@@ -14,7 +14,6 @@
 - [Build Status](#build-status)
 - [Parts List](#parts-list)
 - [Previews](#previews)
-<!-- - [Software Setup](#software-setup) -->
 - [Software Guide](#software-guide)
 - [Development](#development)
 - [Licensing](#licensing)
@@ -51,9 +50,9 @@
 ## Previews <a name="previews"></a>
 
 | Name              | Preview |
-| :---------------- | :---------------------------------------------------------------- |
-| Lightning         | ![Lightning](.github/images/examples/lightning.gif)               |
-| Rainbow (default) | ![Rainbow](.github/images/examples/rainbow.gif)                   |
+| :---------------- | :-------------------------------------------------- |
+| Lightning         | ![Lightning](.github/images/examples/lightning.gif) |
+| Rainbow (default) | ![Rainbow](.github/images/examples/rainbow.gif)     |
 
 More coming soon!
 
@@ -185,7 +184,7 @@ Cody Tolene
 <!-- LINK REFERENCES -->
 
 [url-btc]: https://explorer.btc.com/btc/address/bc1qfx3lvspkj0q077u3gnrnxqkqwyvcku2nml86wmudy7yf2u8edmqq0a5vnt
-[url-new-issue]: https://github.com/CodyTolene/Unicorn-Pi/issues/new
+[url-new-issue]: https://github.com/CodyTolene/Unicorn-Pi-Galactic/issues/new
 [url-pi-pico]: https://www.raspberrypi.org/products/raspberry-pi-pico/
 [url-pimoroni-pico-guide]: https://learn.pimoroni.com/tutorial/pico/getting-started-with-pico
 [url-python-downloads]: https://www.python.org/downloads/
