@@ -1,0 +1,15 @@
+CREDITS
+
+This project includes third-party code from the following sources:
+
+1.  Project Name: pimoroni-pico
+    Author: pimoroni
+    URL: https://github.com/pimoroni/pimoroni-pico
+    Licensed under the MIT License
+    Description: Libraries and examples to support Pimoroni Pico add-ons in C++ and MicroPython.
+
+2.  Project Name: 
+    Author: pimoroni
+    URL: https://github.com/pimoroni/unicorn
+    Licensed under the MIT License
+    Description: Firmware and examples for the Pimoroni Galactic and Cosmic Unicorn boards.
