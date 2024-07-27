@@ -81,13 +81,13 @@ TODO: Add software setup instructions.
 Button layout
 
 ```bash
-|===================================|
-| (A) oooooooooooooooooooooooo (V+) |
-| (B) oooooooooooooooooooooooo (V-) |
-| (C) oooooooooooooooooooooooo (Zz) |
-| (D) oooooooooooooooooooooooo (L+) |
-|     oooooooooooooooooooooooo (L-) |
-|===================================|
+|===========================================================|
+| (A) oooooooooooooooooooooooooooooooooooooooooooooooo (V+) |
+| (B) oooooooooooooooooooooooooooooooooooooooooooooooo (V-) |
+| (C) oooooooooooooooooooooooooooooooooooooooooooooooo (Zz) |
+| (D) oooooooooooooooooooooooooooooooooooooooooooooooo (L+) |
+|     oooooooooooooooooooooooooooooooooooooooooooooooo (L-) |
+|===========================================================|
 ```
 
 | Button | Action                |
