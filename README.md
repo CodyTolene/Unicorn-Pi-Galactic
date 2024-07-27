@@ -49,10 +49,10 @@
 
 ## Previews <a name="previews"></a>
 
-| Name              | Preview |
-| :---------------- | :-------------------------------------------------- |
-| Lightning         | ![Lightning](.github/images/examples/lightning.gif) |
-| Rainbow (default) | ![Rainbow](.github/images/examples/rainbow.gif)     |
+| Name                 | Preview                                             |
+| :------------------- | :-------------------------------------------------- |
+| Lightning (w/ sound) | ![Lightning](.github/images/examples/lightning.gif) |
+| Rainbow (default)    | ![Rainbow](.github/images/examples/rainbow.gif)     |
 
 More coming soon!
 
