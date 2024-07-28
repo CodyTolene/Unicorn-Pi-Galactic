@@ -8,9 +8,24 @@ from collections import OrderedDict
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
 from galactic import GalacticUnicorn
 
+from views import digital_clock_view
 from views import digital_rain_view
+from views import dvd_bouncer_view
+from views import emergency_view
+from views import fire_view
+from views import fireflies_view
+from views import fireplace_view
+from views import fireworks_view
+from views import flashlight_torch_view
+from views import lava_lamp_view
 from views import lightning_view
+from views import plasma_view
 from views import rainbow_view
+from views import raindrops_view
+from views import snowfall_view
+from views import sos_view
+from views import warp_speed_view
+from views import wave_view
 
 from utils.button_listener import buttonListenerProcess
 from utils.view_manager import load_current_view_index
@@ -26,9 +41,24 @@ graphics = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN)
 # Ordered dictionary of view functions
 views = OrderedDict(
     [
+        ("Digital Clock", digital_clock_view.run),
         ("Digital Rain", digital_rain_view.run),
+        ("DVD Bouncer", dvd_bouncer_view.run),
+        ("Emergency", emergency_view.run),
+        ("Fire", fire_view.run),
+        ("Fireflies", fireflies_view.run),
+        ("Fireplace", fireplace_view.run),
+        ("Fireworks", fireworks_view.run),
+        ("Flashlight Torch", flashlight_torch_view.run),
+        ("Lava Lamp", lava_lamp_view.run),
         ("Lightning", lightning_view.run),
+        ("Plasma", plasma_view.run),
         ("Rainbow", rainbow_view.run),
+        ("Raindrops", raindrops_view.run),
+        ("SOS", sos_view.run),
+        ("Snowfall", snowfall_view.run),
+        ("Warp Speed", warp_speed_view.run),
+        ("Wave", wave_view.run),
     ]
 )
 

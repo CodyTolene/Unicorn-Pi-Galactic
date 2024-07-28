@@ -49,11 +49,26 @@
 
 ## Previews <a name="previews"></a>
 
-| Name                 | Preview                                                   |
-| :------------------- | :-------------------------------------------------------- |
-| Digital Rain         | ![Digital Rain](.github/images/examples/digital_rain.gif) |
-| Lightning (w/ sound) | ![Lightning](.github/images/examples/lightning.gif) |
-| Rainbow (default)    | ![Rainbow](.github/images/examples/rainbow.gif)     |
+| Name                 | Preview                                                           |
+| :------------------- | :---------------------------------------------------------------- |
+| Digital Clock        | ![Digital Clock](.github/images/examples/digital-clock.gif)       |
+| Digital Rain         | ![Digital Rain](.github/images/examples/digital_rain.gif)         |
+| DVD Bouncer          | ![DVD Bouncer](.github/images/examples/dvd-bouncer.gif)           |
+| Emergency            | ![Emergency](.github/images/examples/emergency.gif)               |
+| Fire                 | ![Fire](.github/images/examples/fire.gif)                         |
+| Fireflies            | ![Fireflies](.github/images/examples/fireflies.gif)               |
+| Fireplace            | ![Fireplace](.github/images/examples/fireplace.gif)               |
+| Fireworks            | ![Fireworks](.github/images/examples/fireworks.gif)               |
+| Flashlight Torch     | ![Flashlight Torch](.github/images/examples/flashlight-torch.gif) |
+| Lava Lamp            | ![Lava Lamp](.github/images/examples/lava-lamp.gif)               |
+| Lightning (w/ sound) | ![Lightning](.github/images/examples/lightning.gif)               |
+| Plasma               | ![Plasma](.github/images/examples/plasma.gif)                     |
+| Rainbow (default)    | ![Rainbow](.github/images/examples/rainbow.gif)                   |
+| Raindrops            | ![Raindrops](.github/images/examples/raindrops.gif)               |
+| SOS (Morse Code)     | ![SOS](.github/images/examples/sos.gif)                           |
+| Snowfall             | ![Snowfall](.github/images/examples/snowfall.gif)                 |
+| Warp Speed           | ![Warp Speed](.github/images/examples/warp-speed.gif)             |
+| Wave                 | ![Wave](.github/images/examples/wave.gif)                         |
 
 More coming soon!
 
