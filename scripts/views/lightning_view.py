@@ -26,10 +26,10 @@ class Lightning:
             waveforms=Channel.NOISE,
             attack=0.005,
             decay=0.010,
-            sustain=65535 / 65535,  # Full sustain
+            sustain=65535 / 65535,
             release=0.100,
             volume=65535 / 65535,
-        )  # Full volume
+        )
 
     def create_bolt(self):
         bolt = []
@@ -77,8 +77,8 @@ class Lightning:
 
 
 async def run(galacticUnicorn, graphics):
-    width = galacticUnicorn.WIDTH  # Get the width of the display
-    height = galacticUnicorn.HEIGHT  # Get the height of the display
+    width = galacticUnicorn.WIDTH
+    height = galacticUnicorn.HEIGHT
     timer = Timer(-1)  # Create a timer for managing sound release
     lightning = Lightning(
         width, height, graphics, galacticUnicorn, timer
@@ -91,7 +91,7 @@ async def run(galacticUnicorn, graphics):
         await lightning.update()  # Update the Lightning effect
 
         galacticUnicorn.update(graphics)  # Update the display
-        await uasyncio.sleep(0.1)  # Pause for a short time before the next update
+        await uasyncio.sleep(0.1)  # Pause before the next update
 
 
 # This section of code is only for testing.

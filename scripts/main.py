@@ -8,6 +8,7 @@ from collections import OrderedDict
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
 from galactic import GalacticUnicorn
 
+from views import digital_rain_view
 from views import lightning_view
 from views import rainbow_view
 
@@ -25,6 +26,7 @@ graphics = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN)
 # Ordered dictionary of view functions
 views = OrderedDict(
     [
+        ("Digital Rain", digital_rain_view.run),
         ("Lightning", lightning_view.run),
         ("Rainbow", rainbow_view.run),
     ]

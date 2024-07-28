@@ -49,8 +49,9 @@
 
 ## Previews <a name="previews"></a>
 
-| Name                 | Preview                                             |
-| :------------------- | :-------------------------------------------------- |
+| Name                 | Preview                                                   |
+| :------------------- | :-------------------------------------------------------- |
+| Digital Rain         | ![Digital Rain](.github/images/examples/digital_rain.gif) |
 | Lightning (w/ sound) | ![Lightning](.github/images/examples/lightning.gif) |
 | Rainbow (default)    | ![Rainbow](.github/images/examples/rainbow.gif)     |
 
