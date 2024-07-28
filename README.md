@@ -15,6 +15,7 @@
 - [Parts List](#parts-list)
 - [Previews](#previews)
 - [Software Guide](#software-guide)
+- [Software Setup](#software-setup)
 - [Development](#development)
 - [Licensing](#licensing)
 - [Wrapping Up](#wrapping-up)
@@ -78,13 +79,21 @@ Have another idea? Share it [here][url-new-issue]. You can also fork this repo a
 <!---------------------------------------------------------------------------->
 <!---------------------------------------------------------------------------->
 
-<!-- 
 ## Software Setup <a name="software-setup"></a>
 
-TODO: Add software setup instructions.
+First make sure you have this repo cloned to your computer. If you don't have Git installed, you can download the repo as a ZIP file by clicking the green "Code" button at the top of this page. Follow the steps below to run the Python scripts in this repository on your Raspberry Pi Pico with the Pimoroni Unicorn Pack:
+
+1. Similar to how you install the Pimoroni custom software to a Raspberry Pi Pico ([official guide][url-pimoroni-pico-guide]), you need to install the .uf2 file for the Pimoroni Galactic Unicorn. You can find the .uf2 file on the [Pimoroni GitHub Release Page][url-galactic-unicorn-release] where the file is generally named starting with "galactic_unicorn...". 
+   > ![Info][img-info] This is a one-time setup.
+2. Download and install the Thonny IDE from the [official website][url-thonny]. 
+   > ![Info][img-info] This allows us to write and run Python code on the Galactic Unicorns Raspberry Pi Pico.
+3. Open Thonny and connect your Galactic Unicorns Raspberry Pi Pico to your computer using a USB cable.
+4. On the left hand side you should see the file explorer for your Galactic Unicorns Raspberry Pi Pico. Drag and drop all the files from the `scripts` folder in this repository to the root directory of your Galactic Unicorns Raspberry Pi Pico.
+5. Unplug and replug your Galactic Unicorn to restart the device or press the "Reset" button on the back.
+
+The file `main.py` will automatically run when the Galactic Unicorn is powered on.
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
--->
 
 <!---------------------------------------------------------------------------->
 <!---------------------------------------------------------------------------->
@@ -215,6 +224,7 @@ Cody Tolene
 [url-python-downloads]: https://www.python.org/downloads/
 [url-thonny]: https://thonny.org/
 [url-galactic-unicorn]: https://shop.pimoroni.com/products/space-unicorns?variant=40842033561683
+[url-galactic-unicorn-release]: https://github.com/pimoroni/pimoroni-pico/releases
 
 <!---------------------------------------------------------------------------->
 <!---------------------------------------------------------------------------->
