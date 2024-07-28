@@ -8,7 +8,8 @@ from collections import OrderedDict
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
 from galactic import GalacticUnicorn
 
-from views import digital_clock_view
+from views import digital_clock_12_view
+from views import digital_clock_24_view
 from views import digital_rain_view
 from views import dvd_bouncer_view
 from views import emergency_view
@@ -41,9 +42,10 @@ graphics = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN)
 # Ordered dictionary of view functions
 views = OrderedDict(
     [
-        ("Digital Clock", digital_clock_view.run),
-        ("Digital Rain", digital_rain_view.run),
         ("DVD Bouncer", dvd_bouncer_view.run),
+        ("Digital Clock 12-Hour", digital_clock_12_view.run),
+        ("Digital Clock 24-Hour", digital_clock_24_view.run),
+        ("Digital Rain", digital_rain_view.run),
         ("Emergency", emergency_view.run),
         ("Fire", fire_view.run),
         ("Fireflies", fireflies_view.run),
