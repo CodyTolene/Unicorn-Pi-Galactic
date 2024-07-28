@@ -11,8 +11,6 @@ async def run(galacticUnicorn, graphics):
     width = galacticUnicorn.WIDTH
     height = galacticUnicorn.HEIGHT
 
-    # Brightness and color settings
-    brightness_levels = [0.3, 0.6, 1.0]
     colors = [
         (255, 255, 255),  # White
         (255, 0, 0),  # Red
@@ -22,13 +20,33 @@ async def run(galacticUnicorn, graphics):
         (0, 255, 255),  # Light Blue
         (255, 0, 255),  # Pink
     ]
-    brightness_index = 1
-    color_index = 0
+    color_index = 0  # Start with white
 
     # Set a monospaced font
     graphics.set_font("bitmap8")
 
+    buttonStates = {
+        "C": False,
+        "D": False,
+    }
+
     while True:
+        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_C):
+            if not buttonStates["C"]:
+                buttonStates["C"] = True
+                # Cycle to the previous color
+                color_index = (color_index - 1) % len(colors)
+        else:
+            buttonStates["C"] = False
+
+        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_D):
+            if not buttonStates["D"]:
+                buttonStates["D"] = True
+                # Cycle to the next color
+                color_index = (color_index + 1) % len(colors)
+        else:
+            buttonStates["D"] = False
+
         graphics.set_pen(0)
         graphics.clear()
 
@@ -39,27 +57,27 @@ async def run(galacticUnicorn, graphics):
             current_time[5],  # Seconds
         )
 
-        current_color = colors[color_index]  # Todo make dynamic
-        brightness = brightness_levels[brightness_index]
-        adjusted_color = tuple(int(c * brightness) for c in current_color)
+        # Adjust color
+        current_color = colors[color_index]
+        graphics.set_pen(graphics.create_pen(*current_color))
 
-        graphics.set_pen(graphics.create_pen(*adjusted_color))
-
+        # Calculate the maximum scale that fits both the width and height
         max_text_width = graphics.measure_text(time_str, 1)
         max_text_height = 6  # Height of the font
         scale_x = width // max_text_width
         scale_y = height // max_text_height
         scale = min(scale_x, scale_y)
 
-        # Center the text horizontally and vertically
+        # Center the text
         text_width = graphics.measure_text(time_str, scale)
-        x = (width - text_width) // 2
-        y = (height - max_text_height * scale) // 2
+        x = (width - text_width) // 2  # Center the text horizontally
+        y = (height - max_text_height * scale) // 2  # Center the text vertically
 
+        # Display the left-aligned time centered on the display
         graphics.text(time_str, x, y, scale=scale)
         galacticUnicorn.update(graphics)
 
-        await uasyncio.sleep(0.5)
+        await uasyncio.sleep(0.1)  # Adjust the speed of updating
 
 
 # This section of code is only for testing.

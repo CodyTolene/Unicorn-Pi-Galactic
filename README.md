@@ -49,28 +49,26 @@
 
 ## Previews <a name="previews"></a>
 
-| Name                 | Preview                                                           |
-| :------------------- | :---------------------------------------------------------------- |
-| Digital Clock        | ![Digital Clock](.github/images/examples/digital-clock.gif)       |
-| Digital Rain         | ![Digital Rain](.github/images/examples/digital_rain.gif)         |
-| DVD Bouncer          | ![DVD Bouncer](.github/images/examples/dvd-bouncer.gif)           |
-| Emergency            | ![Emergency](.github/images/examples/emergency.gif)               |
-| Fire                 | ![Fire](.github/images/examples/fire.gif)                         |
-| Fireflies            | ![Fireflies](.github/images/examples/fireflies.gif)               |
-| Fireplace            | ![Fireplace](.github/images/examples/fireplace.gif)               |
-| Fireworks            | ![Fireworks](.github/images/examples/fireworks.gif)               |
-| Flashlight Torch     | ![Flashlight Torch](.github/images/examples/flashlight-torch.gif) |
-| Lava Lamp            | ![Lava Lamp](.github/images/examples/lava-lamp.gif)               |
-| Lightning (w/ sound) | ![Lightning](.github/images/examples/lightning.gif)               |
-| Plasma               | ![Plasma](.github/images/examples/plasma.gif)                     |
-| Rainbow (default)    | ![Rainbow](.github/images/examples/rainbow.gif)                   |
-| Raindrops            | ![Raindrops](.github/images/examples/raindrops.gif)               |
-| SOS (Morse Code)     | ![SOS](.github/images/examples/sos.gif)                           |
-| Snowfall             | ![Snowfall](.github/images/examples/snowfall.gif)                 |
-| Warp Speed           | ![Warp Speed](.github/images/examples/warp-speed.gif)             |
-| Wave                 | ![Wave](.github/images/examples/wave.gif)                         |
-
-More coming soon!
+| Name              | Sound(s) | Preview                                                           |
+| :---------------- | :------- | :---------------------------------------------------------------- |
+| Digital Clock     | N/A      | ![Digital Clock](.github/images/examples/digital-clock.gif)       |
+| Digital Rain      | N/A      | ![Digital Rain](.github/images/examples/digital_rain.gif)         |
+| DVD Bouncer       | N/A      | ![DVD Bouncer](.github/images/examples/dvd-bouncer.gif)           |
+| Emergency         | N/A      | ![Emergency](.github/images/examples/emergency.gif)               |
+| Fire              | N/A      | ![Fire](.github/images/examples/fire.gif)                         |
+| Fireflies         | N/A      | ![Fireflies](.github/images/examples/fireflies.gif)               |
+| Fireplace         | N/A      | ![Fireplace](.github/images/examples/fireplace.gif)               |
+| Fireworks         | N/A      | ![Fireworks](.github/images/examples/fireworks.gif)               |
+| Flashlight Torch  | N/A      | ![Flashlight Torch](.github/images/examples/flashlight-torch.gif) |
+| Lava Lamp         | N/A      | ![Lava Lamp](.github/images/examples/lava-lamp.gif)               |
+| Lightning         | Thunder  | ![Lightning](.github/images/examples/lightning.gif)               |
+| Plasma            | N/A      | ![Plasma](.github/images/examples/plasma.gif)                     |
+| Rainbow (default) | N/A      | ![Rainbow](.github/images/examples/rainbow.gif)                   |
+| Raindrops         | N/A      | ![Raindrops](.github/images/examples/raindrops.gif)               |
+| SOS (Morse Code)  | N/A      | ![SOS](.github/images/examples/sos.gif)                           |
+| Snowfall          | N/A      | ![Snowfall](.github/images/examples/snowfall.gif)                 |
+| Warp Speed        | N/A      | ![Warp Speed](.github/images/examples/warp-speed.gif)             |
+| Wave              | N/A      | ![Wave](.github/images/examples/wave.gif)                         |
 
 Have another idea? Share it [here][url-new-issue]. You can also fork this repo and submit a pull request with your own effect or animation! I'd love to see what you come up with.
 
@@ -94,17 +92,19 @@ TODO: Add software setup instructions.
 
 ## Software Guide <a name="software-guide"></a>
 
-Button layout
+Pimoroni Galactic Unicorn Button layout
 
 ```bash
-|===========================================================|
-| (A) oooooooooooooooooooooooooooooooooooooooooooooooo (V+) |
-| (B) oooooooooooooooooooooooooooooooooooooooooooooooo (V-) |
-| (C) oooooooooooooooooooooooooooooooooooooooooooooooo (Zz) |
-| (D) oooooooooooooooooooooooooooooooooooooooooooooooo (L+) |
-|     oooooooooooooooooooooooooooooooooooooooooooooooo (L-) |
-|===========================================================|
+|===========================================|
+| (A) oooooooooooooooooooooooooooooooo (V+) |
+| (B) oooooooooooooooooooooooooooooooo (V-) |
+| (C) oooooooooooooooooooooooooooooooo (Zz) |
+| (D) oooooooooooooooooooooooooooooooo (L+) |
+|     oooooooooooooooooooooooooooooooo (L-) |
+|===========================================|
 ```
+
+Global Controls:
 
 | Button | Action                |
 | :----- | :-------------------- |
@@ -117,6 +117,15 @@ Button layout
 | "Zz"   | Sleep or Awaken.      |
 | "L+"   | Increase brightness.  |
 | "L-"   | Lower brightness.     |
+
+### Digital Clock View
+
+"Digital Clock" controls:
+
+| Button | Action                        |
+| :----- | :---------------------------- |
+| "C"    | Cycle text color to previous. |
+| "D"    | Cycle text color to next.     |
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
