@@ -9,98 +9,133 @@ from utils.view_manager import switch_view
 async def buttonListenerProcess(
     views, galacticUnicorn, graphics, currentViewKey, currentViewTask
 ):
-    buttonAState = False
-    buttonBState = False
-    buttonCState = False
-    buttonDState = False
-    volumeUpState = False
-    volumeDownState = False
-    brightnessUpState = False
-    brightnessDownState = False
-    sleepState = False
-
     view_keys = list(views.keys())
 
+    buttonStates = {
+        "A": False,
+        "B": False,
+        "C": False,
+        "D": False,
+        "VOLUME_UP": False,
+        "VOLUME_DOWN": False,
+        "BRIGHTNESS_UP": False,
+        "BRIGHTNESS_DOWN": False,
+        "SLEEP": False,
+    }
+
+    isDeviceOn = True
+    previous_brightness = galacticUnicorn.get_brightness()
+    previous_volume = 0.5  # Set initial volume to 0.5
+
     while True:
-        # Check if button A is pressed
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_A):
-            if not buttonAState:
-                buttonAState = True
-                # Handle button A press if needed
-        else:
-            buttonAState = False
+        if isDeviceOn:
+            if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_A):
+                if not buttonStates["A"]:
+                    buttonStates["A"] = True
+                    # Switch to the previous view
+                    current_index = view_keys.index(currentViewKey)
+                    currentViewKey = view_keys[(current_index - 1) % len(view_keys)]
+                    currentViewTask = await switch_view(
+                        views,
+                        currentViewKey,
+                        currentViewTask,
+                        galacticUnicorn,
+                        graphics,
+                    )
+            else:
+                buttonStates["A"] = False
 
-        # Check if button B is pressed
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_B):
-            if not buttonBState:
-                buttonBState = True
-                # Handle button B press if needed
-        else:
-            buttonBState = False
+            if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_B):
+                if not buttonStates["B"]:
+                    buttonStates["B"] = True
+                    # Switch to the next view
+                    current_index = view_keys.index(currentViewKey)
+                    currentViewKey = view_keys[(current_index + 1) % len(view_keys)]
+                    currentViewTask = await switch_view(
+                        views,
+                        currentViewKey,
+                        currentViewTask,
+                        galacticUnicorn,
+                        graphics,
+                    )
+            else:
+                buttonStates["B"] = False
 
-        # Check if button C is pressed
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_C):
-            if not buttonCState:
-                buttonCState = True
-                # Handle button C press if needed
-        else:
-            buttonCState = False
+            if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_C):
+                if not buttonStates["C"]:
+                    buttonStates["C"] = True
+                    # Handle SWITCH_C
+            else:
+                buttonStates["C"] = False
 
-        # Check if button D is pressed
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_D):
-            if not buttonDState:
-                buttonDState = True
-                # Handle button D press if needed
-        else:
-            buttonDState = False
+            if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_D):
+                if not buttonStates["D"]:
+                    buttonStates["D"] = True
+                    # Handle SWITCH_D
+            else:
+                buttonStates["D"] = False
 
-        # Check if volume up is pressed
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_VOLUME_UP):
-            if not volumeUpState:
-                volumeUpState = True
-                # Handle volume up press if needed
-        else:
-            volumeUpState = False
+            if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_VOLUME_UP):
+                if not buttonStates["VOLUME_UP"]:
+                    buttonStates["VOLUME_UP"] = True
+                    # Turn the volume up
+                    previous_volume = min(previous_volume + 0.1, 1.0)
+                    galacticUnicorn.set_volume(previous_volume)
+            else:
+                buttonStates["VOLUME_UP"] = False
 
-        # Check if volume down is pressed
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_VOLUME_DOWN):
-            if not volumeDownState:
-                volumeDownState = True
-                # Handle volume down press if needed
-        else:
-            volumeDownState = False
+            if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_VOLUME_DOWN):
+                if not buttonStates["VOLUME_DOWN"]:
+                    buttonStates["VOLUME_DOWN"] = True
+                    # Turn the volume down
+                    previous_volume = max(previous_volume - 0.1, 0.0)
+                    galacticUnicorn.set_volume(previous_volume)
+            else:
+                buttonStates["VOLUME_DOWN"] = False
 
-        # Check if brightness up is pressed
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_BRIGHTNESS_UP):
-            if not brightnessUpState:
-                brightnessUpState = True
-                current_index = view_keys.index(currentViewKey)
-                currentViewKey = view_keys[(current_index - 1) % len(view_keys)]
-                currentViewTask = await switch_view(
-                    views, currentViewKey, currentViewTask, galacticUnicorn, graphics
-                )
-        else:
-            brightnessUpState = False
+            if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_BRIGHTNESS_UP):
+                if not buttonStates["BRIGHTNESS_UP"]:
+                    buttonStates["BRIGHTNESS_UP"] = True
+                    # Turn the brightness up
+                    current_brightness = galacticUnicorn.get_brightness()
+                    if current_brightness < 0.1:
+                        new_brightness = 0.25
+                    else:
+                        new_brightness = min(current_brightness + 0.25, 1.0)
+                    galacticUnicorn.set_brightness(new_brightness)
+            else:
+                buttonStates["BRIGHTNESS_UP"] = False
 
-        # Check if brightness down is pressed
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_BRIGHTNESS_DOWN):
-            if not brightnessDownState:
-                brightnessDownState = True
-                current_index = view_keys.index(currentViewKey)
-                currentViewKey = view_keys[(current_index + 1) % len(view_keys)]
-                currentViewTask = await switch_view(
-                    views, currentViewKey, currentViewTask, galacticUnicorn, graphics
-                )
-        else:
-            brightnessDownState = False
+            if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_BRIGHTNESS_DOWN):
+                if not buttonStates["BRIGHTNESS_DOWN"]:
+                    buttonStates["BRIGHTNESS_DOWN"] = True
+                    # Turn the brightness down
+                    current_brightness = galacticUnicorn.get_brightness()
+                    new_brightness = max(current_brightness - 0.25, 0.1)
+                    galacticUnicorn.set_brightness(new_brightness)
+            else:
+                buttonStates["BRIGHTNESS_DOWN"] = False
 
-        # Check if sleep is pressed
         if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_SLEEP):
-            if not sleepState:
-                sleepState = True
-                # Handle sleep press if needed
+            if not buttonStates["SLEEP"]:
+                buttonStates["SLEEP"] = True
+                # Power on/off the device
+                if isDeviceOn:
+                    # Simulate power off by setting brightness and volume to 0
+                    previous_brightness = galacticUnicorn.get_brightness()
+                    galacticUnicorn.set_brightness(0)
+                    galacticUnicorn.set_volume(0)
+                    graphics.set_pen(graphics.create_pen(0, 0, 0))
+                    graphics.clear()
+                    galacticUnicorn.update(graphics)
+                    isDeviceOn = False
+                else:
+                    # Simulate power on by restoring the previous brightness and volume
+                    galacticUnicorn.set_brightness(previous_brightness)
+                    galacticUnicorn.set_volume(previous_volume)
+                    isDeviceOn = True
         else:
-            sleepState = False
+            buttonStates["SLEEP"] = False
 
         # Sleep for a short period to debounce button presses
         await uasyncio.sleep(0.1)

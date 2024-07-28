@@ -108,15 +108,15 @@ Button layout
 
 | Button | Action                |
 | :----- | :-------------------- |
-| "A"    | Varies by view/scene. |
-| "B"    | Varies by view/scene. |
+| "A"    | Next view/scene.      |
+| "B"    | Previous view/scene.  |
 | "C"    | Varies by view/scene. |
 | "D"    | Varies by view/scene. |
 | "V+"   | Increase volume.      |
 | "V-"   | Decrease volume.      |
-| "Zz"   | Sleep mode.           |
-| "L+"   | Next view/scene.      |
-| "L-"   | Previous view/scene.  |
+| "Zz"   | Sleep or Awaken.      |
+| "L+"   | Increase brightness.  |
+| "L-"   | Lower brightness.     |
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
