@@ -2,7 +2,7 @@
   <img align="center" src=".github/images/unicorn-pi-galactic.png" />
   <h1 align="center">Unicorn-Pi Galactic</h1>
   <p align="center">
-    Software for displaying the best effects and animations on the Pimoroni Galactic Unicorn.
+    Software for your Pimoroni Galactic Unicorn that brings the best effects and animations to life. Use the onboard buttons to switch views, customize text colors, adjust brightness, and much more. Many effects and animations also feature custom sounds for an immersive experience.
   </p>
   <p align="center">
     The effects in this software are written in Python and designed to be easy to use, modify individually, and test. Suggestions for new effects or animations are always welcome. Thank you for checking out this project!
@@ -101,7 +101,7 @@ The file `main.py` will automatically run when the Galactic Unicorn is powered o
 
 ## Software Guide <a name="software-guide"></a>
 
-Pimoroni Galactic Unicorn Button layout
+### Pimoroni Galactic Unicorn Button layout
 
 ```bash
 |===========================================|
@@ -113,7 +113,7 @@ Pimoroni Galactic Unicorn Button layout
 |===========================================|
 ```
 
-Global Controls:
+### Global Controls
 
 | Button | Action                |
 | :----- | :-------------------- |
