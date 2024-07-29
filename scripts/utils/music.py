@@ -6,8 +6,10 @@ from machine import Timer
 from galactic import GalacticUnicorn, Channel
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
+# Global variables
 volume = 0.5  # Set initial volume to 0.5
 previous_volume = 0.5
+current_timer = None  # Global variable to hold the current Timer instance
 
 
 # Create and play music on the Pimoroni Galactic Unicorn.
@@ -18,11 +20,19 @@ def play_notes(
     bpm,  # Beats per minute for the music.
     repeat=False,  # Boolean for optional repeat when song ends.
 ):
+    global current_timer
+
+    # Ensure any previous timer is deinitialized
+    if current_timer:
+        current_timer.deinit()
+        current_timer = None
+
     # Length of the song in beats.
     song_length = max(len(track) for track in musicNotes)
     beat = 0  # Current beat in the song.
 
     def next_beat():
+        global current_timer
         nonlocal beat
         for i in range(len(musicNotes)):
             if beat < len(musicNotes[i]):
@@ -36,17 +46,19 @@ def play_notes(
             if repeat:
                 beat = 0
             else:
-                timer.deinit()
+                if current_timer:
+                    current_timer.deinit()
+                    current_timer = None
                 galacticUnicorn.stop_playing()
 
     def tick(timer):
         next_beat()
 
-    timer = Timer(-1)
-    timer.init(freq=bpm / 60, mode=Timer.PERIODIC, callback=tick)
+    current_timer = Timer(-1)
+    current_timer.init(freq=bpm / 60, mode=Timer.PERIODIC, callback=tick)
 
     galacticUnicorn.play_synth()
-    return timer
+    return current_timer
 
 
 # Temporarily toggle all sounds on or off.
@@ -64,7 +76,6 @@ async def toggle_mute(galacticUnicorn):
 # Decrease all channel volumes.
 async def volume_down(galacticUnicorn):
     global volume
-    # print("Volume down")
     volume = max(volume - 0.1, 0.0)
     galacticUnicorn.set_volume(volume)
 
@@ -72,13 +83,16 @@ async def volume_down(galacticUnicorn):
 # Increase all channel volumes.
 async def volume_up(galacticUnicorn):
     global volume
-    # print("Volume up")
     volume = min(volume + 0.1, 1.0)
     galacticUnicorn.set_volume(volume)
 
 
 # Stop all currently playing sounds.
 async def stop_all_sounds(galacticUnicorn):
+    global current_timer
+    if current_timer:
+        current_timer.deinit()
+        current_timer = None
     galacticUnicorn.stop_playing()
 
 
