@@ -3,8 +3,9 @@
 
 import uasyncio
 import random
-from galactic import GalacticUnicorn
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
+
+from utils.music import play_notes
+from galactic import Channel
 
 
 async def run(galacticUnicorn, graphics):
@@ -33,6 +34,20 @@ async def run(galacticUnicorn, graphics):
 
     raindrops = [Raindrop() for _ in range(30)]
 
+    # Configure and play rain sound
+    musicNotes = [800, 810, 820]
+    channel = galacticUnicorn.synth_channel(0)
+    channel.configure(
+        waveforms=Channel.NOISE,
+        attack=0.005,
+        decay=0.500,
+        sustain=0,
+        release=0.100,
+        volume=18000 / 65535,
+    )
+    channels = [channel]
+    play_notes(galacticUnicorn, [musicNotes], channels, bpm=820, repeat=True)
+
     while True:
         graphics.set_pen(graphics.create_pen(0, 0, 0))
         graphics.clear()
@@ -42,10 +57,3 @@ async def run(galacticUnicorn, graphics):
 
         galacticUnicorn.update(graphics)
         await uasyncio.sleep(0.025)
-
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))

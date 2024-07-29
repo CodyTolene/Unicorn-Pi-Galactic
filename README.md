@@ -54,7 +54,7 @@
 | :---------------------- | :------- | :---------------------------------------------------------------- |
 | Digital Clock (12 hour) | N/A      | ![Digital Clock 12](.github/images/examples/digital-clock-12.gif) |
 | Digital Clock (24 hour) | N/A      | ![Digital Clock 24](.github/images/examples/digital-clock-24.gif) |
-| Digital Rain            | N/A      | ![Digital Rain](.github/images/examples/digital_rain.gif)         |
+| Digital Rain            | Rain     | ![Digital Rain](.github/images/examples/digital_rain.gif)         |
 | DVD Bouncer             | N/A      | ![DVD Bouncer](.github/images/examples/dvd-bouncer.gif)           |
 | Emergency               | N/A      | ![Emergency](.github/images/examples/emergency.gif)               |
 | Fire                    | N/A      | ![Fire](.github/images/examples/fire.gif)                         |

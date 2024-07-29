@@ -3,22 +3,22 @@
 
 import uasyncio
 import random
-from galactic import GalacticUnicorn, Channel
-from machine import Timer
+from galactic import Channel
+from utils.music import play_notes
 
 
 class Lightning:
-    def __init__(self, width, height, graphics, gu, timer):
+    def __init__(self, width, height, graphics, gu):
         self.graphics = graphics
         self.width = width
         self.height = height
         self.gu = gu
-        self.timer = timer
         self.flash = False
         self.flash_duration = 0
         self.bolts = []
         self.channels = [self.gu.synth_channel(0)]
         self.configure_channel()
+        self.lightning_notes = [random.randint(500, 5000) for _ in range(10)]
 
     def configure_channel(self):
         # Configure sound channel
@@ -57,31 +57,26 @@ class Lightning:
                 self.flash = True
                 self.flash_duration = random.randint(1, 3)
                 self.bolts = [self.create_bolt() for _ in range(random.randint(1, 3))]
-                self.play_lightning_sound()
+                await self.play_lightning_sound()
 
         for bolt in self.bolts:
             for x, y in bolt:
                 self.graphics.set_pen(self.graphics.create_pen(255, 255, 255))
                 self.graphics.pixel(x, y)
 
-    def play_lightning_sound(self):
-        self.gu.play_synth()
-        self.channels[0].trigger_attack()
-        self.timer.init(
-            freq=1, mode=Timer.ONE_SHOT, callback=lambda t: self.release_sound()
+    async def play_lightning_sound(self):
+        # Randomly vary the BPM around 600 or 480
+        bpm = random.choice([random.randint(550, 650), random.randint(430, 530)])
+        play_notes(
+            self.gu, [self.lightning_notes], self.channels, bpm=bpm, repeat=False
         )
-
-    def release_sound(self):
-        self.channels[0].trigger_release()
-        self.gu.stop_playing()
 
 
 async def run(galacticUnicorn, graphics):
     width = galacticUnicorn.WIDTH
     height = galacticUnicorn.HEIGHT
-    timer = Timer(-1)  # Create a timer for managing sound release
     lightning = Lightning(
-        width, height, graphics, galacticUnicorn, timer
+        width, height, graphics, galacticUnicorn
     )  # Create Lightning effect
 
     while True:
@@ -92,12 +87,3 @@ async def run(galacticUnicorn, graphics):
 
         galacticUnicorn.update(graphics)  # Update the display
         await uasyncio.sleep(0.1)  # Pause before the next update
-
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
-
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))
