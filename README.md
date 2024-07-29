@@ -63,6 +63,7 @@
 | Flashlight Torch  | N/A      | ![Flashlight Torch](.github/images/examples/flashlight-torch.gif) |
 | Lava Lamp         | N/A      | ![Lava Lamp](.github/images/examples/lava-lamp.gif)               |
 | Lightning         | Thunder  | ![Lightning](.github/images/examples/lightning.gif)               |
+| Nyan Cat          | N/A      | ![Nyan Cat](.github/images/examples/nyan-cat.gif)                 |
 | Plasma            | N/A      | ![Plasma](.github/images/examples/plasma.gif)                     |
 | Rainbow (default) | N/A      | ![Rainbow](.github/images/examples/rainbow.gif)                   |
 | Raindrops         | N/A      | ![Raindrops](.github/images/examples/raindrops.gif)               |

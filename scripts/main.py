@@ -20,6 +20,7 @@ from views import fireworks_view
 from views import flashlight_torch_view
 from views import lava_lamp_view
 from views import lightning_view
+from views import nyan_cat_view
 from views import plasma_view
 from views import rainbow_view
 from views import raindrops_view
@@ -54,6 +55,7 @@ views = OrderedDict(
         ("Flashlight Torch", flashlight_torch_view.run),
         ("Lava Lamp", lava_lamp_view.run),
         ("Lightning", lightning_view.run),
+        ("Nyan Cat", nyan_cat_view.run),
         ("Plasma", plasma_view.run),
         ("Rainbow", rainbow_view.run),
         ("Raindrops", raindrops_view.run),
