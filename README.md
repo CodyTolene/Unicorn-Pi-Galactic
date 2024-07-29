@@ -54,7 +54,7 @@
 | :---------------------- | :------- | :---------------------------------------------------------------- |
 | Digital Clock (12 hour) | N/A      | ![Digital Clock 12](.github/images/examples/digital-clock-12.gif) |
 | Digital Clock (24 hour) | N/A      | ![Digital Clock 24](.github/images/examples/digital-clock-24.gif) |
-| Digital Rain            | Rain     | ![Digital Rain](.github/images/examples/digital_rain.gif)         |
+| Digital Rain            | N/A      | ![Digital Rain](.github/images/examples/digital_rain.gif)         |
 | DVD Bouncer             | N/A      | ![DVD Bouncer](.github/images/examples/dvd-bouncer.gif)           |
 | Emergency               | N/A      | ![Emergency](.github/images/examples/emergency.gif)               |
 | Fire                    | N/A      | ![Fire](.github/images/examples/fire.gif)                         |
@@ -67,7 +67,7 @@
 | Nyan Cat                | N/A      | ![Nyan Cat](.github/images/examples/nyan-cat.gif)                 |
 | Plasma                  | N/A      | ![Plasma](.github/images/examples/plasma.gif)                     |
 | Rainbow (default)       | N/A      | ![Rainbow](.github/images/examples/rainbow.gif)                   |
-| Raindrops               | N/A      | ![Raindrops](.github/images/examples/raindrops.gif)               |
+| Raindrops               | Rain     | ![Raindrops](.github/images/examples/raindrops.gif)               |
 | SOS (Morse Code)        | N/A      | ![SOS](.github/images/examples/sos.gif)                           |
 | Snowfall                | N/A      | ![Snowfall](.github/images/examples/snowfall.gif)                 |
 | Warp Speed              | N/A      | ![Warp Speed](.github/images/examples/warp-speed.gif)             |
