@@ -3,39 +3,38 @@
 
 import random
 import uasyncio
-from galactic import GalacticUnicorn
+
+from galactic import GalacticUnicorn, Channel
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
+from utils.music import play_notes
 
 
 class Firework:
-    def __init__(self, width, height, graphics):
+    def __init__(self, width, height, graphics, galacticUnicorn, channels):
         self.width = width
         self.height = height
         self.graphics = graphics
-        # Randomly determine the launch x position, with 80% chance near the middle
+        self.galacticUnicorn = galacticUnicorn
+        self.channels = channels
         self.launch_x = (
             random.randint(width // 4, 3 * width // 4)
             if random.random() < 0.8
             else random.randint(1, width - 2)
         )
         self.explosion_x = self.launch_x
-        self.explosion_y = height // 2  # Center the explosion
-        self.brightness = random.uniform(
-            0.5, 1.0
-        )  # Random brightness for distance effect
-        # Create a color with the given brightness
+        self.explosion_y = height // 2
+        self.brightness = random.uniform(0.5, 1.0)
         self.color = graphics.create_pen(
             int(self.brightness * random.randint(100, 255)),
             int(self.brightness * random.randint(100, 255)),
             int(self.brightness * random.randint(100, 255)),
         )
         self.particles = []
-        self.stage = "launch"  # Initial stage is launch
-        self.y = height - 1  # Start from the bottom
-        self.create_explosion_particles()  # Initialize explosion particles
+        self.stage = "launch"
+        self.y = height - 1
+        self.create_explosion_particles()
 
     def create_explosion_particles(self):
-        # Create random points for the explosion particles
         explosion_points = [
             (random.uniform(-1, 1), random.uniform(-1, 1)) for _ in range(10)
         ]
@@ -47,33 +46,42 @@ class Firework:
                     "dx": dx,
                     "dy": dy,
                     "color": self.color,
-                    "life": 1.0,  # Particle life starts at 1.0
+                    "life": 1.0,
                 }
             )
+
+    def play_explosion_sound(self):
+        explosion_sounds = [
+            [800, 850, 900, 950, 1000, -1, -1],
+            [1000, 1050, 1100, 1150, 1200, -1, -1],
+            [600, 650, 700, 750, 800, -1, -1],
+            [1100, 1150, 1200, 1250, 1300, -1, -1],
+            [700, 750, 800, 850, 900, -1, -1],
+        ]
+        selected_sound = random.choice(explosion_sounds)
+        play_notes(
+            self.galacticUnicorn, [selected_sound], self.channels, bpm=700, repeat=False
+        )
 
     async def update(self):
         if self.stage == "launch":
             if self.y > self.height // 2:
-                # Draw the firework as it launches
                 self.graphics.set_pen(self.color)
                 self.graphics.pixel(self.launch_x, self.y)
-                self.y -= 1  # Move up
+                self.y -= 1
             else:
-                self.stage = "explode"  # Transition to explode stage
+                self.stage = "explode"
+                self.play_explosion_sound()
         elif self.stage == "explode":
             if any(p["life"] > 0 for p in self.particles):
                 for p in self.particles:
                     if p["life"] > 0:
-                        p["x"] += p["dx"]  # Move particle horizontally
-                        p["y"] += p["dy"]  # Move particle vertically
-                        p["dy"] += 0.05  # Apply gravity effect
-                        p["life"] -= 0.05  # Decrease life
-
-                        # Check if particle is within bounds
+                        p["x"] += p["dx"]
+                        p["y"] += p["dy"]
+                        p["dy"] += 0.05
+                        p["life"] -= 0.05
                         width_in_bounds = 0 <= int(p["x"]) < self.width
                         height_in_bounds = 0 <= int(p["y"]) < self.height
-
-                        # Draw particle if within bounds
                         if width_in_bounds and height_in_bounds:
                             brightness = int(255 * p["life"])
                             self.graphics.set_pen(
@@ -90,21 +98,28 @@ async def run(galacticUnicorn, graphics):
     width = galacticUnicorn.WIDTH
     height = galacticUnicorn.HEIGHT
     fireworks = []
+    channels = [galacticUnicorn.synth_channel(0)]
+    channels[0].configure(
+        waveforms=Channel.NOISE,
+        attack=0.005,
+        decay=0.500,
+        sustain=0,
+        release=0.100,
+        volume=18000 / 65535,
+    )
 
     while True:
-        # Clear the screen
         graphics.set_pen(graphics.create_pen(0, 0, 0))
         graphics.clear()
 
-        # Add new fireworks at random intervals
         if random.random() < 0.1:
-            fireworks.append(Firework(width, height, graphics))
+            fireworks.append(
+                Firework(width, height, graphics, galacticUnicorn, channels)
+            )
 
-        # Update all fireworks
         for firework in fireworks:
             await firework.update()
 
-        # Remove fireworks that have completed their explosion
         filtered_fireworks = []
         for firework in fireworks:
             has_life = any(p["life"] > 0 for p in firework.particles)
@@ -113,10 +128,8 @@ async def run(galacticUnicorn, graphics):
                 filtered_fireworks.append(firework)
         fireworks = filtered_fireworks
 
-        # Update the display
         galacticUnicorn.update(graphics)
-
-        await uasyncio.sleep(0.1)  # Sleep to control animation speed
+        await uasyncio.sleep(0.1)
 
 
 # This section of code is only for testing.
