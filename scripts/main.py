@@ -25,7 +25,7 @@ from views import plasma_view
 from views import rainbow_view
 from views import raindrops_view
 from views import snowfall_view
-from views import sos_view
+from views import sos_signal_view
 from views import warp_speed_view
 from views import wave_view
 
@@ -59,7 +59,7 @@ views = OrderedDict(
         ("Plasma", plasma_view.run),
         ("Rainbow", rainbow_view.run),
         ("Raindrops", raindrops_view.run),
-        ("SOS", sos_view.run),
+        ("SOS", sos_signal_view.run),
         ("Snowfall", snowfall_view.run),
         ("Warp Speed", warp_speed_view.run),
         ("Wave", wave_view.run),

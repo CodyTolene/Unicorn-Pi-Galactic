@@ -3,53 +3,53 @@
 
 import uasyncio
 import time
+
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
-async def run(galacticUnicorn, graphics):
-    width = galacticUnicorn.WIDTH
-    height = galacticUnicorn.HEIGHT
+class DigitalClock12:
+    def __init__(self, galacticUnicorn, graphics):
+        self.colors = [
+            (255, 255, 255),  # White
+            (255, 0, 0),  # Red
+            (0, 255, 0),  # Green
+            (0, 0, 255),  # Blue
+            (255, 255, 0),  # Yellow
+            (0, 255, 255),  # Light Blue
+            (255, 0, 255),  # Pink
+        ]
+        self.button_states = {"C": False, "D": False}
+        self.color_index = 0  # Start with white
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.graphics.set_font("bitmap8")
+        self.height = galacticUnicorn.HEIGHT
+        self.width = galacticUnicorn.WIDTH
 
-    colors = [
-        (255, 255, 255),  # White
-        (255, 0, 0),  # Red
-        (0, 255, 0),  # Green
-        (0, 0, 255),  # Blue
-        (255, 255, 0),  # Yellow
-        (0, 255, 255),  # Light Blue
-        (255, 0, 255),  # Pink
-    ]
-    color_index = 0  # Start with white
-
-    # Set a monospaced font
-    graphics.set_font("bitmap8")
-
-    buttonStates = {
-        "C": False,
-        "D": False,
-    }
-
-    while True:
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_C):
-            if not buttonStates["C"]:
-                buttonStates["C"] = True
+    def on_button_press(self):
+        if self.galacticUnicorn.is_pressed(self.galacticUnicorn.SWITCH_C):
+            if not self.button_states["C"]:
+                self.button_states["C"] = True
                 # Cycle to the previous color
-                color_index = (color_index - 1) % len(colors)
+                self.color_index = (self.color_index - 1) % len(self.colors)
         else:
-            buttonStates["C"] = False
+            self.button_states["C"] = False
 
-        if galacticUnicorn.is_pressed(galacticUnicorn.SWITCH_D):
-            if not buttonStates["D"]:
-                buttonStates["D"] = True
+        if self.galacticUnicorn.is_pressed(self.galacticUnicorn.SWITCH_D):
+            if not self.button_states["D"]:
+                self.button_states["D"] = True
                 # Cycle to the next color
-                color_index = (color_index + 1) % len(colors)
+                self.color_index = (self.color_index + 1) % len(self.colors)
         else:
-            buttonStates["D"] = False
+            self.button_states["D"] = False
 
-        graphics.set_pen(0)
-        graphics.clear()
+    async def update(self):
+        self.on_button_press()
+        self.graphics.set_pen(0)
+        self.graphics.clear()
 
+        # Time string
         current_time = time.localtime()
         hour = current_time[3]
         minute = current_time[4]
@@ -59,31 +59,35 @@ async def run(galacticUnicorn, graphics):
         if hour == 0:
             hour = 12
 
-        time_str = "{:02}:{:02}:{:02} {}".format(
-            hour, minute, second, am_pm  # Hour  # Minute  # Seconds  # AM/PM
-        )
+        time_str = "{:02}:{:02}:{:02} {}".format(hour, minute, second, am_pm)
 
-        # Adjust color
-        current_color = colors[color_index]
-        graphics.set_pen(graphics.create_pen(*current_color))
+        # Color
+        current_color = self.colors[self.color_index]
+        self.graphics.set_pen(self.graphics.create_pen(*current_color))
 
-        # Calculate the maximum scale that fits both the width and height
-        max_text_width = graphics.measure_text(time_str, 1)
+        # Scale
+        max_text_width = self.graphics.measure_text(time_str, 1)
         max_text_height = 6  # Height of the font
-        scale_x = width // max_text_width
-        scale_y = height // max_text_height
+        scale_x = self.width // max_text_width
+        scale_y = self.height // max_text_height
         scale = min(scale_x, scale_y)
 
-        # Center the text
-        text_width = graphics.measure_text(time_str, scale)
-        x = (width - text_width) // 2  # Center the text horizontally
-        y = (height - max_text_height * scale) // 2  # Center the text vertically
+        # Text position
+        text_width = self.graphics.measure_text(time_str, scale)
+        x = (self.width - text_width) // 2  # Center the text horizontally
+        y = (self.height - max_text_height * scale) // 2  # Center the text vertically
 
-        # Display the left-aligned time centered on the display
-        graphics.text(time_str, x, y, scale=scale)
-        galacticUnicorn.update(graphics)
+        # Display
+        self.graphics.text(time_str, x, y, scale=scale)
+        self.galacticUnicorn.update(self.graphics)
 
-        await uasyncio.sleep(0.1)  # Adjust the speed of updating
+
+async def run(galacticUnicorn, graphics):
+    digital_clock_12 = DigitalClock12(galacticUnicorn, graphics)
+
+    while True:
+        await digital_clock_12.update()
+        await uasyncio.sleep(0.1)
 
 
 # This section of code is only for testing.

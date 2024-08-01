@@ -6,13 +6,23 @@ from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
+class FlashlightTorch:
+    def __init__(self, galacticUnicorn, graphics):
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.white = graphics.create_pen(255, 255, 255)
+
+    async def update(self):
+        self.graphics.set_pen(self.white)
+        self.graphics.clear()
+        self.galacticUnicorn.update(self.graphics)
+
+
 async def run(galacticUnicorn, graphics):
-    white = graphics.create_pen(255, 255, 255)
+    flashlight_torch = FlashlightTorch(galacticUnicorn, graphics)
 
     while True:
-        graphics.set_pen(white)
-        graphics.clear()
-        galacticUnicorn.update(graphics)
+        await flashlight_torch.update()
         await uasyncio.sleep(0.1)
 
 

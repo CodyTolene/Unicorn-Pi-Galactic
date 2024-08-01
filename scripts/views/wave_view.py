@@ -8,17 +8,20 @@ from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
-async def run(galacticUnicorn, graphics):
-    width = galacticUnicorn.WIDTH
-    height = galacticUnicorn.HEIGHT
+class Wave:
+    def __init__(self, galacticUnicorn, graphics):
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.width = galacticUnicorn.WIDTH
+        self.height = galacticUnicorn.HEIGHT
 
-    while True:
+    async def update(self):
         t = time.ticks_ms() / 1000
-        for x in range(width):
+        for x in range(self.width):
             await uasyncio.sleep_ms(0)
-            for y in range(height):
-                wave_x = math.sin((x / width * 2 * math.pi) + t)
-                wave_y = math.sin((y / height * 2 * math.pi) + t)
+            for y in range(self.height):
+                wave_x = math.sin((x / self.width * 2 * math.pi) + t)
+                wave_y = math.sin((y / self.height * 2 * math.pi) + t)
                 wave = (wave_x + wave_y) / 2
 
                 wave = (wave + 1) / 2 * 0.8 + 0.2
@@ -27,12 +30,19 @@ async def run(galacticUnicorn, graphics):
                 blue = int(wave * 255)
                 green = int(wave * 127)
 
-                PEN = graphics.create_pen(0, green, blue)
-                graphics.set_pen(PEN)
-                graphics.pixel(x, y)
+                PEN = self.graphics.create_pen(0, green, blue)
+                self.graphics.set_pen(PEN)
+                self.graphics.pixel(x, y)
 
-        galacticUnicorn.update(graphics)
-        await uasyncio.sleep(1.0 / 60)
+        self.galacticUnicorn.update(self.graphics)
+
+
+async def run(galacticUnicorn, graphics):
+    wave = Wave(galacticUnicorn, graphics)
+
+    while True:
+        await wave.update()
+        await uasyncio.sleep(0.1)
 
 
 # This section of code is only for testing.

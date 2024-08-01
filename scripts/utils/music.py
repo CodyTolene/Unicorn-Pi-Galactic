@@ -94,6 +94,9 @@ async def stop_all_sounds(galacticUnicorn):
         current_timer.deinit()
         current_timer = None
     galacticUnicorn.stop_playing()
+    for i in range(8):  # Assuming 8 channels
+        channel = galacticUnicorn.synth_channel(i)
+        channel.trigger_release()
 
 
 async def play_example_rain(galacticUnicorn, graphics):
@@ -146,5 +149,4 @@ async def play_example_rain(galacticUnicorn, graphics):
 if __name__ == "__main__":
     galacticUnicorn = GalacticUnicorn()
     graphics = PicoGraphics(display=DISPLAY)
-    # Test the rain sound example
     uasyncio.run(play_example_rain(galacticUnicorn, graphics))

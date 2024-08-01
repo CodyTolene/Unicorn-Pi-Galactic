@@ -5,46 +5,49 @@
 import random
 import micropython
 import uasyncio
+
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
-async def run(galacticUnicorn, graphics):
-    fire_colours = [
-        graphics.create_pen(0, 0, 0),
-        graphics.create_pen(20, 20, 20),
-        graphics.create_pen(180, 30, 0),
-        graphics.create_pen(220, 160, 0),
-        graphics.create_pen(255, 255, 180),
-    ]
-
-    width = galacticUnicorn.HEIGHT + 2
-    height = galacticUnicorn.WIDTH + 4
-    heat = [[0.0 for y in range(height)] for x in range(width)]
-    base_damping_factor = 0.97
-    fire_spawns = 1
+class Fire:
+    def __init__(self, galacticUnicorn, graphics):
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.fire_colours = [
+            graphics.create_pen(0, 0, 0),
+            graphics.create_pen(20, 20, 20),
+            graphics.create_pen(180, 30, 0),
+            graphics.create_pen(220, 160, 0),
+            graphics.create_pen(255, 255, 180),
+        ]
+        self.width = galacticUnicorn.HEIGHT + 2
+        self.height = galacticUnicorn.WIDTH + 4
+        self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
+        self.base_damping_factor = 0.97
+        self.fire_spawns = 1
 
     @micropython.native
-    def update():
-        _heat = heat
+    async def update(self):
+        _heat = self.heat
 
-        for x in range(width):
-            _heat[x][height - 1] = 0.0
-            _heat[x][height - 2] = 0.0
+        for x in range(self.width):
+            _heat[x][self.height - 1] = 0.0
+            _heat[x][self.height - 2] = 0.0
 
-        for c in range(fire_spawns):
-            x = random.randint(width // 2 - 1, width // 2 + 1)
-            _heat[x][height - 1] = 1.0
-            _heat[x + 1][height - 1] = 1.0
-            _heat[x - 1][height - 1] = 1.0
-            _heat[x][height - 2] = 1.0
-            _heat[x + 1][height - 2] = 1.0
-            _heat[x - 1][height - 2] = 1.0
+        for _ in range(self.fire_spawns):
+            x = random.randint(self.width // 2 - 1, self.width // 2 + 1)
+            _heat[x][self.height - 1] = 1.0
+            _heat[x + 1][self.height - 1] = 1.0
+            _heat[x - 1][self.height - 1] = 1.0
+            _heat[x][self.height - 2] = 1.0
+            _heat[x + 1][self.height - 2] = 1.0
+            _heat[x - 1][self.height - 2] = 1.0
 
-        damping_factor = base_damping_factor + random.uniform(-0.02, 0.02)
+        damping_factor = self.base_damping_factor + random.uniform(-0.02, 0.02)
         factor = damping_factor / 5.0
-        for y in range(height - 3, -1, -1):
-            for x in range(1, width - 1):
+        for y in range(self.height - 3, -1, -1):
+            for x in range(1, self.width - 1):
                 sum_heat_y1 = _heat[x][y + 1]
                 sum_heat_y2 = _heat[x][y + 2]
                 sum_heat_x1y1 = _heat[x - 1][y + 1]
@@ -53,16 +56,13 @@ async def run(galacticUnicorn, graphics):
                 _heat[x][y] += sum_heat_y1 + sum_heat_y2 + sum_heat_x1y1 + sum_heat_x2y1
                 _heat[x][y] *= factor
 
-    @micropython.native
-    def draw():
-        _graphics = graphics
-        _heat = heat
-        _set_pen = graphics.set_pen
-        _pixel = graphics.pixel
-        _fire_colours = fire_colours
+        _graphics = self.graphics
+        _set_pen = self.graphics.set_pen
+        _pixel = self.graphics.pixel
+        _fire_colours = self.fire_colours
 
-        for y in range(galacticUnicorn.WIDTH):
-            for x in range(galacticUnicorn.HEIGHT):
+        for y in range(self.galacticUnicorn.WIDTH):
+            for x in range(self.galacticUnicorn.HEIGHT):
                 value = _heat[x + 1][y + 1]
                 if value < 0.15:
                     _set_pen(_fire_colours[0])
@@ -74,13 +74,16 @@ async def run(galacticUnicorn, graphics):
                     _set_pen(_fire_colours[3])
                 else:
                     _set_pen(_fire_colours[4])
-                _pixel(y, galacticUnicorn.HEIGHT - x - 1)
+                _pixel(y, self.galacticUnicorn.HEIGHT - x - 1)
 
-        galacticUnicorn.update(_graphics)
+        self.galacticUnicorn.update(_graphics)
+
+
+async def run(galacticUnicorn, graphics):
+    fire = Fire(galacticUnicorn, graphics)
 
     while True:
-        update()
-        draw()
+        await fire.update()
         await uasyncio.sleep(1.0 / 60)
 
 

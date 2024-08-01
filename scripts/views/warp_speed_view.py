@@ -7,57 +7,66 @@ from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
-async def run(galacticUnicorn, graphics):
-    width = galacticUnicorn.WIDTH
-    height = galacticUnicorn.HEIGHT
-    cx = width // 2
-    cy = height // 2
+class WarpSpeed:
+    def __init__(self, galacticUnicorn, graphics, num_stars=50):
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.width = galacticUnicorn.WIDTH
+        self.height = galacticUnicorn.HEIGHT
+        self.cx = self.width // 2
+        self.cy = self.height // 2
+        self.stars = [
+            {
+                "x": random.uniform(-self.width, self.width),
+                "y": random.uniform(-self.height, self.height),
+                "speed": random.uniform(0.01, 0.1),
+            }
+            for _ in range(num_stars)
+        ]
 
-    # Generate stars with random positions and speeds
-    num_stars = 50
-    stars = [
-        {
-            "x": random.uniform(-width, width),
-            "y": random.uniform(-height, height),
-            "speed": random.uniform(0.01, 0.1),
-        }
-        for _ in range(num_stars)
-    ]
+    def reset_star(self, star):
+        star["x"] = random.uniform(-self.width, self.width)
+        star["y"] = random.uniform(-self.height, self.height)
+        star["speed"] = random.uniform(0.01, 0.1)
+
+    async def update_star(self, star):
+        star["x"] += star["x"] * star["speed"]
+        star["y"] += star["y"] * star["speed"]
+
+        if (
+            star["x"] > self.width // 2  # noqa: W503
+            or star["x"] < -self.width // 2  # noqa: W503
+            or star["y"] > self.height // 2  # noqa: W503
+            or star["y"] < -self.height // 2  # noqa: W503
+        ):
+            self.reset_star(star)
+
+        sx = int(self.cx + star["x"])
+        sy = int(self.cy + star["y"])
+
+        if 0 <= sx < self.width and 0 <= sy < self.height:
+            brightness = int((star["speed"] / 0.1) * 255)
+            self.graphics.set_pen(
+                self.graphics.create_pen(brightness, brightness, brightness)
+            )
+            self.graphics.pixel(sx, sy)
+
+    async def update(self):
+        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
+        self.graphics.clear()
+
+        for star in self.stars:
+            await self.update_star(star)
+
+        self.galacticUnicorn.update(self.graphics)
+
+
+async def run(galacticUnicorn, graphics):
+    warp_speed = WarpSpeed(galacticUnicorn, graphics)
 
     while True:
-        graphics.set_pen(graphics.create_pen(0, 0, 0))
-        graphics.clear()
-
-        for star in stars:
-            # Update star position
-            star["x"] += star["x"] * star["speed"]
-            star["y"] += star["y"] * star["speed"]
-
-            # Reset star if it goes out of bounds
-            x_out_of_bounds = star["x"] > width // 2 or star["x"] < -width // 2
-            y_out_of_bounds = star["y"] > height // 2 or star["y"] < -height // 2
-            if x_out_of_bounds or y_out_of_bounds:
-                star["x"] = random.uniform(-width, width)
-                star["y"] = random.uniform(-height, height)
-                star["speed"] = random.uniform(0.01, 0.1)
-
-            # Calculate screen position
-            sx = int(cx + star["x"])
-            sy = int(cy + star["y"])
-
-            # Draw star
-            if 0 <= sx < width and 0 <= sy < height:
-                brightness = int((star["speed"] / 0.1) * 255)
-                graphics.set_pen(
-                    graphics.create_pen(brightness, brightness, brightness)
-                )
-                graphics.pixel(sx, sy)
-
-        # Ask the Unicorn to update the graphics
-        galacticUnicorn.update(graphics)
-
-        # And sleep, so we update ~ 60fps
-        await uasyncio.sleep(1.0 / 60)
+        await warp_speed.update()
+        await uasyncio.sleep(0.016)
 
 
 # This section of code is only for testing.

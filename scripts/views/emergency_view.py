@@ -6,21 +6,26 @@ from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
+class Emergency:
+    def __init__(self, galacticUnicorn, graphics):
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.red = graphics.create_pen(255, 0, 0)
+        self.blue = graphics.create_pen(0, 0, 255)
+        self.current_color = self.red
+
+    async def update(self):
+        self.graphics.set_pen(self.current_color)
+        self.graphics.clear()
+        self.galacticUnicorn.update(self.graphics)
+        self.current_color = self.blue if self.current_color == self.red else self.red
+
+
 async def run(galacticUnicorn, graphics):
-    red = graphics.create_pen(255, 0, 0)
-    blue = graphics.create_pen(0, 0, 255)
+    emergency = Emergency(galacticUnicorn, graphics)
 
     while True:
-        # Flash red
-        graphics.set_pen(red)
-        graphics.clear()
-        galacticUnicorn.update(graphics)
-        await uasyncio.sleep(0.5)
-
-        # Flash blue
-        graphics.set_pen(blue)
-        graphics.clear()
-        galacticUnicorn.update(graphics)
+        await emergency.update()
         await uasyncio.sleep(0.5)
 
 

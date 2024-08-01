@@ -6,23 +6,31 @@ import uasyncio
 
 from galactic import GalacticUnicorn, Channel
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
-from utils.music import play_notes
+from utils.music import play_notes, volume
 
 
 class Firework:
-    def __init__(self, width, height, graphics, galacticUnicorn, channels):
-        self.width = width
-        self.height = height
+    def __init__(self, graphics, galacticUnicorn):
+        self.width = galacticUnicorn.WIDTH
+        self.height = galacticUnicorn.HEIGHT
         self.graphics = graphics
         self.galacticUnicorn = galacticUnicorn
-        self.channels = channels
+        self.channels = [galacticUnicorn.synth_channel(0)]
+        self.channels[0].configure(
+            waveforms=Channel.NOISE,
+            attack=0.005,
+            decay=0.500,
+            sustain=0,
+            release=0.100,
+            volume=volume,
+        )
         self.launch_x = (
-            random.randint(width // 4, 3 * width // 4)
+            random.randint(self.width // 4, 3 * self.width // 4)
             if random.random() < 0.8
-            else random.randint(1, width - 2)
+            else random.randint(1, self.width - 2)
         )
         self.explosion_x = self.launch_x
-        self.explosion_y = height // 2
+        self.explosion_y = self.height // 2
         self.brightness = random.uniform(0.5, 1.0)
         self.color = graphics.create_pen(
             int(self.brightness * random.randint(100, 255)),
@@ -31,7 +39,7 @@ class Firework:
         )
         self.particles = []
         self.stage = "launch"
-        self.y = height - 1
+        self.y = self.height - 1
         self.create_explosion_particles()
 
     def create_explosion_particles(self):
@@ -95,27 +103,13 @@ class Firework:
 
 
 async def run(galacticUnicorn, graphics):
-    width = galacticUnicorn.WIDTH
-    height = galacticUnicorn.HEIGHT
     fireworks = []
-    channels = [galacticUnicorn.synth_channel(0)]
-    channels[0].configure(
-        waveforms=Channel.NOISE,
-        attack=0.005,
-        decay=0.500,
-        sustain=0,
-        release=0.100,
-        volume=18000 / 65535,
-    )
-
     while True:
         graphics.set_pen(graphics.create_pen(0, 0, 0))
         graphics.clear()
 
         if random.random() < 0.1:
-            fireworks.append(
-                Firework(width, height, graphics, galacticUnicorn, channels)
-            )
+            fireworks.append(Firework(graphics, galacticUnicorn))
 
         for firework in fireworks:
             await firework.update()

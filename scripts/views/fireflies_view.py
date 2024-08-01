@@ -8,67 +8,64 @@ from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
-class Firefly:
-    def __init__(self, width, height, graphics):
+class Fireflies:
+    def __init__(self, galacticUnicorn, graphics):
+        self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
-        self.width = width
-        self.height = height
-        self.reset()
+        self.height = galacticUnicorn.HEIGHT
+        self.width = galacticUnicorn.WIDTH
 
-    def reset(self):
-        self.x = random.uniform(0, self.width)  # Random initial x position
-        self.y = random.uniform(0, self.height)  # Random initial y position
-        self.red = random.randint(150, 255)  # Higher red component for yellow
-        self.green = random.randint(150, 255)  # Higher green component for yellow
-        self.blue = random.randint(0, 50)  # Lower blue component for yellow
-        self.brightness = 0.0  # Start with zero brightness
-        self.life = random.uniform(
-            30.0, 60.0
-        )  # Initial life duration, between 30 and 60 seconds
-        self.age = 0.0  # Age of the firefly
-        self.phase_offset = random.uniform(
-            0, 2 * math.pi
-        )  # Random phase offset for independence
+        self.fireflies = [self.create_firefly() for _ in range(10)]
 
-    async def update(self):
-        # Increase age
-        self.age += 0.1
+    def create_firefly(self):
+        return {
+            "age": 0.0,
+            "blue": random.randint(0, 50),
+            "brightness": 0.0,
+            "green": random.randint(150, 255),
+            "life": random.uniform(30.0, 60.0),
+            "phase_offset": random.uniform(0, 2 * math.pi),
+            "red": random.randint(150, 255),
+            "x": random.uniform(0, self.width),
+            "y": random.uniform(0, self.height),
+        }
 
-        # Adjust brightness using a sine wave for smooth dimming in and out
-        self.brightness = (
-            math.sin(self.age * 2 * math.pi / 10 + self.phase_offset) + 1
+    def reset_firefly(self, firefly):
+        firefly.update(self.create_firefly())
+
+    async def update_firefly(self, firefly):
+        firefly["age"] += 0.1
+        firefly["brightness"] = (
+            math.sin(firefly["age"] * 2 * math.pi / 10 + firefly["phase_offset"]) + 1
         ) / 2
 
-        # Reset firefly when its life runs out
-        if self.age >= self.life:
-            self.reset()
+        if firefly["age"] >= firefly["life"]:
+            self.reset_firefly(firefly)
 
-        # Create pen with updated brightness values
         pen = self.graphics.create_pen(
-            int(self.red * self.brightness),
-            int(self.green * self.brightness),
-            int(self.blue * self.brightness),
+            int(firefly["red"] * firefly["brightness"]),
+            int(firefly["green"] * firefly["brightness"]),
+            int(firefly["blue"] * firefly["brightness"]),
         )
         self.graphics.set_pen(pen)
-        self.graphics.pixel(int(self.x), int(self.y))
+        self.graphics.pixel(int(firefly["x"]), int(firefly["y"]))
+
+    async def update(self):
+        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
+        self.graphics.clear()
+
+        for firefly in self.fireflies:
+            await self.update_firefly(firefly)
+
+        self.galacticUnicorn.update(self.graphics)
 
 
 async def run(galacticUnicorn, graphics):
-    width = galacticUnicorn.WIDTH  # Get the width of the display
-    height = galacticUnicorn.HEIGHT  # Get the height of the display
-
-    # Create fireflies
-    fireflies = [Firefly(width, height, graphics) for _ in range(10)]
+    fireflies = Fireflies(galacticUnicorn, graphics)
 
     while True:
-        graphics.set_pen(graphics.create_pen(0, 0, 0))  # Clear the screen
-        graphics.clear()
-
-        for firefly in fireflies:
-            await firefly.update()  # Update each firefly
-
-        galacticUnicorn.update(graphics)  # Update the display
-        await uasyncio.sleep(0.1)  # Pause for a short time before the next update
+        await fireflies.update()
+        await uasyncio.sleep(0.1)
 
 
 # This section of code is only for testing.
