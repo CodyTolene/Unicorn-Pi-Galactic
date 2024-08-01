@@ -28,8 +28,6 @@ class Lightning:
             volume=volume,
         )
 
-        self.lightning_notes = [random.randint(500, 5000) for _ in range(10)]
-
     def create_bolt(self):
         bolt = []
         x = random.randint(0, self.width - 1)
@@ -69,10 +67,11 @@ class Lightning:
         self.galacticUnicorn.update(self.graphics)
 
     async def play_lightning_sound(self):
+        lightning_notes = [random.randint(500, 5000) for _ in range(10)]
         bpm = random.choice([random.randint(550, 650), random.randint(430, 530)])
         play_notes(
             self.galacticUnicorn,
-            [self.lightning_notes],
+            [lightning_notes],
             self.channels,
             bpm=bpm,
             repeat=False,
