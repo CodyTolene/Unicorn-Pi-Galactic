@@ -6,15 +6,16 @@ import uasyncio
 
 from galactic import GalacticUnicorn, Channel
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
-from utils.music import play_notes, volume
 
 
 class Firework:
-    def __init__(self, graphics, galacticUnicorn):
-        self.width = galacticUnicorn.WIDTH
-        self.height = galacticUnicorn.HEIGHT
-        self.graphics = graphics
+    def __init__(self, graphics, galacticUnicorn, music):
         self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.height = galacticUnicorn.HEIGHT
+        self.music = music
+        self.width = galacticUnicorn.WIDTH
+
         self.channels = [galacticUnicorn.synth_channel(0)]
         self.channels[0].configure(
             waveforms=Channel.NOISE,
@@ -22,13 +23,15 @@ class Firework:
             decay=0.500,
             sustain=0,
             release=0.100,
-            volume=volume,
+            volume=music.volume,
         )
+
         self.launch_x = (
             random.randint(self.width // 4, 3 * self.width // 4)
             if random.random() < 0.8
             else random.randint(1, self.width - 2)
         )
+
         self.explosion_x = self.launch_x
         self.explosion_y = self.height // 2
         self.brightness = random.uniform(0.5, 1.0)
@@ -67,9 +70,7 @@ class Firework:
             [700, 750, 800, 850, 900, -1, -1],
         ]
         selected_sound = random.choice(explosion_sounds)
-        play_notes(
-            self.galacticUnicorn, [selected_sound], self.channels, bpm=700, repeat=False
-        )
+        self.music.play_notes([selected_sound], self.channels, bpm=700, repeat=False)
 
     async def update(self):
         if self.stage == "launch":
@@ -102,14 +103,14 @@ class Firework:
                             self.graphics.pixel(int(p["x"]), int(p["y"]))
 
 
-async def run(galacticUnicorn, graphics):
+async def run(galacticUnicorn, graphics, music):
     fireworks = []
     while True:
         graphics.set_pen(graphics.create_pen(0, 0, 0))
         graphics.clear()
 
         if random.random() < 0.1:
-            fireworks.append(Firework(graphics, galacticUnicorn))
+            fireworks.append(Firework(graphics, galacticUnicorn, music))
 
         for firework in fireworks:
             await firework.update()

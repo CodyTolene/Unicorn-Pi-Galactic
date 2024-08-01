@@ -5,8 +5,8 @@ import uasyncio
 import sys
 
 from collections import OrderedDict
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
 from galactic import GalacticUnicorn
+from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
 
 from views import digital_clock_12_view
 from views import digital_clock_24_view
@@ -30,6 +30,7 @@ from views import warp_speed_view
 from views import wave_view
 
 from utils.button_listener import buttonListenerProcess
+from utils.music import Music
 from utils.view_manager import load_current_view_index
 
 # Ensure local packages can be imported
@@ -78,16 +79,21 @@ if __name__ == "__main__":
     graphics.clear()
     galacticUnicorn.update(graphics)
 
+    # Initialize the music player
+    music = Music(galacticUnicorn)
+
     # Start the asyncio event loop
     loop = uasyncio.get_event_loop()
 
     # Start the initial view
-    currentViewTask = loop.create_task(views[currentViewKey](galacticUnicorn, graphics))
+    currentViewTask = loop.create_task(
+        views[currentViewKey](galacticUnicorn, graphics, music)
+    )
 
     # Create and schedule the button listener coroutine
     loop.create_task(
         buttonListenerProcess(
-            views, galacticUnicorn, graphics, currentViewKey, currentViewTask
+            views, galacticUnicorn, graphics, currentViewKey, currentViewTask, music
         )
     )
 

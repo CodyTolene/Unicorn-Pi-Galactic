@@ -8,20 +8,24 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class WarpSpeed:
-    def __init__(self, galacticUnicorn, graphics, num_stars=50):
+    def __init__(self, galacticUnicorn, graphics, music):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
-        self.width = galacticUnicorn.WIDTH
         self.height = galacticUnicorn.HEIGHT
+        self.music = music
+        self.width = galacticUnicorn.WIDTH
+
         self.cx = self.width // 2
         self.cy = self.height // 2
+
+        self.startCount = 50
         self.stars = [
             {
                 "x": random.uniform(-self.width, self.width),
                 "y": random.uniform(-self.height, self.height),
                 "speed": random.uniform(0.01, 0.1),
             }
-            for _ in range(num_stars)
+            for _ in range(self.startCount)
         ]
 
     def reset_star(self, star):
@@ -61,8 +65,8 @@ class WarpSpeed:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics):
-    warp_speed = WarpSpeed(galacticUnicorn, graphics)
+async def run(galacticUnicorn, graphics, music):
+    warp_speed = WarpSpeed(galacticUnicorn, graphics, music)
 
     while True:
         await warp_speed.update()

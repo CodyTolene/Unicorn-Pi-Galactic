@@ -11,9 +11,8 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class Fire:
-    def __init__(self, galacticUnicorn, graphics):
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
+    def __init__(self, galacticUnicorn, graphics, music):
+        self.base_damping_factor = 0.97
         self.fire_colours = [
             graphics.create_pen(0, 0, 0),
             graphics.create_pen(20, 20, 20),
@@ -21,11 +20,14 @@ class Fire:
             graphics.create_pen(220, 160, 0),
             graphics.create_pen(255, 255, 180),
         ]
-        self.width = galacticUnicorn.HEIGHT + 2
-        self.height = galacticUnicorn.WIDTH + 4
-        self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
-        self.base_damping_factor = 0.97
         self.fire_spawns = 1
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.height = galacticUnicorn.WIDTH + 4
+        self.music = music
+        self.width = galacticUnicorn.HEIGHT + 2
+
+        self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
 
     @micropython.native
     async def update(self):
@@ -79,8 +81,8 @@ class Fire:
         self.galacticUnicorn.update(_graphics)
 
 
-async def run(galacticUnicorn, graphics):
-    fire = Fire(galacticUnicorn, graphics)
+async def run(galacticUnicorn, graphics, music):
+    fire = Fire(galacticUnicorn, graphics, music)
 
     while True:
         await fire.update()

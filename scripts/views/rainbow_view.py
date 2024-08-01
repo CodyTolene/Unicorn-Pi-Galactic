@@ -8,15 +8,15 @@ import uasyncio
 import math
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 from galactic import GalacticUnicorn, Channel
-from utils.music import play_notes, volume
 
 
 class Rainbow:
-    def __init__(self, galacticUnicorn, graphics):
+    def __init__(self, galacticUnicorn, graphics, music):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
         self.hue_offset = 0.0
+        self.music = music
         self.phase = 0
         self.speed = 1.0
         self.stripe_width = 3.0
@@ -38,7 +38,7 @@ class Rainbow:
             decay=0.168,
             sustain=0xAFFF / 65535,
             release=0.168,
-            volume=volume,
+            volume=self.music.volume,
         )
         channels[1].configure(
             waveforms=Channel.SINE + Channel.SQUARE,
@@ -46,7 +46,7 @@ class Rainbow:
             decay=0.300,
             sustain=0,
             release=0,
-            volume=volume,
+            volume=self.music.volume,
         )
         channels[2].configure(
             waveforms=Channel.NOISE,
@@ -54,7 +54,7 @@ class Rainbow:
             decay=0.010,
             sustain=16000 / 65535,
             release=0.100,
-            volume=volume,
+            volume=self.music.volume,
         )
         channels[3].configure(
             waveforms=Channel.NOISE,
@@ -62,7 +62,7 @@ class Rainbow:
             decay=0.005,
             sustain=8000 / 65535,
             release=0.040,
-            volume=volume,
+            volume=self.music.volume,
         )
         channels[4].configure(
             waveforms=Channel.SQUARE,
@@ -70,9 +70,9 @@ class Rainbow:
             decay=0.100,
             sustain=0,
             release=0.500,
-            volume=volume,
+            volume=self.music.volume,
         )
-        play_notes(self.galacticUnicorn, music_notes, channels, bpm=700, repeat=True)
+        self.music.play_notes(music_notes, channels, bpm=700, repeat=True)
 
     @staticmethod
     def from_hsv(h, s, v):
@@ -136,8 +136,8 @@ class Rainbow:
         self.on_button_press()
 
 
-async def run(galacticUnicorn, graphics):
-    rainbow = Rainbow(galacticUnicorn, graphics)
+async def run(galacticUnicorn, graphics, music):
+    rainbow = Rainbow(galacticUnicorn, graphics, music)
 
     while True:
         await rainbow.update()

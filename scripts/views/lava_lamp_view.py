@@ -9,13 +9,14 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class LavaLamp:
-    def __init__(self, galacticUnicorn, graphics):
+    def __init__(self, galacticUnicorn, graphics, music):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
+        self.music = music
         self.width = galacticUnicorn.WIDTH
 
-        self.blobs = [self.create_blob() for _ in range(7)]  # Increase number of blobs
+        self.blobs = [self.create_blob() for _ in range(7)]
 
     def create_blob(self):
         color = (
@@ -68,8 +69,8 @@ class LavaLamp:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics):
-    lava_lamp = LavaLamp(galacticUnicorn, graphics)
+async def run(galacticUnicorn, graphics, music):
+    lava_lamp = LavaLamp(galacticUnicorn, graphics, music)
 
     while True:
         await lava_lamp.update()

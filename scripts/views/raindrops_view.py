@@ -3,7 +3,6 @@
 
 import uasyncio
 import random
-from utils.music import play_notes
 from galactic import GalacticUnicorn, Channel
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
@@ -30,11 +29,12 @@ class Raindrop:
 
 
 class Raindrops:
-    def __init__(self, galacticUnicorn, graphics):
+    def __init__(self, galacticUnicorn, graphics, music):
         self.direction = random.choice([-0.3, 0.3])
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
+        self.music = music
         self.width = galacticUnicorn.WIDTH
 
         self.raindrops = [
@@ -52,10 +52,10 @@ class Raindrops:
             decay=0.500,
             sustain=0,
             release=0.100,
-            volume=18000 / 65535,
+            volume=self.music.volume,
         )
         channels = [channel]
-        play_notes(self.galacticUnicorn, [musicNotes], channels, bpm=820, repeat=True)
+        self.music.play_notes([musicNotes], channels, bpm=820, repeat=True)
 
     async def update(self):
         self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
@@ -67,8 +67,8 @@ class Raindrops:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics):
-    raindrops = Raindrops(galacticUnicorn, graphics)
+async def run(galacticUnicorn, graphics, music):
+    raindrops = Raindrops(galacticUnicorn, graphics, music)
 
     while True:
         await raindrops.update()

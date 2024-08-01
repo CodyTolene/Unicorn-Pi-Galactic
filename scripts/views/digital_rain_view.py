@@ -8,12 +8,13 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class DigitalRain:
-    def __init__(self, galacticUnicorn, graphics):
+    def __init__(self, galacticUnicorn, graphics, music):
+        self.dots = []
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
-        self.width = galacticUnicorn.WIDTH
         self.height = galacticUnicorn.HEIGHT
-        self.dots = []
+        self.music = music
+        self.width = galacticUnicorn.WIDTH
 
     def clear(self):
         self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
@@ -64,8 +65,8 @@ class DigitalRain:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics):
-    digital_rain = DigitalRain(galacticUnicorn, graphics)
+async def run(galacticUnicorn, graphics, music):
+    digital_rain = DigitalRain(galacticUnicorn, graphics, music)
 
     while True:
         await digital_rain.update()

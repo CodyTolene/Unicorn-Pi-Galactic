@@ -9,7 +9,7 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class DigitalClock12:
-    def __init__(self, galacticUnicorn, graphics):
+    def __init__(self, galacticUnicorn, graphics, music):
         self.colors = [
             (255, 255, 255),  # White
             (255, 0, 0),  # Red
@@ -24,6 +24,7 @@ class DigitalClock12:
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.graphics.set_font("bitmap8")
+        self.music = music
         self.height = galacticUnicorn.HEIGHT
         self.width = galacticUnicorn.WIDTH
 
@@ -82,8 +83,8 @@ class DigitalClock12:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics):
-    digital_clock_12 = DigitalClock12(galacticUnicorn, graphics)
+async def run(galacticUnicorn, graphics, music):
+    digital_clock_12 = DigitalClock12(galacticUnicorn, graphics, music)
 
     while True:
         await digital_clock_12.update()

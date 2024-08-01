@@ -8,11 +8,13 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class Snowfall:
-    def __init__(self, galacticUnicorn, graphics):
+    def __init__(self, galacticUnicorn, graphics, music):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
-        self.width = galacticUnicorn.WIDTH
         self.height = galacticUnicorn.HEIGHT
+        self.music = music
+        self.width = galacticUnicorn.WIDTH
+
         self.snowflakes = [
             self.Snowflake(self.width, self.height, self.graphics, initial=True)
             for _ in range(20)
@@ -63,8 +65,8 @@ class Snowfall:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics):
-    snowfall = Snowfall(galacticUnicorn, graphics)
+async def run(galacticUnicorn, graphics, music):
+    snowfall = Snowfall(galacticUnicorn, graphics, music)
 
     while True:
         await snowfall.update()
