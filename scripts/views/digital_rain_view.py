@@ -4,9 +4,6 @@
 import random
 import uasyncio
 
-from galactic import GalacticUnicorn
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
-
 
 class DigitalRain:
     def __init__(self, galacticUnicorn, graphics, sound_service):
@@ -16,6 +13,12 @@ class DigitalRain:
         self.height = galacticUnicorn.HEIGHT
         self.sound_service = sound_service
         self.width = galacticUnicorn.WIDTH
+
+        self.MAX_DOTS = 50
+        BRIGHT_GREEN = (0, 255, 0)
+        MEDIUM_GREEN = (0, 128, 0)
+        DARK_GREEN = (0, 64, 0)
+        self.GREEN_VARIATIONS = [BRIGHT_GREEN, MEDIUM_GREEN, DARK_GREEN]
 
     def clear(self):
         self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
@@ -39,7 +42,7 @@ class DigitalRain:
 
     def create_random_dot(self):
         x = random.randint(0, self.width - 1)
-        color = random.choice(GREEN_VARIATIONS)
+        color = random.choice(self.GREEN_VARIATIONS)
         return self.create_dot(x, 0, color)
 
     def draw_dots(self):
@@ -50,7 +53,7 @@ class DigitalRain:
 
     async def update(self):
         self.clear()
-        if len(self.dots) < MAX_DOTS and random.random() < 0.85:
+        if len(self.dots) < self.MAX_DOTS and random.random() < 0.85:
             new_dot = self.create_random_dot()
             self.dots.append(new_dot)
 
@@ -72,16 +75,3 @@ async def run(galacticUnicorn, graphics, sound_service):
     while True:
         await digital_rain.update()
         await uasyncio.sleep(0.1)
-
-
-MAX_DOTS = 50
-BRIGHT_GREEN = (0, 255, 0)
-MEDIUM_GREEN = (0, 128, 0)
-DARK_GREEN = (0, 64, 0)
-GREEN_VARIATIONS = [BRIGHT_GREEN, MEDIUM_GREEN, DARK_GREEN]
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))

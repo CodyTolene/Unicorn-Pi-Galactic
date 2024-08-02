@@ -2,8 +2,6 @@
 # Apache License 2.0
 
 import uasyncio
-from galactic import GalacticUnicorn
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class NyanCat:
@@ -197,9 +195,3 @@ frames = [
         "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",
     ],
 ]
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))

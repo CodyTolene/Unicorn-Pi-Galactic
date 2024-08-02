@@ -7,7 +7,6 @@
 import uasyncio
 import math
 
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 from galactic import GalacticUnicorn
 from utils.sounds import ExampleMusic
 
@@ -97,10 +96,3 @@ async def run(galacticUnicorn, graphics, sound_service):
     while True:
         await rainbow.update()
         await uasyncio.sleep(0.1)
-
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))

@@ -4,8 +4,6 @@
 import time
 import math
 import uasyncio
-from galactic import GalacticUnicorn
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class Wave:
@@ -44,10 +42,3 @@ async def run(galacticUnicorn, graphics, sound_service):
     while True:
         await wave.update()
         await uasyncio.sleep(0.1)
-
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))

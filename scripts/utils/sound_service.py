@@ -3,9 +3,8 @@
 
 import uasyncio
 
-from galactic import GalacticUnicorn, Channel
+from galactic import Channel
 from machine import Timer
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 # A class for playing sound on the Pimoroni Galactic Unicorn.
@@ -138,11 +137,3 @@ async def play_example_rain(galacticUnicorn, graphics, sound_service):
 
     # And then stop all sounds
     await sound_service.stop_all_sounds()
-
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    sound_service = SoundService(galacticUnicorn)
-    uasyncio.run(play_example_rain(galacticUnicorn, graphics, sound_service))

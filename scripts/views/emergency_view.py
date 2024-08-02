@@ -19,9 +19,7 @@ any misuse or adverse effects resulting from the use of this software.
 """
 
 import uasyncio
-from galactic import GalacticUnicorn
 
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 from utils.sounds import SirenSound
 
 
@@ -58,10 +56,3 @@ async def run(galacticUnicorn, graphics, sound_service):
     while True:
         await emergency.update()
         await uasyncio.sleep(1.15)
-
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))
