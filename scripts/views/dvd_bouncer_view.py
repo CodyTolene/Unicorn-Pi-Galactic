@@ -8,7 +8,7 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class DVDBouncer:
-    def __init__(self, galacticUnicorn, graphics, sound):
+    def __init__(self, galacticUnicorn, graphics, sound_service):
         self.dx = 1 if random.choice([True, False]) else -1
         self.dy = 1 if random.choice([True, False]) else -1
         self.galacticUnicorn = galacticUnicorn
@@ -16,7 +16,7 @@ class DVDBouncer:
         self.height = galacticUnicorn.HEIGHT
         self.logo_height = 1
         self.logo_width = 2
-        self.sound = sound
+        self.sound_service = sound_service
         self.width = galacticUnicorn.WIDTH
         self.x = random.randint(1, self.width - self.logo_width - 1)
         self.y = random.randint(1, self.height - self.logo_height - 1)
@@ -68,8 +68,8 @@ class DVDBouncer:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics, sound):
-    dvd_bouncer = DVDBouncer(galacticUnicorn, graphics, sound)
+async def run(galacticUnicorn, graphics, sound_service):
+    dvd_bouncer = DVDBouncer(galacticUnicorn, graphics, sound_service)
 
     while True:
         await dvd_bouncer.update()

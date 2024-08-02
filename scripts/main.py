@@ -30,7 +30,7 @@ from views import warp_speed_view
 from views import wave_view
 
 from utils.button_listener import buttonListenerProcess
-from utils.sound import Sound
+from utils.sound_service import SoundService
 from utils.view_manager import load_current_view_index
 
 # Ensure local packages can be imported
@@ -80,20 +80,25 @@ if __name__ == "__main__":
     galacticUnicorn.update(graphics)
 
     # Initialize the sound player
-    sound = Sound(galacticUnicorn)
+    sound_service = SoundService(galacticUnicorn)
 
     # Start the asyncio event loop
     loop = uasyncio.get_event_loop()
 
     # Start the initial view
     currentViewTask = loop.create_task(
-        views[currentViewKey](galacticUnicorn, graphics, sound)
+        views[currentViewKey](galacticUnicorn, graphics, sound_service)
     )
 
     # Create and schedule the button listener coroutine
     loop.create_task(
         buttonListenerProcess(
-            views, galacticUnicorn, graphics, currentViewKey, currentViewTask, sound
+            views,
+            galacticUnicorn,
+            graphics,
+            currentViewKey,
+            currentViewTask,
+            sound_service,
         )
     )
 

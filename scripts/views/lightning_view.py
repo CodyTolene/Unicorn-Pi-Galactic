@@ -10,14 +10,14 @@ from utils.sounds import ThunderSound
 
 
 class Lightning:
-    def __init__(self, galacticUnicorn, graphics, sound):
+    def __init__(self, galacticUnicorn, graphics, sound_service):
         self.bolts = []
         self.flash = False
         self.flash_duration = 0
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.sound = ThunderSound(galacticUnicorn, sound)
+        self.sound_service = ThunderSound(galacticUnicorn, sound_service)
         self.width = galacticUnicorn.WIDTH
 
     def create_bolt(self):
@@ -49,7 +49,7 @@ class Lightning:
                 self.flash = True
                 self.flash_duration = random.randint(1, 3)
                 self.bolts = [self.create_bolt() for _ in range(random.randint(1, 3))]
-                self.sound.play()
+                self.sound_service.play()
 
         for bolt in self.bolts:
             for x, y in bolt:
@@ -59,8 +59,8 @@ class Lightning:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics, sound):
-    lightning = Lightning(galacticUnicorn, graphics, sound)
+async def run(galacticUnicorn, graphics, sound_service):
+    lightning = Lightning(galacticUnicorn, graphics, sound_service)
 
     while True:
         await lightning.update()

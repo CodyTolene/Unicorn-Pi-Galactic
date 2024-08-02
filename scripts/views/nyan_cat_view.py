@@ -7,11 +7,11 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class NyanCat:
-    def __init__(self, galacticUnicorn, graphics, sound):
+    def __init__(self, galacticUnicorn, graphics, sound_service):
         self.frame_index = 0
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
-        self.sound = sound
+        self.sound_service = sound_service
 
     def display_frame(self, frame):
         for y, row in enumerate(frame):
@@ -30,8 +30,8 @@ class NyanCat:
         self.frame_index = (self.frame_index + 1) % len(frames)
 
 
-async def run(galacticUnicorn, graphics, sound):
-    nyan_cat = NyanCat(galacticUnicorn, graphics, sound)
+async def run(galacticUnicorn, graphics, sound_service):
+    nyan_cat = NyanCat(galacticUnicorn, graphics, sound_service)
 
     while True:
         await nyan_cat.update()

@@ -13,12 +13,12 @@ from utils.sounds import ExampleMusic
 
 
 class Rainbow:
-    def __init__(self, galacticUnicorn, graphics, sound):
+    def __init__(self, galacticUnicorn, graphics, sound_service):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
         self.hue_offset = 0.0
-        self.sound = ExampleMusic(galacticUnicorn, sound)
+        self.sound_service = ExampleMusic(galacticUnicorn, sound_service)
         self.phase = 0
         self.speed = 1.0
         self.stripe_width = 3.0
@@ -27,7 +27,7 @@ class Rainbow:
         self.hue_map = [
             self.from_hsv(x / self.width, 1.0, 1.0) for x in range(self.width)
         ]
-        self.sound.play()
+        self.sound_service.play()
 
     @staticmethod
     def from_hsv(h, s, v):
@@ -91,8 +91,8 @@ class Rainbow:
         self.on_button_press()
 
 
-async def run(galacticUnicorn, graphics, sound):
-    rainbow = Rainbow(galacticUnicorn, graphics, sound)
+async def run(galacticUnicorn, graphics, sound_service):
+    rainbow = Rainbow(galacticUnicorn, graphics, sound_service)
 
     while True:
         await rainbow.update()

@@ -56,7 +56,7 @@ class ExampleMusic:
     # fmt: on
     music_notes = [melody_notes, rhythm_notes, drum_beats, hi_hat, bass_notes]
 
-    def __init__(self, galacticUnicorn, sound):
+    def __init__(self, galacticUnicorn, sound_service):
         self.channels = [
             galacticUnicorn.synth_channel(i) for i in range(len(self.music_notes))
         ]
@@ -66,7 +66,7 @@ class ExampleMusic:
             decay=0.168,
             sustain=0xAFFF / 65535,
             release=0.168,
-            volume=sound.get_current_volume(),
+            volume=sound_service.get_current_volume(),
         )
         self.channels[1].configure(
             waveforms=Channel.SINE + Channel.SQUARE,
@@ -74,7 +74,7 @@ class ExampleMusic:
             decay=0.300,
             sustain=0,
             release=0,
-            volume=sound.get_current_volume(),
+            volume=sound_service.get_current_volume(),
         )
         self.channels[2].configure(
             waveforms=Channel.NOISE,
@@ -82,7 +82,7 @@ class ExampleMusic:
             decay=0.010,
             sustain=16000 / 65535,
             release=0.100,
-            volume=sound.get_current_volume(),
+            volume=sound_service.get_current_volume(),
         )
         self.channels[3].configure(
             waveforms=Channel.NOISE,
@@ -90,7 +90,7 @@ class ExampleMusic:
             decay=0.005,
             sustain=8000 / 65535,
             release=0.040,
-            volume=sound.get_current_volume(),
+            volume=sound_service.get_current_volume(),
         )
         self.channels[4].configure(
             waveforms=Channel.SQUARE,
@@ -98,17 +98,19 @@ class ExampleMusic:
             decay=0.100,
             sustain=0,
             release=0.500,
-            volume=sound.get_current_volume(),
+            volume=sound_service.get_current_volume(),
         )
-        self.sound = sound
+        self.sound_service = sound_service
 
     def play(self):
-        self.sound.play_notes(self.music_notes, self.channels, bpm=700, repeat=True)
+        self.sound_service.play_notes(
+            self.music_notes, self.channels, bpm=700, repeat=True
+        )
 
 
 class ExampleRandomMusic:
-    def __init__(self, galacticUnicorn, sound):
-        self.sound = sound
+    def __init__(self, galacticUnicorn, sound_service):
+        self.sound_service = sound_service
         self.notes = []
 
         for _ in range(8):  # 8 channels
@@ -127,16 +129,16 @@ class ExampleRandomMusic:
                 decay=0.1,
                 sustain=0.5,
                 release=0.5,
-                volume=self.sound.get_current_volume(),
+                volume=self.sound_service.get_current_volume(),
             )
 
     def play(self):
-        self.sound.play_notes(self.notes, self.channels, bpm=60, repeat=True)
+        self.sound_service.play_notes(self.notes, self.channels, bpm=60, repeat=True)
 
 
 class FireworkSound:
-    def __init__(self, galacticUnicorn, sound):
-        self.sound = sound
+    def __init__(self, galacticUnicorn, sound_service):
+        self.sound_service = sound_service
         self.channels = [galacticUnicorn.synth_channel(0)]
         self.channels[0].configure(
             waveforms=Channel.NOISE,
@@ -144,7 +146,7 @@ class FireworkSound:
             decay=0.500,
             sustain=0,
             release=0.100,
-            volume=self.sound.get_current_volume(),
+            volume=self.sound_service.get_current_volume(),
         )
 
         self.explosion_sounds = [
@@ -157,13 +159,15 @@ class FireworkSound:
 
     def play(self):
         selected_sound = random.choice(self.explosion_sounds)
-        self.sound.play_notes([selected_sound], self.channels, bpm=700, repeat=False)
+        self.sound_service.play_notes(
+            [selected_sound], self.channels, bpm=700, repeat=False
+        )
 
 
 class RaindropsSound:
-    def __init__(self, galacticUnicorn, sound):
+    def __init__(self, galacticUnicorn, sound_service):
         self.notes = [800, 810, 820]
-        self.sound = sound
+        self.sound_service = sound_service
         channel = galacticUnicorn.synth_channel(0)
         channel.configure(
             waveforms=Channel.NOISE,
@@ -171,16 +175,16 @@ class RaindropsSound:
             decay=0.500,
             sustain=0,
             release=0.100,
-            volume=self.sound.get_current_volume(),
+            volume=self.sound_service.get_current_volume(),
         )
         self.channels = [channel]
 
     def play(self):
-        self.sound.play_notes([self.notes], self.channels, bpm=820, repeat=True)
+        self.sound_service.play_notes([self.notes], self.channels, bpm=820, repeat=True)
 
 
 class ThunderSound:
-    def __init__(self, galacticUnicorn, sound):
+    def __init__(self, galacticUnicorn, sound_service):
         self.channels = [galacticUnicorn.synth_channel(0)]
         self.channels[0].configure(
             waveforms=Channel.NOISE,
@@ -188,14 +192,14 @@ class ThunderSound:
             decay=0.010,
             sustain=65535 / 65535,
             release=0.100,
-            volume=sound.get_current_volume(),
+            volume=sound_service.get_current_volume(),
         )
-        self.sound = sound
+        self.sound_service = sound_service
 
     # Plays a random thunder sound
     def play(self):
         random_notes = [random.randint(500, 5000) for _ in range(10)]
         random_bpm = random.choice([random.randint(550, 650), random.randint(430, 530)])
-        self.sound.play_notes(
+        self.sound_service.play_notes(
             [random_notes], self.channels, bpm=random_bpm, repeat=False
         )

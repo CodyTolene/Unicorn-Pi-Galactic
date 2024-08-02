@@ -9,7 +9,7 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 # A class for playing sound on the Pimoroni Galactic Unicorn.
-class Sound:
+class SoundService:
     def __init__(self, galacticUnicorn):
         self.current_timer = None
         self.galacticUnicorn = galacticUnicorn
@@ -19,7 +19,7 @@ class Sound:
         self,
         musicNotes,  # List of note sequences for each channel.
         channels,  # List of configured synth channels.
-        bpm,  # Beats per minute for the sound.
+        bpm,  # Beats per minute for the sound_service.
         repeat=False,  # Boolean for optional repeat when song ends.
     ):
         # Ensure any previous timer is deinitialized
@@ -94,7 +94,7 @@ class Sound:
         return self.galacticUnicorn.get_volume()
 
 
-async def play_example_rain(galacticUnicorn, graphics, sound):
+async def play_example_rain(galacticUnicorn, graphics, sound_service):
     # Rain sound frequencies (white noise-like)
     musicNotes = [800, 810, 820]
 
@@ -106,43 +106,43 @@ async def play_example_rain(galacticUnicorn, graphics, sound):
         decay=0.500,
         sustain=0,
         release=0.100,
-        volume=sound.get_current_volume(),
+        volume=sound_service.get_current_volume(),
     )
 
     # Create and play rain sound
     channels = [channel]
-    sound.play_notes([musicNotes], channels, bpm=820, repeat=True)
+    sound_service.play_notes([musicNotes], channels, bpm=820, repeat=True)
 
     # Wait for 3 seconds
     await uasyncio.sleep(3)
 
     # Volume up
-    await sound.volume_up()
-    await sound.volume_up()
-    await sound.volume_up()
-    await sound.volume_up()
-    await sound.volume_up()
+    await sound_service.volume_up()
+    await sound_service.volume_up()
+    await sound_service.volume_up()
+    await sound_service.volume_up()
+    await sound_service.volume_up()
 
     # Wait for 3 seconds
     await uasyncio.sleep(3)
 
     # Volume down
-    await sound.volume_down()
-    await sound.volume_down()
-    await sound.volume_down()
-    await sound.volume_down()
-    await sound.volume_down()
+    await sound_service.volume_down()
+    await sound_service.volume_down()
+    await sound_service.volume_down()
+    await sound_service.volume_down()
+    await sound_service.volume_down()
 
     # Wait for 5 seconds
     await uasyncio.sleep(5)
 
     # And then stop all sounds
-    await sound.stop_all_sounds()
+    await sound_service.stop_all_sounds()
 
 
 # This section of code is only for testing.
 if __name__ == "__main__":
     galacticUnicorn = GalacticUnicorn()
     graphics = PicoGraphics(display=DISPLAY)
-    sound = Sound(galacticUnicorn)
-    uasyncio.run(play_example_rain(galacticUnicorn, graphics, sound))
+    sound_service = SoundService(galacticUnicorn)
+    uasyncio.run(play_example_rain(galacticUnicorn, graphics, sound_service))

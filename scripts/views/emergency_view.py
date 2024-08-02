@@ -7,11 +7,11 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class Emergency:
-    def __init__(self, galacticUnicorn, graphics, sound):
+    def __init__(self, galacticUnicorn, graphics, sound_service):
         self.blue = graphics.create_pen(0, 0, 255)
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
-        self.sound = sound
+        self.sound_service = sound_service
         self.red = graphics.create_pen(255, 0, 0)
 
         self.current_color = self.red
@@ -23,8 +23,8 @@ class Emergency:
         self.current_color = self.blue if self.current_color == self.red else self.red
 
 
-async def run(galacticUnicorn, graphics, sound):
-    emergency = Emergency(galacticUnicorn, graphics, sound)
+async def run(galacticUnicorn, graphics, sound_service):
+    emergency = Emergency(galacticUnicorn, graphics, sound_service)
 
     while True:
         await emergency.update()

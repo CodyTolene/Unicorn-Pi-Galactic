@@ -10,11 +10,11 @@ from utils.sounds import FireworkSound
 
 
 class Firework:
-    def __init__(self, graphics, galacticUnicorn, sound):
+    def __init__(self, graphics, galacticUnicorn, sound_service):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.sound = FireworkSound(galacticUnicorn, sound)
+        self.sound_service = FireworkSound(galacticUnicorn, sound_service)
         self.width = galacticUnicorn.WIDTH
 
         self.launch_x = (
@@ -61,7 +61,7 @@ class Firework:
                 self.y -= 1
             else:
                 self.stage = "explode"
-                self.sound.play()
+                self.sound_service.play()
         elif self.stage == "explode":
             if any(p["life"] > 0 for p in self.particles):
                 for p in self.particles:
@@ -84,14 +84,14 @@ class Firework:
                             self.graphics.pixel(int(p["x"]), int(p["y"]))
 
 
-async def run(galacticUnicorn, graphics, sound):
+async def run(galacticUnicorn, graphics, sound_service):
     fireworks = []
     while True:
         graphics.set_pen(graphics.create_pen(0, 0, 0))
         graphics.clear()
 
         if random.random() < 0.1:
-            fireworks.append(Firework(graphics, galacticUnicorn, sound))
+            fireworks.append(Firework(graphics, galacticUnicorn, sound_service))
 
         for firework in fireworks:
             await firework.update()

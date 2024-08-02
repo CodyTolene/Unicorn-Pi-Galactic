@@ -10,11 +10,11 @@ from utils.sounds import ExampleRandomMusic
 
 
 class Fireplace:
-    def __init__(self, graphics, galacticUnicorn, sound):
+    def __init__(self, graphics, galacticUnicorn, sound_service):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT + 2
-        self.sound = ExampleRandomMusic(galacticUnicorn, sound)
+        self.sound_service = ExampleRandomMusic(galacticUnicorn, sound_service)
         self.width = galacticUnicorn.WIDTH
 
         self.fire_colours = [
@@ -25,7 +25,7 @@ class Fireplace:
             graphics.create_pen(255, 255, 180),
         ]
         self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
-        self.sound.play()
+        self.sound_service.play()
 
     async def update(self):
         _heat = self.heat
@@ -73,8 +73,8 @@ class Fireplace:
         self.galacticUnicorn.update(_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound):
-    fireplace = Fireplace(graphics, galacticUnicorn, sound)
+async def run(galacticUnicorn, graphics, sound_service):
+    fireplace = Fireplace(graphics, galacticUnicorn, sound_service)
 
     while True:
         await fireplace.update()

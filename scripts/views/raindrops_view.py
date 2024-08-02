@@ -10,19 +10,19 @@ from utils.sounds import RaindropsSound
 
 
 class Raindrops:
-    def __init__(self, galacticUnicorn, graphics, sound):
+    def __init__(self, galacticUnicorn, graphics, sound_service):
         self.direction = random.choice([-0.3, 0.3])
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.sound = RaindropsSound(galacticUnicorn, sound)
+        self.sound_service = RaindropsSound(galacticUnicorn, sound_service)
         self.width = galacticUnicorn.WIDTH
 
         self.raindrops = [
             Raindrop(self.width, self.height, self.graphics, self.direction)
             for _ in range(30)
         ]
-        self.sound.play()
+        self.sound_service.play()
 
     async def update(self):
         self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
@@ -55,8 +55,8 @@ class Raindrop:
             self.x = random.randint(0, self.width - 1)
 
 
-async def run(galacticUnicorn, graphics, sound):
-    raindrops = Raindrops(galacticUnicorn, graphics, sound)
+async def run(galacticUnicorn, graphics, sound_service):
+    raindrops = Raindrops(galacticUnicorn, graphics, sound_service)
 
     while True:
         await raindrops.update()
