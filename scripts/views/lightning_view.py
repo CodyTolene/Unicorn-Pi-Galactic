@@ -3,8 +3,10 @@
 
 import uasyncio
 import random
-from galactic import GalacticUnicorn, Channel
+
+from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
+from utils.sounds import ThunderSound
 
 
 class Lightning:
@@ -15,18 +17,8 @@ class Lightning:
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.sound = sound
+        self.sound = ThunderSound(galacticUnicorn, sound)
         self.width = galacticUnicorn.WIDTH
-
-        self.channels = [self.galacticUnicorn.synth_channel(0)]
-        self.channels[0].configure(
-            waveforms=Channel.NOISE,
-            attack=0.005,
-            decay=0.010,
-            sustain=65535 / 65535,
-            release=0.100,
-            volume=self.sound.get_current_volume(),
-        )
 
     def create_bolt(self):
         bolt = []
@@ -57,7 +49,7 @@ class Lightning:
                 self.flash = True
                 self.flash_duration = random.randint(1, 3)
                 self.bolts = [self.create_bolt() for _ in range(random.randint(1, 3))]
-                await self.play_lightning_sound()
+                await self.sound.play()
 
         for bolt in self.bolts:
             for x, y in bolt:
@@ -65,11 +57,6 @@ class Lightning:
                 self.graphics.pixel(x, y)
 
         self.galacticUnicorn.update(self.graphics)
-
-    async def play_lightning_sound(self):
-        lightning_notes = [random.randint(500, 5000) for _ in range(10)]
-        bpm = random.choice([random.randint(550, 650), random.randint(430, 530)])
-        self.sound.play_notes([lightning_notes], self.channels, bpm=bpm, repeat=False)
 
 
 async def run(galacticUnicorn, graphics, sound):
