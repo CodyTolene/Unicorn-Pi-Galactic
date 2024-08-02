@@ -3,6 +3,7 @@
 
 import random
 import uasyncio
+
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
