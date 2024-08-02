@@ -11,6 +11,9 @@ class SoundService:
         self.galacticUnicorn = galacticUnicorn
         self.previous_volume = galacticUnicorn.get_volume()
 
+        # Set the initial volume
+        self.galacticUnicorn.set_volume(0.2)
+
     def play_notes(
         self,
         musicNotes,  # List of note sequences for each channel.
