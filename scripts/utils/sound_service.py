@@ -1,9 +1,6 @@
 # Cody Tolene
 # Apache License 2.0
 
-import uasyncio
-
-from galactic import Channel
 from machine import Timer
 
 
@@ -91,49 +88,3 @@ class SoundService:
     # Getter for the current volume
     def get_current_volume(self):
         return self.galacticUnicorn.get_volume()
-
-
-async def play_example_rain(galacticUnicorn, graphics, sound_service):
-    # Rain sound frequencies (white noise-like)
-    musicNotes = [800, 810, 820]
-
-    # Configure channels
-    channel = galacticUnicorn.synth_channel(0)
-    channel.configure(
-        waveforms=Channel.NOISE,
-        attack=0.005,
-        decay=0.500,
-        sustain=0,
-        release=0.100,
-        volume=sound_service.get_current_volume(),
-    )
-
-    # Create and play rain sound
-    channels = [channel]
-    sound_service.play_notes([musicNotes], channels, bpm=820, repeat=True)
-
-    # Wait for 3 seconds
-    await uasyncio.sleep(3)
-
-    # Volume up
-    await sound_service.volume_up()
-    await sound_service.volume_up()
-    await sound_service.volume_up()
-    await sound_service.volume_up()
-    await sound_service.volume_up()
-
-    # Wait for 3 seconds
-    await uasyncio.sleep(3)
-
-    # Volume down
-    await sound_service.volume_down()
-    await sound_service.volume_down()
-    await sound_service.volume_down()
-    await sound_service.volume_down()
-    await sound_service.volume_down()
-
-    # Wait for 5 seconds
-    await uasyncio.sleep(5)
-
-    # And then stop all sounds
-    await sound_service.stop_all_sounds()
