@@ -9,6 +9,88 @@ import random
 from galactic import Channel
 
 
+class CelebrationSound:
+    def __init__(self, galacticUnicorn, sound_service):
+        self.galacticUnicorn = galacticUnicorn
+        self.notes = [784, 880, 988, 1047, 1175, 988, 1047, 880, 784, -1, 800]
+        self.sound_service = sound_service
+
+        self.channels = self.set_channels()
+
+    def set_channels(self):
+        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels[0].configure(
+            waveforms=Channel.SQUARE + Channel.TRIANGLE,
+            attack=0.01,
+            decay=0.1,
+            sustain=0.7,
+            release=0.2,
+            volume=self.sound_service.get_current_volume(),
+        )
+        return channels
+
+    def play(self):
+        self.channels = self.set_channels()
+        self.sound_service.play_notes(
+            [self.notes], self.channels, bpm=480, repeat=False
+        )
+
+
+class CelebrationSound2:
+    def __init__(self, galacticUnicorn, sound_service):
+        self.galacticUnicorn = galacticUnicorn
+        self.notes = [523, 587, 659, 698, 784, 880, 988, 1047, -1]
+        self.sound_service = sound_service
+
+        self.channels = self.set_channels()
+
+    def set_channels(self):
+        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels[0].configure(
+            waveforms=Channel.SQUARE + Channel.TRIANGLE,
+            attack=0.01,
+            decay=0.1,
+            sustain=0.7,
+            release=0.2,
+            volume=self.sound_service.get_current_volume(),
+        )
+        return channels
+
+    def play(self):
+        self.channels = self.set_channels()
+        self.sound_service.play_notes(
+            [self.notes], self.channels, bpm=360, repeat=False
+        )
+
+
+class ExplosionSound:
+    def __init__(self, galacticUnicorn, sound_service):
+        self.galacticUnicorn = galacticUnicorn
+        self.notes = [600, 700, 800, 900, 1000]
+        self.sound_service = sound_service
+
+        self.channels = self.set_channels()
+
+    def set_channels(self):
+        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels[0].configure(
+            waveforms=Channel.NOISE,
+            attack=0.01,
+            decay=0.4,
+            sustain=0.2,
+            release=0.5,
+            volume=self.sound_service.get_current_volume(),
+        )
+        return channels
+
+    def play(self):
+        self.channels = self.set_channels()
+        explosion = random.choice(self.notes)
+        self.sound_service.play_notes(
+            [[explosion]], self.channels, bpm=120, repeat=False
+        )
+
+
 class ExampleMusic:
     # fmt: off
     melody_notes = [
@@ -141,17 +223,11 @@ class SirenSound:
         self.sound_service = sound_service
         self.channels = [galacticUnicorn.synth_channel(0)]
         self.channels[0].configure(
-            # Combine sine and triangle waves for depth
             waveforms=Channel.SINE + Channel.TRIANGLE,
-            # Sound reaches max amplitude very quickly
             attack=0.01,
-            # Duration to drop from max amplitude to sustain level
             decay=0.1,
-            # Sustain level for the sound while the note is held
             sustain=0.8,
-            # Time to drop from sustain level to zero
             release=0.1,
-            # Set the volume to the current volume level
             volume=self.sound_service.get_current_volume(),
         )
 
@@ -234,3 +310,11 @@ class ThunderSound:
             volume=sound_service.get_current_volume(),
         )
         self.sound_service = sound_service
+
+    # Plays a random thunder sound
+    def play(self):
+        random_notes = [random.randint(500, 5000) for _ in range(10)]
+        random_bpm = random.choice([random.randint(550, 650), random.randint(430, 530)])
+        self.sound_service.play_notes(
+            [random_notes], self.channels, bpm=random_bpm, repeat=False
+        )

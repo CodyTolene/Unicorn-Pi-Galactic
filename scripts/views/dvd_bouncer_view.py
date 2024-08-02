@@ -5,6 +5,7 @@ import random
 import uasyncio
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
+from utils.sounds import CelebrationSound, CelebrationSound2, ExplosionSound
 
 
 class DVDBouncer:
@@ -16,11 +17,13 @@ class DVDBouncer:
         self.height = galacticUnicorn.HEIGHT
         self.logo_height = 1
         self.logo_width = 2
-        self.sound_service = sound_service
         self.width = galacticUnicorn.WIDTH
         self.x = random.randint(1, self.width - self.logo_width - 1)
         self.y = random.randint(1, self.height - self.logo_height - 1)
         self.color = self.random_color()
+        self.celebration_sound = CelebrationSound(galacticUnicorn, sound_service)
+        self.celebration_sound_2 = CelebrationSound2(galacticUnicorn, sound_service)
+        self.explosion_sound = ExplosionSound(galacticUnicorn, sound_service)
 
     def random_color(self):
         return self.graphics.create_pen(
@@ -44,22 +47,36 @@ class DVDBouncer:
     def update_position(self):
         self.clear_logo()
 
+        # Check if we hit a diagonal corner
+        hit_corner = (self.x <= 0 or self.x >= self.width - self.logo_width) and (
+            self.y <= 0 or self.y >= self.height - self.logo_height
+        )
+
         # Update the position of the logo
         self.x += self.dx
         self.y += self.dy
 
         # Check for collisions with the screen edges
         if self.x <= 0 or self.x >= self.width - self.logo_width:
+            self.explosion_sound.play()
             self.dx = -self.dx
             self.color = self.random_color()
             # Ensure it moves away from the edge
             self.x = max(0, min(self.x, self.width - self.logo_width))
 
         if self.y <= 0 or self.y >= self.height - self.logo_height:
+            self.explosion_sound.play()
             self.dy = -self.dy
             self.color = self.random_color()
             # Ensure it moves away from the edge
             self.y = max(0, min(self.y, self.height - self.logo_height))
+
+        # Play random celebration sound if a corner is hit
+        if hit_corner:
+            if random.choice([True, False]):
+                self.celebration_sound.play()
+            else:
+                self.celebration_sound_2.play()
 
         self.draw_logo()
 
