@@ -52,7 +52,7 @@ class Raindrops:
             decay=0.500,
             sustain=0,
             release=0.100,
-            volume=self.music.volume,
+            volume=self.music.get_current_volume(),
         )
         channels = [channel]
         self.music.play_notes([musicNotes], channels, bpm=820, repeat=True)

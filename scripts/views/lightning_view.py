@@ -25,7 +25,7 @@ class Lightning:
             decay=0.010,
             sustain=65535 / 65535,
             release=0.100,
-            volume=music.volume,
+            volume=self.music.get_current_volume(),
         )
 
     def create_bolt(self):

@@ -13,8 +13,7 @@ class Music:
     def __init__(self, galacticUnicorn):
         self.current_timer = None
         self.galacticUnicorn = galacticUnicorn
-        self.previous_volume = 0.5
-        self.volume = 0.5
+        self.previous_volume = galacticUnicorn.get_volume()
 
     def play_notes(
         self,
@@ -62,22 +61,24 @@ class Music:
 
     # Temporarily toggle all sounds on or off.
     async def toggle_mute(self):
-        if self.volume == 0.0:
-            self.volume = self.previous_volume
+        current_volume = self.get_current_volume()
+
+        if current_volume == 0.0:
+            current_volume = self.previous_volume
         else:
-            self.previous_volume = self.volume
-            self.volume = 0.0
-        self.galacticUnicorn.set_volume(self.volume)
+            self.previous_volume = current_volume
+
+        self.galacticUnicorn.set_volume(current_volume)
 
     # Decrease all channel volumes.
     async def volume_down(self):
-        self.volume = max(self.volume - 0.1, 0.0)
-        self.galacticUnicorn.set_volume(self.volume)
+        current_volume = max(self.get_current_volume() - 0.1, 0.0)
+        self.galacticUnicorn.set_volume(current_volume)
 
     # Increase all channel volumes.
     async def volume_up(self):
-        self.volume = min(self.volume + 0.1, 1.0)
-        self.galacticUnicorn.set_volume(self.volume)
+        current_volume = min(self.get_current_volume() + 0.1, 1.0)
+        self.galacticUnicorn.set_volume(current_volume)
 
     # Stop all currently playing sounds.
     async def stop_all_sounds(self):
@@ -88,6 +89,10 @@ class Music:
         for i in range(8):  # Assuming 8 channels
             channel = self.galacticUnicorn.synth_channel(i)
             channel.trigger_release()
+
+    # Getter for the current volume
+    def get_current_volume(self):
+        return self.galacticUnicorn.get_volume()
 
 
 async def play_example_rain(galacticUnicorn, graphics, music):
@@ -102,7 +107,7 @@ async def play_example_rain(galacticUnicorn, graphics, music):
         decay=0.500,
         sustain=0,
         release=0.100,
-        volume=music.volume,
+        volume=music.get_current_volume(),
     )
 
     # Create and play rain sound

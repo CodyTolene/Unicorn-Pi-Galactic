@@ -38,7 +38,7 @@ class Rainbow:
             decay=0.168,
             sustain=0xAFFF / 65535,
             release=0.168,
-            volume=self.music.volume,
+            volume=self.music.get_current_volume(),
         )
         channels[1].configure(
             waveforms=Channel.SINE + Channel.SQUARE,
@@ -46,7 +46,7 @@ class Rainbow:
             decay=0.300,
             sustain=0,
             release=0,
-            volume=self.music.volume,
+            volume=self.music.get_current_volume(),
         )
         channels[2].configure(
             waveforms=Channel.NOISE,
@@ -54,7 +54,7 @@ class Rainbow:
             decay=0.010,
             sustain=16000 / 65535,
             release=0.100,
-            volume=self.music.volume,
+            volume=self.music.get_current_volume(),
         )
         channels[3].configure(
             waveforms=Channel.NOISE,
@@ -62,7 +62,7 @@ class Rainbow:
             decay=0.005,
             sustain=8000 / 65535,
             release=0.040,
-            volume=self.music.volume,
+            volume=self.music.get_current_volume(),
         )
         channels[4].configure(
             waveforms=Channel.SQUARE,
@@ -70,7 +70,7 @@ class Rainbow:
             decay=0.100,
             sustain=0,
             release=0.500,
-            volume=self.music.volume,
+            volume=self.music.get_current_volume(),
         )
         self.music.play_notes(music_notes, channels, bpm=700, repeat=True)
 

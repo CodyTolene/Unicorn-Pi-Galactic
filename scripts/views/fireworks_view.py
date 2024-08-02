@@ -23,7 +23,7 @@ class Firework:
             decay=0.500,
             sustain=0,
             release=0.100,
-            volume=music.volume,
+            volume=self.music.get_current_volume(),
         )
 
         self.launch_x = (

@@ -23,7 +23,7 @@ class Fireplace:
                 decay=0.1,
                 sustain=0.5,
                 release=0.5,
-                volume=music.volume,
+                volume=self.music.get_current_volume(),
             )
 
         self.fire_colours = [
