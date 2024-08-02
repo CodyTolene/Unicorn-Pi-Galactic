@@ -136,6 +136,45 @@ class ExampleRandomMusic:
         self.sound_service.play_notes(self.notes, self.channels, bpm=60, repeat=True)
 
 
+class SirenSound:
+    def __init__(self, galacticUnicorn, sound_service):
+        self.sound_service = sound_service
+        self.channels = [galacticUnicorn.synth_channel(0)]
+        self.channels[0].configure(
+            # Combine sine and triangle waves for depth
+            waveforms=Channel.SINE + Channel.TRIANGLE,
+            # Sound reaches max amplitude very quickly
+            attack=0.01,
+            # Duration to drop from max amplitude to sustain level
+            decay=0.1,
+            # Sustain level for the sound while the note is held
+            sustain=0.8,
+            # Time to drop from sustain level to zero
+            release=0.1,
+            # Set the volume to the current volume level
+            volume=self.sound_service.get_current_volume(),
+        )
+
+        self.tone_a = 600
+        self.tone_b = 700
+        self.siren_notes = [self.tone_a, 0, 0, 0, self.tone_b, 0, 0, 0]
+
+    def play(self):
+        self.sound_service.play_notes(
+            [self.siren_notes], self.channels, bpm=240, repeat=True
+        )
+
+    def play_tone_a(self):
+        self.sound_service.play_notes(
+            [[self.tone_a, 0, 0, 0]], self.channels, bpm=240, repeat=True
+        )
+
+    def play_tone_b(self):
+        self.sound_service.play_notes(
+            [[self.tone_b, 0, 0, 0]], self.channels, bpm=240, repeat=True
+        )
+
+
 class FireworkSound:
     def __init__(self, galacticUnicorn, sound_service):
         self.sound_service = sound_service
@@ -195,11 +234,3 @@ class ThunderSound:
             volume=sound_service.get_current_volume(),
         )
         self.sound_service = sound_service
-
-    # Plays a random thunder sound
-    def play(self):
-        random_notes = [random.randint(500, 5000) for _ in range(10)]
-        random_bpm = random.choice([random.randint(550, 650), random.randint(430, 530)])
-        self.sound_service.play_notes(
-            [random_notes], self.channels, bpm=random_bpm, repeat=False
-        )

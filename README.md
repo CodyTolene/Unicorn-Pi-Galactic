@@ -9,6 +9,8 @@
   </p>
 </div>
 
+> ![Warning][img-warning] This software may produce flashing lights, which can trigger seizures in individuals with photosensitive epilepsy. Please exercise caution if you or anyone who may be exposed to the lights has a history of epilepsy or seizures.
+
 ## Index <a name="index"></a>
 
 - [Build Status](#build-status)
@@ -56,7 +58,7 @@
 | Digital Clock (12 hour) | N/A            | ![Digital Clock 12][img-digital-clock-12] |
 | Digital Clock (24 hour) | N/A            | ![Digital Clock 24][img-digital-clock-24] |
 | Digital Rain            | N/A            | ![Digital Rain][img-digital-rain]         |
-| Emergency               | N/A            | ![Emergency][img-emergency]               |
+| Emergency               | Siren Tones    | ![Emergency][img-emergency]               |
 | Fire                    | N/A            | ![Fire][img-fire]                         |
 | Fireflies               | N/A            | ![Fireflies][img-fireflies]               |
 | Fireplace               | N/A            | ![Fireplace][img-fireplace]               |
@@ -73,7 +75,11 @@
 | Warp Speed              | N/A            | ![Warp Speed][img-warp-speed]             |
 | Wave                    | N/A            | ![Wave][img-wave]                         |
 
-Have another idea? Share it [here][url-new-issue]. You can also fork this repo and submit a pull request with your own effect or animation! I'd love to see what you come up with.
+> ![Warning][img-warning] This software may produce flashing lights, which can trigger seizures in individuals with photosensitive epilepsy. Please exercise caution if you or anyone who may be exposed to the lights has a history of epilepsy or seizures.
+
+> ![Warning][img-warning] The use of emergency lights and/or siren sounds may be inappropriate or illegal in certain situations or locations. Users are responsible for ensuring compliance with local laws and regulations and must use this code responsibly. Use this software at your own risk. The author disclaims all responsibility for any misuse or adverse effects resulting from the use of this software.
+
+> ![Info][img-info] Have another idea? Share it [here][url-new-issue]. You can also fork this repo and submit a pull request with your own effect or animation! I'd love to see what you come up with.
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
