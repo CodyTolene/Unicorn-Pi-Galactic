@@ -49,7 +49,7 @@ class Lightning:
                 self.flash = True
                 self.flash_duration = random.randint(1, 3)
                 self.bolts = [self.create_bolt() for _ in range(random.randint(1, 3))]
-                await self.sound.play()
+                self.sound.play()
 
         for bolt in self.bolts:
             for x, y in bolt:

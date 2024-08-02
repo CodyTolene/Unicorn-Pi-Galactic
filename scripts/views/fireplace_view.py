@@ -3,8 +3,10 @@
 
 import random
 import uasyncio
-from galactic import GalacticUnicorn, Channel
+
+from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
+from utils.sounds import ExampleRandomMusic
 
 
 class Fireplace:
@@ -12,19 +14,8 @@ class Fireplace:
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT + 2
-        self.sound = sound
+        self.sound = ExampleRandomMusic(galacticUnicorn, sound)
         self.width = galacticUnicorn.WIDTH
-
-        self.channels = [galacticUnicorn.synth_channel(i) for i in range(8)]
-        for channel in self.channels:
-            channel.configure(
-                waveforms=Channel.SINE,
-                attack=0.01,
-                decay=0.1,
-                sustain=0.5,
-                release=0.5,
-                volume=self.sound.get_current_volume(),
-            )
 
         self.fire_colours = [
             graphics.create_pen(0, 0, 0),
@@ -34,19 +25,7 @@ class Fireplace:
             graphics.create_pen(255, 255, 180),
         ]
         self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
-
-    def play_relaxing_music(self):
-        fireplace_notes = []
-        # 8 channels
-        for _ in range(8):
-            channel_notes = []
-            # Create a sequence of 16 notes per channel
-            for _ in range(16):
-                # Randomly select a low-frequency note or silence (-1)
-                note = random.choice([220, 330, 440, -1])
-                channel_notes.append(note)
-            fireplace_notes.append(channel_notes)
-        self.sound.play_notes(fireplace_notes, self.channels, bpm=60, repeat=True)
+        self.sound.play()
 
     async def update(self):
         _heat = self.heat
@@ -96,7 +75,6 @@ class Fireplace:
 
 async def run(galacticUnicorn, graphics, sound):
     fireplace = Fireplace(graphics, galacticUnicorn, sound)
-    fireplace.play_relaxing_music()
 
     while True:
         await fireplace.update()

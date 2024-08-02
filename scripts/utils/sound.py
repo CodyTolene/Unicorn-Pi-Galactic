@@ -67,18 +67,17 @@ class Sound:
             current_volume = self.previous_volume
         else:
             self.previous_volume = current_volume
+            current_volume = 0.0
 
         self.galacticUnicorn.set_volume(current_volume)
 
     # Decrease all channel volumes.
     async def volume_down(self):
-        current_volume = max(self.get_current_volume() - 0.1, 0.0)
-        self.galacticUnicorn.set_volume(current_volume)
+        self.galacticUnicorn.adjust_volume(-0.1)
 
     # Increase all channel volumes.
     async def volume_up(self):
-        current_volume = min(self.get_current_volume() + 0.1, 1.0)
-        self.galacticUnicorn.set_volume(current_volume)
+        self.galacticUnicorn.adjust_volume(0.1)
 
     # Stop all currently playing sounds.
     async def stop_all_sounds(self):

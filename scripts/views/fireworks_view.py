@@ -4,8 +4,9 @@
 import random
 import uasyncio
 
-from galactic import GalacticUnicorn, Channel
+from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
+from utils.sounds import FireworkSound
 
 
 class Firework:
@@ -13,18 +14,8 @@ class Firework:
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.sound = sound
+        self.sound = FireworkSound(galacticUnicorn, sound)
         self.width = galacticUnicorn.WIDTH
-
-        self.channels = [galacticUnicorn.synth_channel(0)]
-        self.channels[0].configure(
-            waveforms=Channel.NOISE,
-            attack=0.005,
-            decay=0.500,
-            sustain=0,
-            release=0.100,
-            volume=self.sound.get_current_volume(),
-        )
 
         self.launch_x = (
             random.randint(self.width // 4, 3 * self.width // 4)
@@ -43,6 +34,7 @@ class Firework:
         self.particles = []
         self.stage = "launch"
         self.y = self.height - 1
+
         self.create_explosion_particles()
 
     def create_explosion_particles(self):
@@ -61,17 +53,6 @@ class Firework:
                 }
             )
 
-    def play_explosion_sound(self):
-        explosion_sounds = [
-            [800, 850, 900, 950, 1000, -1, -1],
-            [1000, 1050, 1100, 1150, 1200, -1, -1],
-            [600, 650, 700, 750, 800, -1, -1],
-            [1100, 1150, 1200, 1250, 1300, -1, -1],
-            [700, 750, 800, 850, 900, -1, -1],
-        ]
-        selected_sound = random.choice(explosion_sounds)
-        self.sound.play_notes([selected_sound], self.channels, bpm=700, repeat=False)
-
     async def update(self):
         if self.stage == "launch":
             if self.y > self.height // 2:
@@ -80,7 +61,7 @@ class Firework:
                 self.y -= 1
             else:
                 self.stage = "explode"
-                self.play_explosion_sound()
+                self.sound.play()
         elif self.stage == "explode":
             if any(p["life"] > 0 for p in self.particles):
                 for p in self.particles:
