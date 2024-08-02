@@ -2,39 +2,44 @@
 # Apache License 2.0
 
 import random
-import micropython
 import uasyncio
-from galactic import GalacticUnicorn
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
+
+from utils.sounds import ExampleRandomMusic
 
 
-async def run(galacticUnicorn, graphics):
-    fire_colours = [
-        graphics.create_pen(0, 0, 0),
-        graphics.create_pen(20, 20, 20),
-        graphics.create_pen(180, 30, 0),
-        graphics.create_pen(220, 160, 0),
-        graphics.create_pen(255, 255, 180),
-    ]
+class Fireplace:
+    def __init__(self, graphics, galacticUnicorn, sound_service):
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.height = galacticUnicorn.HEIGHT + 2
+        self.sound_service = ExampleRandomMusic(galacticUnicorn, sound_service)
+        self.width = galacticUnicorn.WIDTH
 
-    width = galacticUnicorn.WIDTH
-    height = galacticUnicorn.HEIGHT + 2
+        self.fire_colours = [
+            graphics.create_pen(0, 0, 0),
+            graphics.create_pen(20, 20, 20),
+            graphics.create_pen(180, 30, 0),
+            graphics.create_pen(220, 160, 0),
+            graphics.create_pen(255, 255, 180),
+        ]
+        self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
+        self.sound_service.play()
 
-    heat = [[0.0 for y in range(height)] for x in range(width)]
-    damping_factor = 0.80  # Increased damping factor to reduce flame height
+    async def update(self):
+        _heat = self.heat
+        _graphics = self.graphics
+        _set_pen = self.graphics.set_pen
+        _pixel = self.graphics.pixel
+        _fire_colours = self.fire_colours
 
-    @micropython.native  # noqa: F821
-    def update():
-        _heat = heat
+        for x in range(self.width):
+            _heat[x][self.height - 1] = random.uniform(0.3, 0.6)
+            _heat[x][self.height - 2] = random.uniform(0.3, 0.6)
 
-        # Clear the bottom rows and then add new fire seeds to them
-        for x in range(width):
-            _heat[x][height - 1] = random.uniform(0.3, 0.6)  # Lower initial intensity
-            _heat[x][height - 2] = random.uniform(0.3, 0.6)
-
-        factor = damping_factor / 5.0
-        for y in range(height - 3, -1, -1):  # Ensure y doesn't go out of bounds
-            for x in range(1, width - 1):
+        # Increase damping factor to reduce flame height
+        factor = 0.16
+        for y in range(self.height - 3, -1, -1):
+            for x in range(1, self.width - 1):
                 sum_heat_y = _heat[x][y]
                 sum_heat_y1 = _heat[x][y + 1]
                 sum_heat_y2 = _heat[x][y + 2]
@@ -48,17 +53,9 @@ async def run(galacticUnicorn, graphics):
 
                 _heat[x][y] = sum_heat * factor
 
-    @micropython.native  # noqa: F821
-    def draw():
-        _graphics = graphics
-        _heat = heat
-        _set_pen = graphics.set_pen
-        _pixel = graphics.pixel
-        _fire_colours = fire_colours
-
-        for y in range(galacticUnicorn.HEIGHT):
-            for x in range(galacticUnicorn.WIDTH):
-                value = _heat[x][y + 2]  # Adjust indexing to stay within bounds
+        for y in range(self.galacticUnicorn.HEIGHT):
+            for x in range(self.galacticUnicorn.WIDTH):
+                value = _heat[x][y + 2]
                 if value < 0.15:
                     _set_pen(_fire_colours[0])
                 elif value < 0.3:
@@ -71,16 +68,12 @@ async def run(galacticUnicorn, graphics):
                     _set_pen(_fire_colours[4])
                 _pixel(x, y)
 
-        galacticUnicorn.update(_graphics)
+        self.galacticUnicorn.update(_graphics)
+
+
+async def run(galacticUnicorn, graphics, sound_service):
+    fireplace = Fireplace(graphics, galacticUnicorn, sound_service)
 
     while True:
-        update()
-        draw()
-        await uasyncio.sleep(1.0 / 10)
-
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))
+        await fireplace.update()
+        await uasyncio.sleep(0.1)

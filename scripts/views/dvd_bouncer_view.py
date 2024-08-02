@@ -3,81 +3,90 @@
 
 import random
 import uasyncio
-from galactic import GalacticUnicorn
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
+
+from utils.sounds import CelebrationSound, CelebrationSound2, ExplosionSound
 
 
-async def run(galacticUnicorn, graphics):
-    width = galacticUnicorn.WIDTH
-    height = galacticUnicorn.HEIGHT
+class DVDBouncer:
+    def __init__(self, galacticUnicorn, graphics, sound_service):
+        self.dx = 1 if random.choice([True, False]) else -1
+        self.dy = 1 if random.choice([True, False]) else -1
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.height = galacticUnicorn.HEIGHT
+        self.logo_height = 1
+        self.logo_width = 2
+        self.width = galacticUnicorn.WIDTH
+        self.x = random.randint(1, self.width - self.logo_width - 1)
+        self.y = random.randint(1, self.height - self.logo_height - 1)
+        self.color = self.random_color()
+        self.celebration_sound = CelebrationSound(galacticUnicorn, sound_service)
+        self.celebration_sound_2 = CelebrationSound2(galacticUnicorn, sound_service)
+        self.explosion_sound = ExplosionSound(galacticUnicorn, sound_service)
 
-    # Define the size of the "DVD" logo
-    logo_width = 2
-    logo_height = 1
+    def random_color(self):
+        return self.graphics.create_pen(
+            random.randint(0, 255),
+            random.randint(0, 255),
+            random.randint(0, 255),
+        )
 
-    # Initialize the position and velocity of the logo
-    x = random.randint(0, width - logo_width)
-    y = random.randint(0, height - logo_height)
-    dx = 1
-    dy = 1
+    def draw_logo(self):
+        self.graphics.set_pen(self.color)
+        for i in range(self.logo_width):
+            for j in range(self.logo_height):
+                self.graphics.pixel(self.x + i, self.y + j)
 
-    # Define the blue color for the logo
-    blue_pen = graphics.create_pen(0, 0, 255)
+    def clear_logo(self):
+        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
+        for i in range(self.logo_width):
+            for j in range(self.logo_height):
+                self.graphics.pixel(self.x + i, self.y + j)
 
-    # Function to draw the "DVD" logo
-    def draw_logo(x, y):
-        graphics.set_pen(blue_pen)
-        for i in range(logo_width):
-            for j in range(logo_height):
-                graphics.pixel(x + i, y + j)
+    def update_position(self):
+        self.clear_logo()
 
-    # Function to clear the "DVD" logo
-    def clear_logo(x, y):
-        graphics.set_pen(graphics.create_pen(0, 0, 0))
-        for i in range(logo_width):
-            for j in range(logo_height):
-                graphics.pixel(x + i, y + j)
-
-    while True:
-        # Clear the previous logo position
-        clear_logo(x, y)
+        # Check if we hit a diagonal corner
+        hit_corner = (self.x <= 0 or self.x >= self.width - self.logo_width) and (
+            self.y <= 0 or self.y >= self.height - self.logo_height
+        )
 
         # Update the position of the logo
-        x += dx
-        y += dy
+        self.x += self.dx
+        self.y += self.dy
 
         # Check for collisions with the screen edges
-        if x <= 0 or x >= width - logo_width:
-            dx = -dx
-            graphics.set_pen(
-                graphics.create_pen(
-                    random.randint(0, 255),
-                    random.randint(0, 255),
-                    random.randint(0, 255),
-                )
-            )
-        if y <= 0 or y >= height - logo_height:
-            dy = -dy
-            graphics.set_pen(
-                graphics.create_pen(
-                    random.randint(0, 255),
-                    random.randint(0, 255),
-                    random.randint(0, 255),
-                )
-            )
+        if self.x <= 0 or self.x >= self.width - self.logo_width:
+            self.explosion_sound.play()
+            self.dx = -self.dx
+            self.color = self.random_color()
+            # Ensure it moves away from the edge
+            self.x = max(0, min(self.x, self.width - self.logo_width))
 
-        # Draw the new logo position
-        draw_logo(x, y)
+        if self.y <= 0 or self.y >= self.height - self.logo_height:
+            self.explosion_sound.play()
+            self.dy = -self.dy
+            self.color = self.random_color()
+            # Ensure it moves away from the edge
+            self.y = max(0, min(self.y, self.height - self.logo_height))
 
-        # Update the display
-        galacticUnicorn.update(graphics)
+        # Play random celebration sound if a corner is hit
+        if hit_corner:
+            if random.choice([True, False]):
+                self.celebration_sound.play()
+            else:
+                self.celebration_sound_2.play()
 
-        # Wait for a short period to control the animation speed
+        self.draw_logo()
+
+    async def update(self):
+        self.update_position()
+        self.galacticUnicorn.update(self.graphics)
+
+
+async def run(galacticUnicorn, graphics, sound_service):
+    dvd_bouncer = DVDBouncer(galacticUnicorn, graphics, sound_service)
+
+    while True:
+        await dvd_bouncer.update()
         await uasyncio.sleep(0.25)
-
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))

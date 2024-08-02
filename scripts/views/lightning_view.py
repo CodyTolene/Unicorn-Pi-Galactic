@@ -3,33 +3,20 @@
 
 import uasyncio
 import random
-from galactic import Channel
-from utils.music import play_notes
+
+from utils.sounds import ThunderSound
 
 
 class Lightning:
-    def __init__(self, width, height, graphics, gu):
-        self.graphics = graphics
-        self.width = width
-        self.height = height
-        self.gu = gu
+    def __init__(self, galacticUnicorn, graphics, sound_service):
+        self.bolts = []
         self.flash = False
         self.flash_duration = 0
-        self.bolts = []
-        self.channels = [self.gu.synth_channel(0)]
-        self.configure_channel()
-        self.lightning_notes = [random.randint(500, 5000) for _ in range(10)]
-
-    def configure_channel(self):
-        # Configure sound channel
-        self.channels[0].configure(
-            waveforms=Channel.NOISE,
-            attack=0.005,
-            decay=0.010,
-            sustain=65535 / 65535,
-            release=0.100,
-            volume=65535 / 65535,
-        )
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.height = galacticUnicorn.HEIGHT
+        self.sound_service = ThunderSound(galacticUnicorn, sound_service)
+        self.width = galacticUnicorn.WIDTH
 
     def create_bolt(self):
         bolt = []
@@ -43,6 +30,9 @@ class Lightning:
         return bolt
 
     async def update(self):
+        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
+        self.graphics.clear()
+
         if self.flash:
             self.graphics.set_pen(self.graphics.create_pen(255, 255, 255))
             for x in range(self.width):
@@ -57,33 +47,19 @@ class Lightning:
                 self.flash = True
                 self.flash_duration = random.randint(1, 3)
                 self.bolts = [self.create_bolt() for _ in range(random.randint(1, 3))]
-                await self.play_lightning_sound()
+                self.sound_service.play()
 
         for bolt in self.bolts:
             for x, y in bolt:
                 self.graphics.set_pen(self.graphics.create_pen(255, 255, 255))
                 self.graphics.pixel(x, y)
 
-    async def play_lightning_sound(self):
-        # Randomly vary the BPM around 600 or 480
-        bpm = random.choice([random.randint(550, 650), random.randint(430, 530)])
-        play_notes(
-            self.gu, [self.lightning_notes], self.channels, bpm=bpm, repeat=False
-        )
+        self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics):
-    width = galacticUnicorn.WIDTH
-    height = galacticUnicorn.HEIGHT
-    lightning = Lightning(
-        width, height, graphics, galacticUnicorn
-    )  # Create Lightning effect
+async def run(galacticUnicorn, graphics, sound_service):
+    lightning = Lightning(galacticUnicorn, graphics, sound_service)
 
     while True:
-        graphics.set_pen(graphics.create_pen(0, 0, 0))  # Clear the screen
-        graphics.clear()
-
-        await lightning.update()  # Update the Lightning effect
-
-        galacticUnicorn.update(graphics)  # Update the display
-        await uasyncio.sleep(0.1)  # Pause before the next update
+        await lightning.update()
+        await uasyncio.sleep(0.1)

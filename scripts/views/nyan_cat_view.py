@@ -2,10 +2,40 @@
 # Apache License 2.0
 
 import uasyncio
-from galactic import GalacticUnicorn
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
-# Define the color key
+
+class NyanCat:
+    def __init__(self, galacticUnicorn, graphics, sound_service):
+        self.frame_index = 0
+        self.galacticUnicorn = galacticUnicorn
+        self.graphics = graphics
+        self.sound_service = sound_service
+
+    def display_frame(self, frame):
+        for y, row in enumerate(frame):
+            for x, char in enumerate(row):
+                color = color_key.get(char, (0, 0, 0))
+                pen = self.graphics.create_pen(*color)
+                self.graphics.set_pen(pen)
+                self.graphics.pixel(x, y)
+        self.galacticUnicorn.update(self.graphics)
+
+    async def update(self):
+        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
+        self.graphics.clear()
+
+        self.display_frame(frames[self.frame_index])
+        self.frame_index = (self.frame_index + 1) % len(frames)
+
+
+async def run(galacticUnicorn, graphics, sound_service):
+    nyan_cat = NyanCat(galacticUnicorn, graphics, sound_service)
+
+    while True:
+        await nyan_cat.update()
+        await uasyncio.sleep(0.1)
+
+
 color_key = {
     "R": (255, 0, 0),  # Red
     "O": (255, 165, 0),  # Orange
@@ -20,7 +50,6 @@ color_key = {
     " ": (0, 0, 0),  # Black (space)
 }
 
-# Array of frames for the Nyan Cat animation
 frames = [
     [
         "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",
@@ -166,30 +195,3 @@ frames = [
         "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",
     ],
 ]
-
-
-async def display_frame(frame, galacticUnicorn, graphics):
-    for y, row in enumerate(frame):
-        for x, char in enumerate(row):
-            color = color_key.get(char, (0, 0, 0))
-            pen = graphics.create_pen(*color)
-            graphics.set_pen(pen)
-            graphics.pixel(x, y)
-    galacticUnicorn.update(graphics)
-
-
-async def run(galacticUnicorn, graphics):
-    frame_index = 0
-    while True:
-        graphics.set_pen(0)
-        graphics.clear()
-        await display_frame(frames[frame_index], galacticUnicorn, graphics)
-        frame_index = (frame_index + 1) % len(frames)
-        await uasyncio.sleep(0.1)  # Adjust the speed of updating
-
-
-# This section of code is only for testing.
-if __name__ == "__main__":
-    galacticUnicorn = GalacticUnicorn()
-    graphics = PicoGraphics(display=DISPLAY)
-    uasyncio.run(run(galacticUnicorn, graphics))

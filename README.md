@@ -9,6 +9,8 @@
   </p>
 </div>
 
+> ![Warning][img-warning] This software may produce flashing lights, which can trigger seizures in individuals with photosensitive epilepsy. Please exercise caution if you or anyone who may be exposed to the lights has a history of epilepsy or seizures.
+
 ## Index <a name="index"></a>
 
 - [Build Status](#build-status)
@@ -36,7 +38,7 @@
 
 ## Parts List <a name="parts-list"></a>
 
-<img src=".github/images/intro.png" height="250" />
+![Pimoroni Galactic Unicorn][img-galactic-unicorn]
 
 | Part                                      | Price (USD) |
 | :---------------------------------------- | :---------- |
@@ -50,30 +52,34 @@
 
 ## Previews <a name="previews"></a>
 
-| Name                    | Sound(s)   | Preview                                                           |
-| :---------------------- | :--------- | :---------------------------------------------------------------- |
-| Digital Clock (12 hour) | N/A        | ![Digital Clock 12](.github/images/examples/digital-clock-12.gif) |
-| Digital Clock (24 hour) | N/A        | ![Digital Clock 24](.github/images/examples/digital-clock-24.gif) |
-| Digital Rain            | N/A        | ![Digital Rain](.github/images/examples/digital_rain.gif)         |
-| DVD Bouncer             | N/A        | ![DVD Bouncer](.github/images/examples/dvd-bouncer.gif)           |
-| Emergency               | N/A        | ![Emergency](.github/images/examples/emergency.gif)               |
-| Fire                    | N/A        | ![Fire](.github/images/examples/fire.gif)                         |
-| Fireflies               | N/A        | ![Fireflies](.github/images/examples/fireflies.gif)               |
-| Fireplace               | N/A        | ![Fireplace](.github/images/examples/fireplace.gif)               |
-| Fireworks               | N/A        | ![Fireworks](.github/images/examples/fireworks.gif)               |
-| Flashlight Torch        | N/A        | ![Flashlight Torch](.github/images/examples/flashlight-torch.gif) |
-| Lava Lamp               | N/A        | ![Lava Lamp](.github/images/examples/lava-lamp.gif)               |
-| Lightning               | Thunder    | ![Lightning](.github/images/examples/lightning.gif)               |
-| Nyan Cat                | N/A        | ![Nyan Cat](.github/images/examples/nyan-cat.gif)                 |
-| Plasma                  | N/A        | ![Plasma](.github/images/examples/plasma.gif)                     |
-| Rainbow (default)       | Demo Music | ![Rainbow](.github/images/examples/rainbow.gif)                   |
-| Raindrops               | Rain       | ![Raindrops](.github/images/examples/raindrops.gif)               |
-| SOS (Morse Code)        | N/A        | ![SOS](.github/images/examples/sos.gif)                           |
-| Snowfall                | N/A        | ![Snowfall](.github/images/examples/snowfall.gif)                 |
-| Warp Speed              | N/A        | ![Warp Speed](.github/images/examples/warp-speed.gif)             |
-| Wave                    | N/A        | ![Wave](.github/images/examples/wave.gif)                         |
+| Name                    | Sound(s)           | Preview                                   |
+| :---------------------- | :----------------- | :---------------------------------------- |
+| DVD Bouncer             | Bounce / Celebrate | ![DVD Bouncer][img-dvd-bouncer]           |
+| Digital Clock (12 hour) | N/A                | ![Digital Clock 12][img-digital-clock-12] |
+| Digital Clock (24 hour) | N/A                | ![Digital Clock 24][img-digital-clock-24] |
+| Digital Rain            | N/A                | ![Digital Rain][img-digital-rain]         |
+| Emergency               | Siren Tones        | ![Emergency][img-emergency]               |
+| Fire                    | N/A                | ![Fire][img-fire]                         |
+| Fireflies               | N/A                | ![Fireflies][img-fireflies]               |
+| Fireplace               | N/A                | ![Fireplace][img-fireplace]               |
+| Fireworks               | Freedom Bursts     | ![Fireworks][img-fireworks]               |
+| Flashlight Torch        | N/A                | ![Flashlight Torch][img-flashlight-torch] |
+| Lava Lamp               | N/A                | ![Lava Lamp][img-lava-lamp]               |
+| Lightning               | Thunder Claps      | ![Lightning][img-lightning]               |
+| Nyan Cat                | N/A                | ![Nyan Cat][img-nyan-cat]                 |
+| Plasma                  | N/A                | ![Plasma][img-plasma]                     |
+| Rainbow (default)       | Demo Music         | ![Rainbow][img-rainbow]                   |
+| Raindrops               | Rain               | ![Raindrops][img-raindrops]               |
+| SOS (Morse Code)        | N/A                | ![SOS][img-sos]                           |
+| Snowfall                | N/A                | ![Snowfall][img-snowfall]                 |
+| Warp Speed              | N/A                | ![Warp Speed][img-warp-speed]             |
+| Wave                    | N/A                | ![Wave][img-wave]                         |
 
-Have another idea? Share it [here][url-new-issue]. You can also fork this repo and submit a pull request with your own effect or animation! I'd love to see what you come up with.
+> ![Warning][img-warning] This software may produce flashing lights, which can trigger seizures in individuals with photosensitive epilepsy. Please exercise caution if you or anyone who may be exposed to the lights has a history of epilepsy or seizures.
+
+> ![Warning][img-warning] The use of emergency lights and/or siren sounds may be inappropriate or illegal in certain situations or locations. Users are responsible for ensuring compliance with local laws and regulations and must use this code responsibly. Use this software at your own risk. The author disclaims all responsibility for any misuse or adverse effects resulting from the use of this software.
+
+> ![Info][img-info] Have another idea? Share it [here][url-new-issue]. You can also fork this repo and submit a pull request with your own effect or animation! I'd love to see what you come up with.
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
@@ -202,7 +208,6 @@ Thanks to all the people and projects that made this possible! I hope you enjoy 
 | :------------------------------------------------------------------------ | :------------------------------------------------------------------------ |
 | <img width="48" src=".github/images/ng-icons/email.svg" />                | webmaster@codytolene.com                                                  |
 | <img width="48" src=".github/images/simple-icons/buymeacoffee.svg" />     | https://www.buymeacoffee.com/codytolene                                   |
-| <img width="48" src=".github/images/simple-icons/bitcoin-btc-logo.svg" /> | [bc1qfx3lvspkj0q077u3gnrnxqkqwyvcku2nml86wmudy7yf2u8edmqq0a5vnt][url-btc] |
 
 Fin. Happy programming friend!
 
@@ -214,19 +219,39 @@ Cody Tolene
 
 <!-- IMAGE REFERENCES -->
 
+[img-digital-clock-12]: .github/images/examples/digital-clock-12.gif
+[img-digital-clock-24]: .github/images/examples/digital-clock-24.gif
+[img-digital-rain]: .github/images/examples/digital_rain.gif
+[img-dvd-bouncer]: .github/images/examples/dvd-bouncer.gif
+[img-emergency]: .github/images/examples/emergency.gif
+[img-fire]: .github/images/examples/fire.gif
+[img-fireflies]: .github/images/examples/fireflies.gif
+[img-fireplace]: .github/images/examples/fireplace.gif
+[img-fireworks]: .github/images/examples/fireworks.gif
+[img-flashlight-torch]: .github/images/examples/flashlight-torch.gif
+[img-galactic-unicorn]: .github/images/intro.png
 [img-info]: .github/images/ng-icons/info.svg
+[img-lava-lamp]: .github/images/examples/lava-lamp.gif
+[img-lightning]: .github/images/examples/lightning.gif
+[img-nyan-cat]: .github/images/examples/nyan-cat.gif
+[img-plasma]: .github/images/examples/plasma.gif
+[img-rainbow]: .github/images/examples/rainbow.gif
+[img-raindrops]: .github/images/examples/raindrops.gif
+[img-snowfall]: .github/images/examples/snowfall.gif
+[img-sos]: .github/images/examples/sos.gif
 [img-warning]: .github/images/ng-icons/warn.svg
+[img-warp-speed]: .github/images/examples/warp-speed.gif
+[img-wave]: .github/images/examples/wave.gif
 
 <!-- LINK REFERENCES -->
 
-[url-btc]: https://explorer.btc.com/btc/address/bc1qfx3lvspkj0q077u3gnrnxqkqwyvcku2nml86wmudy7yf2u8edmqq0a5vnt
+[url-galactic-unicorn-release]: https://github.com/pimoroni/pimoroni-pico/releases
+[url-galactic-unicorn]: https://shop.pimoroni.com/products/space-unicorns?variant=40842033561683
 [url-new-issue]: https://github.com/CodyTolene/Unicorn-Pi-Galactic/issues/new
 [url-pi-pico]: https://www.raspberrypi.org/products/raspberry-pi-pico/
 [url-pimoroni-pico-guide]: https://learn.pimoroni.com/tutorial/pico/getting-started-with-pico
 [url-python-downloads]: https://www.python.org/downloads/
 [url-thonny]: https://thonny.org/
-[url-galactic-unicorn]: https://shop.pimoroni.com/products/space-unicorns?variant=40842033561683
-[url-galactic-unicorn-release]: https://github.com/pimoroni/pimoroni-pico/releases
 
 <!---------------------------------------------------------------------------->
 <!---------------------------------------------------------------------------->

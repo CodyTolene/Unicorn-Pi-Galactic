@@ -5,8 +5,8 @@ import uasyncio
 import sys
 
 from collections import OrderedDict
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
 from galactic import GalacticUnicorn
+from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
 
 from views import digital_clock_12_view
 from views import digital_clock_24_view
@@ -25,11 +25,12 @@ from views import plasma_view
 from views import rainbow_view
 from views import raindrops_view
 from views import snowfall_view
-from views import sos_view
+from views import sos_signal_view
 from views import warp_speed_view
 from views import wave_view
 
 from utils.button_listener import buttonListenerProcess
+from utils.sound_service import SoundService
 from utils.view_manager import load_current_view_index
 
 # Ensure local packages can be imported
@@ -59,7 +60,7 @@ views = OrderedDict(
         ("Plasma", plasma_view.run),
         ("Rainbow", rainbow_view.run),
         ("Raindrops", raindrops_view.run),
-        ("SOS", sos_view.run),
+        ("SOS", sos_signal_view.run),
         ("Snowfall", snowfall_view.run),
         ("Warp Speed", warp_speed_view.run),
         ("Wave", wave_view.run),
@@ -78,16 +79,26 @@ if __name__ == "__main__":
     graphics.clear()
     galacticUnicorn.update(graphics)
 
+    # Initialize the sound player
+    sound_service = SoundService(galacticUnicorn)
+
     # Start the asyncio event loop
     loop = uasyncio.get_event_loop()
 
     # Start the initial view
-    currentViewTask = loop.create_task(views[currentViewKey](galacticUnicorn, graphics))
+    currentViewTask = loop.create_task(
+        views[currentViewKey](galacticUnicorn, graphics, sound_service)
+    )
 
     # Create and schedule the button listener coroutine
     loop.create_task(
         buttonListenerProcess(
-            views, galacticUnicorn, graphics, currentViewKey, currentViewTask
+            views,
+            galacticUnicorn,
+            graphics,
+            currentViewKey,
+            currentViewTask,
+            sound_service,
         )
     )
 
