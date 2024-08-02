@@ -7,7 +7,7 @@ from utils.view_manager import switch_view
 
 # Button listener process
 async def buttonListenerProcess(
-    views, galacticUnicorn, graphics, currentViewKey, currentViewTask, music
+    views, galacticUnicorn, graphics, currentViewKey, currentViewTask, sound
 ):
     view_keys = list(views.keys())
 
@@ -32,7 +32,7 @@ async def buttonListenerProcess(
                 if not buttonStates["A"]:
                     buttonStates["A"] = True
                     # Stop all sounds
-                    await music.stop_all_sounds()
+                    await sound.stop_all_sounds()
                     # Switch to the previous view
                     current_index = view_keys.index(currentViewKey)
                     currentViewKey = view_keys[(current_index - 1) % len(view_keys)]
@@ -42,7 +42,7 @@ async def buttonListenerProcess(
                         currentViewTask,
                         galacticUnicorn,
                         graphics,
-                        music,
+                        sound,
                     )
             else:
                 buttonStates["A"] = False
@@ -51,7 +51,7 @@ async def buttonListenerProcess(
                 if not buttonStates["B"]:
                     buttonStates["B"] = True
                     # Stop all sounds
-                    await music.stop_all_sounds()
+                    await sound.stop_all_sounds()
                     # Switch to the next view
                     current_index = view_keys.index(currentViewKey)
                     currentViewKey = view_keys[(current_index + 1) % len(view_keys)]
@@ -61,7 +61,7 @@ async def buttonListenerProcess(
                         currentViewTask,
                         galacticUnicorn,
                         graphics,
-                        music,
+                        sound,
                     )
             else:
                 buttonStates["B"] = False
@@ -84,7 +84,7 @@ async def buttonListenerProcess(
                 if not buttonStates["VOLUME_UP"]:
                     buttonStates["VOLUME_UP"] = True
                     # Turn the volume up
-                    await music.volume_up()
+                    await sound.volume_up()
             else:
                 buttonStates["VOLUME_UP"] = False
 
@@ -92,7 +92,7 @@ async def buttonListenerProcess(
                 if not buttonStates["VOLUME_DOWN"]:
                     buttonStates["VOLUME_DOWN"] = True
                     # Turn the volume down
-                    await music.volume_down()
+                    await sound.volume_down()
             else:
                 buttonStates["VOLUME_DOWN"] = False
 
@@ -127,7 +127,7 @@ async def buttonListenerProcess(
                     # Simulate power off by setting brightness and volume to 0
                     previous_brightness = galacticUnicorn.get_brightness()
                     galacticUnicorn.set_brightness(0)
-                    await music.toggle_mute()
+                    await sound.toggle_mute()
                     graphics.set_pen(graphics.create_pen(0, 0, 0))
                     graphics.clear()
                     galacticUnicorn.update(graphics)
@@ -135,7 +135,7 @@ async def buttonListenerProcess(
                 else:
                     # Simulate power on by restoring the previous brightness and volume
                     galacticUnicorn.set_brightness(previous_brightness)
-                    await music.toggle_mute()
+                    await sound.toggle_mute()
                     isDeviceOn = True
         else:
             buttonStates["SLEEP"] = False

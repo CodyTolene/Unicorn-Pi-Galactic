@@ -9,11 +9,11 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class Fireflies:
-    def __init__(self, galacticUnicorn, graphics, music):
+    def __init__(self, galacticUnicorn, graphics, sound):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.music = music
+        self.sound = sound
         self.width = galacticUnicorn.WIDTH
 
         self.fireflies = [self.create_firefly() for _ in range(10)]
@@ -61,8 +61,8 @@ class Fireflies:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics, music):
-    fireflies = Fireflies(galacticUnicorn, graphics, music)
+async def run(galacticUnicorn, graphics, sound):
+    fireflies = Fireflies(galacticUnicorn, graphics, sound)
 
     while True:
         await fireflies.update()

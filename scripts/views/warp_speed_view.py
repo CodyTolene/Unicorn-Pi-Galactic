@@ -8,11 +8,11 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class WarpSpeed:
-    def __init__(self, galacticUnicorn, graphics, music):
+    def __init__(self, galacticUnicorn, graphics, sound):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.music = music
+        self.sound = sound
         self.width = galacticUnicorn.WIDTH
 
         self.cx = self.width // 2
@@ -65,8 +65,8 @@ class WarpSpeed:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics, music):
-    warp_speed = WarpSpeed(galacticUnicorn, graphics, music)
+async def run(galacticUnicorn, graphics, sound):
+    warp_speed = WarpSpeed(galacticUnicorn, graphics, sound)
 
     while True:
         await warp_speed.update()

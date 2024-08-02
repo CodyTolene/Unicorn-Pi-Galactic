@@ -7,11 +7,11 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class SOSSignal:
-    def __init__(self, galacticUnicorn, graphics, music):
+    def __init__(self, galacticUnicorn, graphics, sound):
         self.black = graphics.create_pen(0, 0, 0)
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
-        self.music = music
+        self.sound = sound
         self.white = graphics.create_pen(255, 255, 255)
 
     async def draw_dot(self):
@@ -51,8 +51,8 @@ class SOSSignal:
         await uasyncio.sleep(1.5)
 
 
-async def run(galacticUnicorn, graphics, music):
-    sos_signal = SOSSignal(galacticUnicorn, graphics, music)
+async def run(galacticUnicorn, graphics, sound):
+    sos_signal = SOSSignal(galacticUnicorn, graphics, sound)
 
     while True:
         await sos_signal.update()

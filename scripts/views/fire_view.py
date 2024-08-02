@@ -11,7 +11,7 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class Fire:
-    def __init__(self, galacticUnicorn, graphics, music):
+    def __init__(self, galacticUnicorn, graphics, sound):
         self.base_damping_factor = 0.97
         self.fire_colours = [
             graphics.create_pen(0, 0, 0),
@@ -24,7 +24,7 @@ class Fire:
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.WIDTH + 4
-        self.music = music
+        self.sound = sound
         self.width = galacticUnicorn.HEIGHT + 2
 
         self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
@@ -81,8 +81,8 @@ class Fire:
         self.galacticUnicorn.update(_graphics)
 
 
-async def run(galacticUnicorn, graphics, music):
-    fire = Fire(galacticUnicorn, graphics, music)
+async def run(galacticUnicorn, graphics, sound):
+    fire = Fire(galacticUnicorn, graphics, sound)
 
     while True:
         await fire.update()

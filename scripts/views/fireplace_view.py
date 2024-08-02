@@ -8,11 +8,11 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class Fireplace:
-    def __init__(self, graphics, galacticUnicorn, music):
+    def __init__(self, graphics, galacticUnicorn, sound):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT + 2
-        self.music = music
+        self.sound = sound
         self.width = galacticUnicorn.WIDTH
 
         self.channels = [galacticUnicorn.synth_channel(i) for i in range(8)]
@@ -23,7 +23,7 @@ class Fireplace:
                 decay=0.1,
                 sustain=0.5,
                 release=0.5,
-                volume=self.music.get_current_volume(),
+                volume=self.sound.get_current_volume(),
             )
 
         self.fire_colours = [
@@ -46,7 +46,7 @@ class Fireplace:
                 note = random.choice([220, 330, 440, -1])
                 channel_notes.append(note)
             fireplace_notes.append(channel_notes)
-        self.music.play_notes(fireplace_notes, self.channels, bpm=60, repeat=True)
+        self.sound.play_notes(fireplace_notes, self.channels, bpm=60, repeat=True)
 
     async def update(self):
         _heat = self.heat
@@ -94,8 +94,8 @@ class Fireplace:
         self.galacticUnicorn.update(_graphics)
 
 
-async def run(galacticUnicorn, graphics, music):
-    fireplace = Fireplace(graphics, galacticUnicorn, music)
+async def run(galacticUnicorn, graphics, sound):
+    fireplace = Fireplace(graphics, galacticUnicorn, sound)
     fireplace.play_relaxing_music()
 
     while True:

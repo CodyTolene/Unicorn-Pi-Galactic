@@ -9,11 +9,11 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class WavePattern:
-    def __init__(self, galacticUnicorn, graphics, music):
+    def __init__(self, galacticUnicorn, graphics, sound):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.music = music
+        self.sound = sound
         self.width = galacticUnicorn.WIDTH
 
     async def update(self):
@@ -32,8 +32,8 @@ class WavePattern:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics, music):
-    wave_pattern = WavePattern(galacticUnicorn, graphics, music)
+async def run(galacticUnicorn, graphics, sound):
+    wave_pattern = WavePattern(galacticUnicorn, graphics, sound)
 
     while True:
         await wave_pattern.update()

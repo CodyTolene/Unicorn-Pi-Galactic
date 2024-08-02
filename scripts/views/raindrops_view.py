@@ -29,12 +29,12 @@ class Raindrop:
 
 
 class Raindrops:
-    def __init__(self, galacticUnicorn, graphics, music):
+    def __init__(self, galacticUnicorn, graphics, sound):
         self.direction = random.choice([-0.3, 0.3])
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.music = music
+        self.sound = sound
         self.width = galacticUnicorn.WIDTH
 
         self.raindrops = [
@@ -52,10 +52,10 @@ class Raindrops:
             decay=0.500,
             sustain=0,
             release=0.100,
-            volume=self.music.get_current_volume(),
+            volume=self.sound.get_current_volume(),
         )
         channels = [channel]
-        self.music.play_notes([musicNotes], channels, bpm=820, repeat=True)
+        self.sound.play_notes([musicNotes], channels, bpm=820, repeat=True)
 
     async def update(self):
         self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
@@ -67,8 +67,8 @@ class Raindrops:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics, music):
-    raindrops = Raindrops(galacticUnicorn, graphics, music)
+async def run(galacticUnicorn, graphics, sound):
+    raindrops = Raindrops(galacticUnicorn, graphics, sound)
 
     while True:
         await raindrops.update()

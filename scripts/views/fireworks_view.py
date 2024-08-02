@@ -9,11 +9,11 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class Firework:
-    def __init__(self, graphics, galacticUnicorn, music):
+    def __init__(self, graphics, galacticUnicorn, sound):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.music = music
+        self.sound = sound
         self.width = galacticUnicorn.WIDTH
 
         self.channels = [galacticUnicorn.synth_channel(0)]
@@ -23,7 +23,7 @@ class Firework:
             decay=0.500,
             sustain=0,
             release=0.100,
-            volume=self.music.get_current_volume(),
+            volume=self.sound.get_current_volume(),
         )
 
         self.launch_x = (
@@ -70,7 +70,7 @@ class Firework:
             [700, 750, 800, 850, 900, -1, -1],
         ]
         selected_sound = random.choice(explosion_sounds)
-        self.music.play_notes([selected_sound], self.channels, bpm=700, repeat=False)
+        self.sound.play_notes([selected_sound], self.channels, bpm=700, repeat=False)
 
     async def update(self):
         if self.stage == "launch":
@@ -103,14 +103,14 @@ class Firework:
                             self.graphics.pixel(int(p["x"]), int(p["y"]))
 
 
-async def run(galacticUnicorn, graphics, music):
+async def run(galacticUnicorn, graphics, sound):
     fireworks = []
     while True:
         graphics.set_pen(graphics.create_pen(0, 0, 0))
         graphics.clear()
 
         if random.random() < 0.1:
-            fireworks.append(Firework(graphics, galacticUnicorn, music))
+            fireworks.append(Firework(graphics, galacticUnicorn, sound))
 
         for firework in fireworks:
             await firework.update()

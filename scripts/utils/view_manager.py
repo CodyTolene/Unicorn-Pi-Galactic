@@ -25,7 +25,7 @@ def load_current_view_index():
 
 # Switch to the current view
 async def switch_view(
-    views, currentViewKey, currentViewTask, galacticUnicorn, graphics, music
+    views, currentViewKey, currentViewTask, galacticUnicorn, graphics, sound
 ):
     if currentViewTask:
         currentViewTask.cancel()
@@ -40,6 +40,6 @@ async def switch_view(
     galacticUnicorn.update(graphics)
     save_current_view_index(currentViewKey)
     currentViewTask = uasyncio.create_task(
-        views[currentViewKey](galacticUnicorn, graphics, music)
+        views[currentViewKey](galacticUnicorn, graphics, sound)
     )
     return currentViewTask

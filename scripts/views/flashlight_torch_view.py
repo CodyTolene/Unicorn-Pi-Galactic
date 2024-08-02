@@ -7,10 +7,10 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class FlashlightTorch:
-    def __init__(self, galacticUnicorn, graphics, music):
+    def __init__(self, galacticUnicorn, graphics, sound):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
-        self.music = music
+        self.sound = sound
         self.white = graphics.create_pen(255, 255, 255)
 
     async def update(self):
@@ -19,8 +19,8 @@ class FlashlightTorch:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics, music):
-    flashlight_torch = FlashlightTorch(galacticUnicorn, graphics, music)
+async def run(galacticUnicorn, graphics, sound):
+    flashlight_torch = FlashlightTorch(galacticUnicorn, graphics, sound)
 
     while True:
         await flashlight_torch.update()

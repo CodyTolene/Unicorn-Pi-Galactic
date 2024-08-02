@@ -8,14 +8,14 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class Lightning:
-    def __init__(self, galacticUnicorn, graphics, music):
+    def __init__(self, galacticUnicorn, graphics, sound):
         self.bolts = []
         self.flash = False
         self.flash_duration = 0
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.music = music
+        self.sound = sound
         self.width = galacticUnicorn.WIDTH
 
         self.channels = [self.galacticUnicorn.synth_channel(0)]
@@ -25,7 +25,7 @@ class Lightning:
             decay=0.010,
             sustain=65535 / 65535,
             release=0.100,
-            volume=self.music.get_current_volume(),
+            volume=self.sound.get_current_volume(),
         )
 
     def create_bolt(self):
@@ -69,11 +69,11 @@ class Lightning:
     async def play_lightning_sound(self):
         lightning_notes = [random.randint(500, 5000) for _ in range(10)]
         bpm = random.choice([random.randint(550, 650), random.randint(430, 530)])
-        self.music.play_notes([lightning_notes], self.channels, bpm=bpm, repeat=False)
+        self.sound.play_notes([lightning_notes], self.channels, bpm=bpm, repeat=False)
 
 
-async def run(galacticUnicorn, graphics, music):
-    lightning = Lightning(galacticUnicorn, graphics, music)
+async def run(galacticUnicorn, graphics, sound):
+    lightning = Lightning(galacticUnicorn, graphics, sound)
 
     while True:
         await lightning.update()

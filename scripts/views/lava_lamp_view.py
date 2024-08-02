@@ -9,11 +9,11 @@ from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 
 
 class LavaLamp:
-    def __init__(self, galacticUnicorn, graphics, music):
+    def __init__(self, galacticUnicorn, graphics, sound):
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.music = music
+        self.sound = sound
         self.width = galacticUnicorn.WIDTH
 
         self.blobs = [self.create_blob() for _ in range(7)]
@@ -69,8 +69,8 @@ class LavaLamp:
         self.galacticUnicorn.update(self.graphics)
 
 
-async def run(galacticUnicorn, graphics, music):
-    lava_lamp = LavaLamp(galacticUnicorn, graphics, music)
+async def run(galacticUnicorn, graphics, sound):
+    lava_lamp = LavaLamp(galacticUnicorn, graphics, sound)
 
     while True:
         await lava_lamp.update()
