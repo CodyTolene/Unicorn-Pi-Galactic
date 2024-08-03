@@ -213,6 +213,7 @@ Thanks to all the people and projects that made this possible! I hope you enjoy 
 | :------------------------------------------------------------------------ | :------------------------------------------------------------------------ |
 | <img width="48" src=".github/images/ng-icons/email.svg" />                | webmaster@codytolene.com                                                  |
 | <img width="48" src=".github/images/simple-icons/buymeacoffee.svg" />     | https://www.buymeacoffee.com/codytolene                                   |
+| <img width="48" src=".github/images/simple-icons/bitcoin-btc-logo.svg" /> | [bc1qfx3lvspkj0q077u3gnrnxqkqwyvcku2nml86wmudy7yf2u8edmqq0a5vnt][url-btc] |
 
 Fin. Happy programming friend!
 
@@ -250,6 +251,7 @@ Cody Tolene
 
 <!-- LINK REFERENCES -->
 
+[url-btc]: https://explorer.btc.com/btc/address/bc1qfx3lvspkj0q077u3gnrnxqkqwyvcku2nml86wmudy7yf2u8edmqq0a5vnt
 [url-galactic-unicorn-release]: https://github.com/pimoroni/pimoroni-pico/releases
 [url-galactic-unicorn]: https://shop.pimoroni.com/products/space-unicorns?variant=40842033561683
 [url-new-issue]: https://github.com/CodyTolene/Unicorn-Pi-Galactic/issues/new
