@@ -29,23 +29,23 @@ from views import wave_view
 
 
 class ViewService:
-    def __init__(self, galactic_unicorn, graphics, sound_service):
+    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
         self.galactic_unicorn = galactic_unicorn
-        self.graphics = graphics
+        self.pico_graphics = pico_graphics
         self.sound_service = sound_service
         self.view_index_file = "/current_view.json"
 
         self.current_view_key = self.load_current_view_index()
 
     def clear_screen(self):
-        self.graphics.set_pen(0)  # Black
-        self.graphics.clear()  # Clear the screen
-        self.galactic_unicorn.update(self.graphics)
+        self.pico_graphics.set_pen(0)  # Black
+        self.pico_graphics.clear()  # Clear the screen
+        self.galactic_unicorn.update(self.pico_graphics)
 
     def get_current_view(self):
         views = self.get_views()
         return views[self.current_view_key](
-            self.galactic_unicorn, self.graphics, self.sound_service
+            self.galactic_unicorn, self.pico_graphics, self.sound_service
         )
 
     def get_views(self):
@@ -98,7 +98,7 @@ class ViewService:
         self.save_current_view_index(self.current_view_key)
         current_view_task = uasyncio.create_task(
             views[self.current_view_key](
-                self.galactic_unicorn, self.graphics, self.sound_service
+                self.galactic_unicorn, self.pico_graphics, self.sound_service
             )
         )
         return current_view_task

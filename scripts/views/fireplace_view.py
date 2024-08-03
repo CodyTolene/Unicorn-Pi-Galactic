@@ -8,28 +8,28 @@ from utils.sounds import FireplaceSound
 
 
 class Fireplace:
-    def __init__(self, graphics, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT + 2
-        self.sound_service = FireplaceSound(galacticUnicorn, sound_service)
-        self.width = galacticUnicorn.WIDTH
+    def __init__(self, pico_graphics, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
+        self.pico_graphics = pico_graphics
+        self.height = galactic_unicorn.HEIGHT + 2
+        self.sound_service = FireplaceSound(galactic_unicorn, sound_service)
+        self.width = galactic_unicorn.WIDTH
 
         self.fire_colours = [
-            graphics.create_pen(0, 0, 0),
-            graphics.create_pen(20, 20, 20),
-            graphics.create_pen(180, 30, 0),
-            graphics.create_pen(220, 160, 0),
-            graphics.create_pen(255, 255, 180),
+            pico_graphics.create_pen(0, 0, 0),
+            pico_graphics.create_pen(20, 20, 20),
+            pico_graphics.create_pen(180, 30, 0),
+            pico_graphics.create_pen(220, 160, 0),
+            pico_graphics.create_pen(255, 255, 180),
         ]
         self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
         self.sound_service.play()
 
     async def update(self):
         _heat = self.heat
-        _graphics = self.graphics
-        _set_pen = self.graphics.set_pen
-        _pixel = self.graphics.pixel
+        _graphics = self.pico_graphics
+        _set_pen = self.pico_graphics.set_pen
+        _pixel = self.pico_graphics.pixel
         _fire_colours = self.fire_colours
 
         for x in range(self.width):
@@ -53,8 +53,8 @@ class Fireplace:
 
                 _heat[x][y] = sum_heat * factor
 
-        for y in range(self.galacticUnicorn.HEIGHT):
-            for x in range(self.galacticUnicorn.WIDTH):
+        for y in range(self.galactic_unicorn.HEIGHT):
+            for x in range(self.galactic_unicorn.WIDTH):
                 value = _heat[x][y + 2]
                 if value < 0.15:
                     _set_pen(_fire_colours[0])
@@ -68,11 +68,11 @@ class Fireplace:
                     _set_pen(_fire_colours[4])
                 _pixel(x, y)
 
-        self.galacticUnicorn.update(_graphics)
+        self.galactic_unicorn.update(_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    fireplace = Fireplace(graphics, galacticUnicorn, sound_service)
+async def run(galactic_unicorn, pico_graphics, sound_service):
+    fireplace = Fireplace(pico_graphics, galactic_unicorn, sound_service)
 
     while True:
         await fireplace.update()

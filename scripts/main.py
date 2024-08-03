@@ -7,6 +7,7 @@ import sys
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
 
+# Import local packages
 from utils.button_service import ButtonService
 from utils.options_service import OptionsService
 from utils.sound_service import SoundService
@@ -21,7 +22,7 @@ if __name__ == "__main__":
     galactic_unicorn = GalacticUnicorn()
 
     # Initialize PicoGraphics
-    graphics = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN)
+    pico_graphics = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN)
 
     # Initialize the options service
     options_service = OptionsService()
@@ -30,7 +31,7 @@ if __name__ == "__main__":
     sound_service = SoundService(galactic_unicorn)
 
     # Initialize the ViewService
-    view_service = ViewService(galactic_unicorn, graphics, sound_service)
+    view_service = ViewService(galactic_unicorn, pico_graphics, sound_service)
     view_service.clear_screen()
 
     # Start the asyncio event loop

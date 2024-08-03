@@ -8,34 +8,34 @@ from utils.sounds import RaindropsSound
 
 
 class Raindrops:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
+    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
         self.direction = random.choice([-0.3, 0.3])
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
-        self.sound_service = RaindropsSound(galacticUnicorn, sound_service)
-        self.width = galacticUnicorn.WIDTH
+        self.galactic_unicorn = galactic_unicorn
+        self.pico_graphics = pico_graphics
+        self.height = galactic_unicorn.HEIGHT
+        self.sound_service = RaindropsSound(galactic_unicorn, sound_service)
+        self.width = galactic_unicorn.WIDTH
 
         self.raindrops = [
-            Raindrop(self.width, self.height, self.graphics, self.direction)
+            Raindrop(self.width, self.height, self.pico_graphics, self.direction)
             for _ in range(30)
         ]
         self.sound_service.play()
 
     async def update(self):
-        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
-        self.graphics.clear()
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(0, 0, 0))
+        self.pico_graphics.clear()
 
         for raindrop in self.raindrops:
             await raindrop.update()
 
-        self.galacticUnicorn.update(self.graphics)
+        self.galactic_unicorn.update(self.pico_graphics)
 
 
 class Raindrop:
-    def __init__(self, width, height, graphics, direction):
-        self.color = graphics.create_pen(0, 0, random.randint(150, 255))
-        self.graphics = graphics
+    def __init__(self, width, height, pico_graphics, direction):
+        self.color = pico_graphics.create_pen(0, 0, random.randint(150, 255))
+        self.pico_graphics = pico_graphics
         self.height = height
         self.speed_x = direction
         self.speed_y = random.uniform(0.3, 0.7)
@@ -44,8 +44,8 @@ class Raindrop:
         self.y = random.uniform(0, height - 1)
 
     async def update(self):
-        self.graphics.set_pen(self.color)
-        self.graphics.pixel(int(self.x), int(self.y))
+        self.pico_graphics.set_pen(self.color)
+        self.pico_graphics.pixel(int(self.x), int(self.y))
         self.x += self.speed_x
         self.y += self.speed_y
         if self.y >= self.height or self.x < 0 or self.x >= self.width:
@@ -53,8 +53,8 @@ class Raindrop:
             self.x = random.randint(0, self.width - 1)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    raindrops = Raindrops(galacticUnicorn, graphics, sound_service)
+async def run(galactic_unicorn, pico_graphics, sound_service):
+    raindrops = Raindrops(galactic_unicorn, pico_graphics, sound_service)
 
     while True:
         await raindrops.update()

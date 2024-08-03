@@ -5,12 +5,12 @@ from utils.sounds import CricketSound
 
 
 class Fireflies:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
-        self.sounds = CricketSound(galacticUnicorn, sound_service)
-        self.width = galacticUnicorn.WIDTH
+    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+        self.galactic_unicorn = galactic_unicorn
+        self.pico_graphics = pico_graphics
+        self.height = galactic_unicorn.HEIGHT
+        self.sounds = CricketSound(galactic_unicorn, sound_service)
+        self.width = galactic_unicorn.WIDTH
         self.fireflies = [self.create_firefly() for _ in range(10)]
         self.chirping_task = None
         self.update_task = None
@@ -40,23 +40,23 @@ class Fireflies:
         if firefly["age"] >= firefly["life"]:
             self.reset_firefly(firefly)
 
-        pen = self.graphics.create_pen(
+        pen = self.pico_graphics.create_pen(
             int(firefly["red"] * firefly["brightness"]),
             int(firefly["green"] * firefly["brightness"]),
             int(firefly["blue"] * firefly["brightness"]),
         )
-        self.graphics.set_pen(pen)
-        self.graphics.pixel(int(firefly["x"]), int(firefly["y"]))
+        self.pico_graphics.set_pen(pen)
+        self.pico_graphics.pixel(int(firefly["x"]), int(firefly["y"]))
 
     async def update(self):
         while True:
-            self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
-            self.graphics.clear()
+            self.pico_graphics.set_pen(self.pico_graphics.create_pen(0, 0, 0))
+            self.pico_graphics.clear()
 
             for firefly in self.fireflies:
                 await self.update_firefly(firefly)
 
-            self.galacticUnicorn.update(self.graphics)
+            self.galactic_unicorn.update(self.pico_graphics)
             await uasyncio.sleep(0.1)  # Ensures correct pacing of updates
 
     async def play_cricket_sound(self):
@@ -83,8 +83,8 @@ class Fireflies:
             self.update_task = None
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    fireflies = Fireflies(galacticUnicorn, graphics, sound_service)
+async def run(galactic_unicorn, pico_graphics, sound_service):
+    fireflies = Fireflies(galactic_unicorn, pico_graphics, sound_service)
     fireflies.start_update()
     fireflies.start_chirping()
 

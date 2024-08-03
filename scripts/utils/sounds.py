@@ -10,15 +10,15 @@ from galactic import Channel
 
 
 class CelebrationSound:
-    def __init__(self, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
+    def __init__(self, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
         self.notes = [784, 880, 988, 1047, 1175, 988, 1047, 880, 784, -1, 800]
         self.sound_service = sound_service
 
         self.channels = self.set_channels()
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels = [self.galactic_unicorn.synth_channel(0)]
         channels[0].configure(
             waveforms=Channel.SQUARE + Channel.TRIANGLE,
             attack=0.01,
@@ -37,15 +37,15 @@ class CelebrationSound:
 
 
 class CelebrationSound2:
-    def __init__(self, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
+    def __init__(self, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
         self.notes = [523, 587, 659, 698, 784, 880, 988, 1047, -1]
         self.sound_service = sound_service
 
         self.channels = self.set_channels()
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels = [self.galactic_unicorn.synth_channel(0)]
         channels[0].configure(
             waveforms=Channel.SQUARE + Channel.TRIANGLE,
             attack=0.01,
@@ -64,13 +64,13 @@ class CelebrationSound2:
 
 
 class CricketSound:
-    def __init__(self, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
+    def __init__(self, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
         self.sound_service = sound_service
         self.channels = self.set_channels()
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels = [self.galactic_unicorn.synth_channel(0)]
         channels[0].configure(
             waveforms=Channel.SINE,
             attack=0.005,
@@ -154,15 +154,15 @@ class ExampleMusic:
     # fmt: on
     music_notes = [melody_notes, rhythm_notes, drum_beats, hi_hat, bass_notes]
 
-    def __init__(self, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
+    def __init__(self, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
         self.sound_service = sound_service
 
         self.channels = self.set_channels()
 
     def set_channels(self):
         channels = [
-            self.galacticUnicorn.synth_channel(i) for i in range(len(self.music_notes))
+            self.galactic_unicorn.synth_channel(i) for i in range(len(self.music_notes))
         ]
         channels[0].configure(
             waveforms=Channel.TRIANGLE + Channel.SQUARE,
@@ -214,10 +214,10 @@ class ExampleMusic:
 
 
 class ExampleRandomMusic:
-    def __init__(self, galacticUnicorn, sound_service):
+    def __init__(self, galactic_unicorn, sound_service):
         self.sound_service = sound_service
         self.notes = []
-        self.galacticUnicorn = galacticUnicorn
+        self.galactic_unicorn = galactic_unicorn
         self.channels = self.set_channels()
 
         for _ in range(8):  # 8 channels
@@ -229,7 +229,7 @@ class ExampleRandomMusic:
             self.notes.append(channel_notes)
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(i) for i in range(8)]
+        channels = [self.galactic_unicorn.synth_channel(i) for i in range(8)]
         for channel in channels:
             channel.configure(
                 waveforms=Channel.SINE,
@@ -247,15 +247,15 @@ class ExampleRandomMusic:
 
 
 class ExplosionSound:
-    def __init__(self, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
+    def __init__(self, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
         self.notes = [600, 700, 800, 900, 1000]
         self.sound_service = sound_service
 
         self.channels = self.set_channels()
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels = [self.galactic_unicorn.synth_channel(0)]
         channels[0].configure(
             waveforms=Channel.NOISE,
             attack=0.01,
@@ -275,13 +275,13 @@ class ExplosionSound:
 
 
 class FireplaceSound:
-    def __init__(self, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
+    def __init__(self, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
         self.sound_service = sound_service
         self.channels = self.set_channels()
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels = [self.galactic_unicorn.synth_channel(0)]
         channels[0].configure(
             waveforms=Channel.NOISE,
             attack=0,
@@ -303,8 +303,8 @@ class FireplaceSound:
 
 
 class FireworkSound:
-    def __init__(self, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
+    def __init__(self, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
         self.sound_service = sound_service
 
         self.channels = self.set_channels()
@@ -318,7 +318,7 @@ class FireworkSound:
         ]
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels = [self.galactic_unicorn.synth_channel(0)]
         channels[0].configure(
             waveforms=Channel.NOISE,
             attack=0.005,
@@ -338,14 +338,14 @@ class FireworkSound:
 
 
 class RaindropsSound:
-    def __init__(self, galacticUnicorn, sound_service):
+    def __init__(self, galactic_unicorn, sound_service):
         self.notes = [800, 810, 820]
         self.sound_service = sound_service
-        self.galacticUnicorn = galacticUnicorn
+        self.galactic_unicorn = galactic_unicorn
         self.channels = self.set_channels()
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels = [self.galactic_unicorn.synth_channel(0)]
         channels[0].configure(
             waveforms=Channel.NOISE,
             attack=0.005,
@@ -364,8 +364,8 @@ class RaindropsSound:
 
 
 class SirenSound:
-    def __init__(self, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
+    def __init__(self, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
         self.sound_service = sound_service
         self.channels = self.set_channels()
 
@@ -374,7 +374,7 @@ class SirenSound:
         self.siren_notes = [self.tone_a, 0, 0, 0, self.tone_b, 0, 0, 0]
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels = [self.galactic_unicorn.synth_channel(0)]
         channels[0].configure(
             waveforms=Channel.SINE + Channel.TRIANGLE,
             attack=0.01,
@@ -405,14 +405,14 @@ class SirenSound:
 
 
 class ThunderSound:
-    def __init__(self, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
+    def __init__(self, galactic_unicorn, sound_service):
+        self.galactic_unicorn = galactic_unicorn
         self.sound_service = sound_service
 
         self.channels = self.set_channels()
 
     def set_channels(self):
-        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels = [self.galactic_unicorn.synth_channel(0)]
         channels[0].configure(
             waveforms=Channel.NOISE,
             attack=0.005,

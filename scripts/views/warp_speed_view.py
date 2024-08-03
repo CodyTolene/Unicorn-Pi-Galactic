@@ -6,12 +6,12 @@ import uasyncio
 
 
 class WarpSpeed:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
+    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+        self.galactic_unicorn = galactic_unicorn
+        self.pico_graphics = pico_graphics
+        self.height = galactic_unicorn.HEIGHT
         self.sound_service = sound_service
-        self.width = galacticUnicorn.WIDTH
+        self.width = galactic_unicorn.WIDTH
 
         self.cx = self.width // 2
         self.cy = self.height // 2
@@ -48,23 +48,23 @@ class WarpSpeed:
 
         if 0 <= sx < self.width and 0 <= sy < self.height:
             brightness = int((star["speed"] / 0.1) * 255)
-            self.graphics.set_pen(
-                self.graphics.create_pen(brightness, brightness, brightness)
+            self.pico_graphics.set_pen(
+                self.pico_graphics.create_pen(brightness, brightness, brightness)
             )
-            self.graphics.pixel(sx, sy)
+            self.pico_graphics.pixel(sx, sy)
 
     async def update(self):
-        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
-        self.graphics.clear()
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(0, 0, 0))
+        self.pico_graphics.clear()
 
         for star in self.stars:
             await self.update_star(star)
 
-        self.galacticUnicorn.update(self.graphics)
+        self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    warp_speed = WarpSpeed(galacticUnicorn, graphics, sound_service)
+async def run(galactic_unicorn, pico_graphics, sound_service):
+    warp_speed = WarpSpeed(galactic_unicorn, pico_graphics, sound_service)
 
     while True:
         await warp_speed.update()

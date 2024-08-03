@@ -8,21 +8,21 @@ import uasyncio
 
 
 class Fire:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
+    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
         self.base_damping_factor = 0.97
         self.fire_colours = [
-            graphics.create_pen(0, 0, 0),
-            graphics.create_pen(20, 20, 20),
-            graphics.create_pen(180, 30, 0),
-            graphics.create_pen(220, 160, 0),
-            graphics.create_pen(255, 255, 180),
+            pico_graphics.create_pen(0, 0, 0),
+            pico_graphics.create_pen(20, 20, 20),
+            pico_graphics.create_pen(180, 30, 0),
+            pico_graphics.create_pen(220, 160, 0),
+            pico_graphics.create_pen(255, 255, 180),
         ]
         self.fire_spawns = 1
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.WIDTH + 4
+        self.galactic_unicorn = galactic_unicorn
+        self.pico_graphics = pico_graphics
+        self.height = galactic_unicorn.WIDTH + 4
         self.sound_service = sound_service
-        self.width = galacticUnicorn.HEIGHT + 2
+        self.width = galactic_unicorn.HEIGHT + 2
 
         self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
 
@@ -55,13 +55,13 @@ class Fire:
                 _heat[x][y] += sum_heat_y1 + sum_heat_y2 + sum_heat_x1y1 + sum_heat_x2y1
                 _heat[x][y] *= factor
 
-        _graphics = self.graphics
-        _set_pen = self.graphics.set_pen
-        _pixel = self.graphics.pixel
+        _graphics = self.pico_graphics
+        _set_pen = self.pico_graphics.set_pen
+        _pixel = self.pico_graphics.pixel
         _fire_colours = self.fire_colours
 
-        for y in range(self.galacticUnicorn.WIDTH):
-            for x in range(self.galacticUnicorn.HEIGHT):
+        for y in range(self.galactic_unicorn.WIDTH):
+            for x in range(self.galactic_unicorn.HEIGHT):
                 value = _heat[x + 1][y + 1]
                 if value < 0.15:
                     _set_pen(_fire_colours[0])
@@ -73,13 +73,13 @@ class Fire:
                     _set_pen(_fire_colours[3])
                 else:
                     _set_pen(_fire_colours[4])
-                _pixel(y, self.galacticUnicorn.HEIGHT - x - 1)
+                _pixel(y, self.galactic_unicorn.HEIGHT - x - 1)
 
-        self.galacticUnicorn.update(_graphics)
+        self.galactic_unicorn.update(_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    fire = Fire(galacticUnicorn, graphics, sound_service)
+async def run(galactic_unicorn, pico_graphics, sound_service):
+    fire = Fire(galactic_unicorn, pico_graphics, sound_service)
 
     while True:
         await fire.update()

@@ -8,12 +8,12 @@ from math import sqrt
 
 
 class LavaLamp:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
+    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+        self.galactic_unicorn = galactic_unicorn
+        self.pico_graphics = pico_graphics
+        self.height = galactic_unicorn.HEIGHT
         self.sound_service = sound_service
-        self.width = galacticUnicorn.WIDTH
+        self.width = galactic_unicorn.WIDTH
 
         self.blobs = [self.create_blob() for _ in range(7)]
 
@@ -23,7 +23,7 @@ class LavaLamp:
             random.randint(0, 255),
             random.randint(0, 150),
         )
-        pen = self.graphics.create_pen(*color)
+        pen = self.pico_graphics.create_pen(*color)
         return {
             "color": color,
             "dx": random.uniform(-0.2, 0.2),
@@ -45,8 +45,8 @@ class LavaLamp:
         if blob["y"] - blob["radius"] <= 0 or blob["y"] + blob["radius"] >= self.height:
             blob["dy"] *= -1
 
-        self.graphics.set_pen(blob["pen"])
-        self.graphics.circle(int(blob["x"]), int(blob["y"]), int(blob["radius"]))
+        self.pico_graphics.set_pen(blob["pen"])
+        self.pico_graphics.circle(int(blob["x"]), int(blob["y"]), int(blob["radius"]))
 
     def update_color(self, blob):
         new_color = (
@@ -55,21 +55,21 @@ class LavaLamp:
             min(255, max(0, blob["color"][2] + random.randint(-1, 1))),
         )
         blob["color"] = new_color
-        blob["pen"] = self.graphics.create_pen(*new_color)
+        blob["pen"] = self.pico_graphics.create_pen(*new_color)
 
     async def update(self):
-        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
-        self.graphics.clear()
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(0, 0, 0))
+        self.pico_graphics.clear()
 
         for blob in self.blobs:
             self.update_color(blob)
             await self.update_blob(blob)
 
-        self.galacticUnicorn.update(self.graphics)
+        self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    lava_lamp = LavaLamp(galacticUnicorn, graphics, sound_service)
+async def run(galactic_unicorn, pico_graphics, sound_service):
+    lava_lamp = LavaLamp(galactic_unicorn, pico_graphics, sound_service)
 
     while True:
         await lava_lamp.update()

@@ -5,31 +5,31 @@ import uasyncio
 
 
 class SOSSignal:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
-        self.black = graphics.create_pen(0, 0, 0)
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
+    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+        self.black = pico_graphics.create_pen(0, 0, 0)
+        self.galactic_unicorn = galactic_unicorn
+        self.pico_graphics = pico_graphics
         self.sound_service = sound_service
-        self.white = graphics.create_pen(255, 255, 255)
+        self.white = pico_graphics.create_pen(255, 255, 255)
 
     async def draw_dot(self):
-        self.graphics.set_pen(self.white)
-        self.graphics.clear()
-        self.galacticUnicorn.update(self.graphics)
+        self.pico_graphics.set_pen(self.white)
+        self.pico_graphics.clear()
+        self.galactic_unicorn.update(self.pico_graphics)
         await uasyncio.sleep(0.3)
-        self.graphics.set_pen(self.black)
-        self.graphics.clear()
-        self.galacticUnicorn.update(self.graphics)
+        self.pico_graphics.set_pen(self.black)
+        self.pico_graphics.clear()
+        self.galactic_unicorn.update(self.pico_graphics)
         await uasyncio.sleep(0.3)
 
     async def draw_dash(self):
-        self.graphics.set_pen(self.white)
-        self.graphics.clear()
-        self.galacticUnicorn.update(self.graphics)
+        self.pico_graphics.set_pen(self.white)
+        self.pico_graphics.clear()
+        self.galactic_unicorn.update(self.pico_graphics)
         await uasyncio.sleep(0.9)
-        self.graphics.set_pen(self.black)
-        self.graphics.clear()
-        self.galacticUnicorn.update(self.graphics)
+        self.pico_graphics.set_pen(self.black)
+        self.pico_graphics.clear()
+        self.galactic_unicorn.update(self.pico_graphics)
         await uasyncio.sleep(0.3)
 
     async def draw_s(self):
@@ -49,8 +49,8 @@ class SOSSignal:
         await uasyncio.sleep(1.5)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    sos_signal = SOSSignal(galacticUnicorn, graphics, sound_service)
+async def run(galactic_unicorn, pico_graphics, sound_service):
+    sos_signal = SOSSignal(galactic_unicorn, pico_graphics, sound_service)
 
     while True:
         await sos_signal.update()
