@@ -10,13 +10,20 @@ from utils.sounds import ThunderSound
 class Lightning:
     def __init__(self, galacticUnicorn, graphics, sound_service):
         self.bolts = []
-        self.flash = False
-        self.flash_duration = 0
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
         self.sound_service = ThunderSound(galacticUnicorn, sound_service)
         self.width = galacticUnicorn.WIDTH
+
+        self.bolts = [
+            self.create_bolt() for _ in range(random.randint(1, 3))
+        ]  # Initial bolts
+
+        # Start with a flash immediately
+        self.flash = True
+        self.flash_duration = random.randint(1, 3)
+        self.sound_service.play()
 
     def create_bolt(self):
         bolt = []

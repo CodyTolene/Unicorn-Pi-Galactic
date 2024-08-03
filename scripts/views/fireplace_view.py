@@ -4,7 +4,7 @@
 import random
 import uasyncio
 
-from utils.sounds import ExampleRandomMusic
+from utils.sounds import FireplaceSound
 
 
 class Fireplace:
@@ -12,7 +12,7 @@ class Fireplace:
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT + 2
-        self.sound_service = ExampleRandomMusic(galacticUnicorn, sound_service)
+        self.sound_service = FireplaceSound(galacticUnicorn, sound_service)
         self.width = galacticUnicorn.WIDTH
 
         self.fire_colours = [

@@ -29,10 +29,10 @@ class CelebrationSound:
         )
         return channels
 
-    def play(self):
+    def play(self, bpm=480, repeat=False):
         self.channels = self.set_channels()
         self.sound_service.play_notes(
-            [self.notes], self.channels, bpm=480, repeat=False
+            [self.notes], self.channels, bpm=bpm, repeat=repeat
         )
 
 
@@ -56,10 +56,54 @@ class CelebrationSound2:
         )
         return channels
 
-    def play(self):
+    def play(self, bpm=360, repeat=False):
         self.channels = self.set_channels()
         self.sound_service.play_notes(
-            [self.notes], self.channels, bpm=360, repeat=False
+            [self.notes], self.channels, bpm=bpm, repeat=repeat
+        )
+
+
+class CricketSound:
+    def __init__(self, galacticUnicorn, sound_service):
+        self.galacticUnicorn = galacticUnicorn
+        self.sound_service = sound_service
+        self.channels = self.set_channels()
+
+    def set_channels(self):
+        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels[0].configure(
+            waveforms=Channel.SINE,
+            attack=0.005,
+            decay=0.02,
+            sustain=0.0,
+            release=0.02,
+            volume=self.sound_service.get_current_volume() * 0.4,
+        )
+        return channels
+
+    def play(self, repeat=False):
+        self.channels = self.set_channels()
+
+        chirp_frequency = random.randint(2000, 2050)
+        chirp_pattern = [
+            chirp_frequency,
+            0,
+            chirp_frequency,
+            0,
+            chirp_frequency,
+            0,
+            0,
+            0,
+            0,
+            0,
+        ]
+        chirp_sequence = chirp_pattern * random.randint(2, 3)
+        silence_duration = random.randint(180, 420)
+        chirp_sequence.extend([0] * silence_duration)
+        random_bpm = random.randint(1500, 3000)
+
+        self.sound_service.play_notes(
+            [chirp_sequence], self.channels, bpm=random_bpm, repeat=repeat
         )
 
 
@@ -162,10 +206,10 @@ class ExampleMusic:
         )
         return channels
 
-    def play(self):
+    def play(self, bpm=700, repeat=True):
         self.channels = self.set_channels()
         self.sound_service.play_notes(
-            self.music_notes, self.channels, bpm=700, repeat=True
+            self.music_notes, self.channels, bpm=bpm, repeat=repeat
         )
 
 
@@ -197,9 +241,9 @@ class ExampleRandomMusic:
             )
         return channels
 
-    def play(self):
+    def play(self, bpm=60, repeat=True):
         self.channels = self.set_channels()
-        self.sound_service.play_notes(self.notes, self.channels, bpm=60, repeat=True)
+        self.sound_service.play_notes(self.notes, self.channels, bpm=bpm, repeat=repeat)
 
 
 class ExplosionSound:
@@ -222,11 +266,39 @@ class ExplosionSound:
         )
         return channels
 
-    def play(self):
+    def play(self, bpm=120, repeat=False):
         self.channels = self.set_channels()
         explosion = random.choice(self.notes)
         self.sound_service.play_notes(
-            [[explosion]], self.channels, bpm=120, repeat=False
+            [[explosion]], self.channels, bpm=bpm, repeat=repeat
+        )
+
+
+class FireplaceSound:
+    def __init__(self, galacticUnicorn, sound_service):
+        self.galacticUnicorn = galacticUnicorn
+        self.sound_service = sound_service
+        self.channels = self.set_channels()
+
+    def set_channels(self):
+        channels = [self.galacticUnicorn.synth_channel(0)]
+        channels[0].configure(
+            waveforms=Channel.NOISE,
+            attack=0,
+            decay=0,
+            sustain=0.1,
+            release=0,
+            volume=self.sound_service.get_current_volume() * 0.3,
+        )
+
+        return channels
+
+    def play(self, repeat=True):
+        self.channels = self.set_channels()
+        random_bpm = random.randint(120, 480)
+        white_noise_note = [2000] * random.randint(2, 12)
+        self.sound_service.play_notes(
+            [white_noise_note], self.channels, bpm=random_bpm, repeat=repeat
         )
 
 
@@ -257,11 +329,11 @@ class FireworkSound:
         )
         return channels
 
-    def play(self):
+    def play(self, bpm=700, repeat=False):
         self.channels = self.set_channels()
         selected_sound = random.choice(self.explosion_sounds)
         self.sound_service.play_notes(
-            [selected_sound], self.channels, bpm=700, repeat=False
+            [selected_sound], self.channels, bpm=bpm, repeat=repeat
         )
 
 
@@ -284,9 +356,11 @@ class RaindropsSound:
         )
         return channels
 
-    def play(self):
+    def play(self, bpm=820, repeat=True):
         self.channels = self.set_channels()
-        self.sound_service.play_notes([self.notes], self.channels, bpm=820, repeat=True)
+        self.sound_service.play_notes(
+            [self.notes], self.channels, bpm=bpm, repeat=repeat
+        )
 
 
 class SirenSound:
@@ -311,22 +385,22 @@ class SirenSound:
         )
         return channels
 
-    def play(self):
+    def play(self, bpm=240, repeat=True):
         self.channels = self.set_channels()
         self.sound_service.play_notes(
-            [self.siren_notes], self.channels, bpm=240, repeat=True
+            [self.siren_notes], self.channels, bpm=bpm, repeat=repeat
         )
 
-    def play_tone_a(self):
+    def play_tone_a(self, bpm=240, repeat=True):
         self.channels = self.set_channels()
         self.sound_service.play_notes(
-            [[self.tone_a, 0, 0, 0]], self.channels, bpm=240, repeat=True
+            [[self.tone_a, 0, 0, 0]], self.channels, bpm=bpm, repeat=repeat
         )
 
-    def play_tone_b(self):
+    def play_tone_b(self, bpm=240, repeat=True):
         self.channels = self.set_channels()
         self.sound_service.play_notes(
-            [[self.tone_b, 0, 0, 0]], self.channels, bpm=240, repeat=True
+            [[self.tone_b, 0, 0, 0]], self.channels, bpm=bpm, repeat=repeat
         )
 
 
@@ -350,10 +424,10 @@ class ThunderSound:
         return channels
 
     # Plays a random thunder sound
-    def play(self):
+    def play(self, repeat=False):
         self.channels = self.set_channels()
         random_notes = [random.randint(500, 5000) for _ in range(10)]
         random_bpm = random.choice([random.randint(550, 650), random.randint(430, 530)])
         self.sound_service.play_notes(
-            [random_notes], self.channels, bpm=random_bpm, repeat=False
+            [random_notes], self.channels, bpm=random_bpm, repeat=repeat
         )

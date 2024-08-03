@@ -1,9 +1,7 @@
-# Cody Tolene
-# Apache License 2.0
-
 import uasyncio
 import random
 import math
+from utils.sounds import CricketSound
 
 
 class Fireflies:
@@ -11,10 +9,11 @@ class Fireflies:
         self.galacticUnicorn = galacticUnicorn
         self.graphics = graphics
         self.height = galacticUnicorn.HEIGHT
-        self.sound_service = sound_service
+        self.sounds = CricketSound(galacticUnicorn, sound_service)
         self.width = galacticUnicorn.WIDTH
-
         self.fireflies = [self.create_firefly() for _ in range(10)]
+        self.chirping_task = None
+        self.update_task = None
 
     def create_firefly(self):
         return {
@@ -50,18 +49,49 @@ class Fireflies:
         self.graphics.pixel(int(firefly["x"]), int(firefly["y"]))
 
     async def update(self):
-        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
-        self.graphics.clear()
+        while True:
+            self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
+            self.graphics.clear()
 
-        for firefly in self.fireflies:
-            await self.update_firefly(firefly)
+            for firefly in self.fireflies:
+                await self.update_firefly(firefly)
 
-        self.galacticUnicorn.update(self.graphics)
+            self.galacticUnicorn.update(self.graphics)
+            await uasyncio.sleep(0.1)  # Ensures correct pacing of updates
+
+    async def play_cricket_sound(self):
+        while True:
+            self.sounds.play()
+            await uasyncio.sleep(random.uniform(8, 30))
+
+    def start_chirping(self):
+        if self.chirping_task is None:
+            self.chirping_task = uasyncio.create_task(self.play_cricket_sound())
+
+    def stop_chirping(self):
+        if self.chirping_task is not None:
+            self.chirping_task.cancel()
+            self.chirping_task = None
+
+    def start_update(self):
+        if self.update_task is None:
+            self.update_task = uasyncio.create_task(self.update())
+
+    def stop_update(self):
+        if self.update_task is not None:
+            self.update_task.cancel()
+            self.update_task = None
 
 
 async def run(galacticUnicorn, graphics, sound_service):
     fireflies = Fireflies(galacticUnicorn, graphics, sound_service)
+    fireflies.start_update()
+    fireflies.start_chirping()
 
-    while True:
-        await fireflies.update()
-        await uasyncio.sleep(0.1)
+    try:
+        while True:
+            await uasyncio.sleep(1)
+    finally:
+        # Stop when exiting scene.
+        fireflies.stop_chirping()
+        fireflies.stop_update()

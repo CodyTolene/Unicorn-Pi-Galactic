@@ -1,6 +1,3 @@
-# Cody Tolene
-# Apache License 2.0
-
 from machine import Timer
 
 
@@ -21,25 +18,27 @@ class SoundService:
         bpm,  # Beats per minute for the sound_service.
         repeat=False,  # Boolean for optional repeat when song ends.
     ):
+        """Play notes in the old format."""
         # Ensure any previous timer is deinitialized
         if self.current_timer:
             self.current_timer.deinit()
             self.current_timer = None
 
-        # Length of the song in beats.
+        # Length of the song in beats
         song_length = max(len(track) for track in musicNotes)
-        beat = 0  # Current beat in the song.
+        beat = 0  # Current beat in the song
 
         def next_beat():
             nonlocal beat
             for i in range(len(musicNotes)):
                 if beat < len(musicNotes[i]):
-                    if musicNotes[i][beat] > 0:
-                        channels[i].frequency(musicNotes[i][beat])
+                    frequency = musicNotes[i][beat]
+                    if frequency > 0:
+                        channels[i].frequency(frequency)
                         channels[i].trigger_attack()
-                    elif musicNotes[i][beat] == -1:
+                    elif frequency == -1:
                         channels[i].trigger_release()
-            beat = beat + 1
+            beat += 1
             if beat >= song_length:
                 if repeat:
                     beat = 0
