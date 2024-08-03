@@ -4,42 +4,40 @@
 import uasyncio
 import json
 
-VIEW_INDEX_FILE = "/current_view.json"
 
+class ViewManager:
+    def __init__(self, view_index_file="/current_view.json"):
+        self.view_index_file = view_index_file
+        self.current_view_key = self.load_current_view_index()
 
-# Save the current view index to a file
-def save_current_view_index(key):
-    with open(VIEW_INDEX_FILE, "w") as f:
-        json.dump({"current_view_key": key}, f)
+    def save_current_view_index(self, key):
+        with open(self.view_index_file, "w") as f:
+            json.dump({"current_view_key": key}, f)
 
-
-# Load the current view index from a file
-def load_current_view_index():
-    try:
-        with open(VIEW_INDEX_FILE, "r") as f:
-            data = json.load(f)
-            return data.get("current_view_key", "Rainbow")
-    except OSError:
-        return "Rainbow"
-
-
-# Switch to the current view
-async def switch_view(
-    views, currentViewKey, currentViewTask, galacticUnicorn, graphics, sound_service
-):
-    if currentViewTask:
-        currentViewTask.cancel()
+    def load_current_view_index(self):
         try:
-            await currentViewTask
-        except uasyncio.CancelledError:
-            pass
+            with open(self.view_index_file, "r") as f:
+                data = json.load(f)
+                return data.get("current_view_key", "Rainbow")
+        except OSError:
+            return "Rainbow"
 
-    # Clear the screen
-    graphics.set_pen(0)  # Black
-    graphics.clear()
-    galacticUnicorn.update(graphics)
-    save_current_view_index(currentViewKey)
-    currentViewTask = uasyncio.create_task(
-        views[currentViewKey](galacticUnicorn, graphics, sound_service)
-    )
-    return currentViewTask
+    async def switch_view(
+        self, views, current_view_task, galactic_unicorn, graphics, sound_service
+    ):
+        if current_view_task:
+            current_view_task.cancel()
+            try:
+                await current_view_task
+            except uasyncio.CancelledError:
+                pass
+
+        # Clear the screen
+        graphics.set_pen(0)  # Black
+        graphics.clear()
+        galactic_unicorn.update(graphics)
+        self.save_current_view_index(self.current_view_key)
+        current_view_task = uasyncio.create_task(
+            views[self.current_view_key](galactic_unicorn, graphics, sound_service)
+        )
+        return current_view_task

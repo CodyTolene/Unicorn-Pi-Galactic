@@ -32,14 +32,14 @@ from views import wave_view
 from utils.button_service import ButtonService
 from utils.options_service import OptionsService
 from utils.sound_service import SoundService
-from utils.view_manager import load_current_view_index
+from utils.view_manager import ViewManager
 
 # Ensure local packages can be imported
 sys.path.append("/utils")
 sys.path.append("/views")
 
 # Initialize GalacticUnicorn & PicoGraphics
-galacticUnicorn = GalacticUnicorn()
+galactic_unicorn = GalacticUnicorn()
 graphics = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN)
 
 # Ordered dictionary of view functions
@@ -68,38 +68,43 @@ views = OrderedDict(
     ]
 )
 
-# Current key of the view being displayed
-currentViewKey = load_current_view_index()
+# Initialize the ViewManager
+view_manager = ViewManager()
 
 # Task to keep track of the current running view
-currentViewTask = None
+current_view_task = None
 
 if __name__ == "__main__":
     # Clear the screen initially
     graphics.set_pen(0)  # Black
     graphics.clear()
-    galacticUnicorn.update(graphics)
+    galactic_unicorn.update(graphics)
 
     # Initialize the options service
     options_service = OptionsService()
 
     # Initialize the sound player
-    sound_service = SoundService(galacticUnicorn)
+    sound_service = SoundService(galactic_unicorn)
 
     # Start the asyncio event loop
     loop = uasyncio.get_event_loop()
 
     # Start the initial view
-    currentViewTask = loop.create_task(
-        views[currentViewKey](galacticUnicorn, graphics, sound_service)
+    current_view_task = loop.create_task(
+        views[view_manager.current_view_key](galactic_unicorn, graphics, sound_service)
     )
 
     # Initialize the button service
     button_service = ButtonService(
-        views, currentViewKey, currentViewTask, galacticUnicorn, graphics, sound_service
+        view_manager,
+        views,
+        current_view_task,
+        galactic_unicorn,
+        graphics,
+        sound_service,
     )
 
-    # Initialize the button service coroutine
+    # Create and schedule the button listener coroutine
     loop.create_task(button_service.run())
 
     # Run the event loop forever

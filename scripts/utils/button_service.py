@@ -2,24 +2,23 @@
 # Apache License 2.0
 
 import uasyncio
-from utils.view_manager import switch_view
 
 
 class ButtonService:
     def __init__(
         self,
+        view_manager,
         views,
-        current_view_key,
         current_view_task,
         galactic_unicorn,
         graphics,
         sound_service,
     ):
-        self.current_view_key = current_view_key
         self.current_view_task = current_view_task
         self.galactic_unicorn = galactic_unicorn
         self.graphics = graphics
         self.sound_service = sound_service
+        self.view_manager = view_manager
         self.views = views
 
         # Initialize button states
@@ -65,11 +64,12 @@ class ButtonService:
             if not self.button_states["A"]:
                 self.button_states["A"] = True
                 await self.sound_service.stop_all_sounds()
-                current_index = view_keys.index(self.current_view_key)
-                self.current_view_key = view_keys[(current_index - 1) % len(view_keys)]
-                self.current_view_task = await switch_view(
+                current_index = view_keys.index(self.view_manager.current_view_key)
+                self.view_manager.current_view_key = view_keys[
+                    (current_index - 1) % len(view_keys)
+                ]
+                self.current_view_task = await self.view_manager.switch_view(
                     self.views,
-                    self.current_view_key,
                     self.current_view_task,
                     self.galactic_unicorn,
                     self.graphics,
@@ -83,11 +83,12 @@ class ButtonService:
             if not self.button_states["B"]:
                 self.button_states["B"] = True
                 await self.sound_service.stop_all_sounds()
-                current_index = view_keys.index(self.current_view_key)
-                self.current_view_key = view_keys[(current_index + 1) % len(view_keys)]
-                self.current_view_task = await switch_view(
+                current_index = view_keys.index(self.view_manager.current_view_key)
+                self.view_manager.current_view_key = view_keys[
+                    (current_index + 1) % len(view_keys)
+                ]
+                self.current_view_task = await self.view_manager.switch_view(
                     self.views,
-                    self.current_view_key,
                     self.current_view_task,
                     self.galactic_unicorn,
                     self.graphics,

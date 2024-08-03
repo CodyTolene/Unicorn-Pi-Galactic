@@ -9,10 +9,9 @@ class SoundService:
     def __init__(self, galacticUnicorn):
         self.current_timer = None
         self.galacticUnicorn = galacticUnicorn
-        self.previous_volume = galacticUnicorn.get_volume()
 
-        # Set the initial volume
         self.galacticUnicorn.set_volume(0.2)
+        self.previous_volume = galacticUnicorn.get_volume()
 
     def play_notes(
         self,
