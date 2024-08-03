@@ -21,7 +21,6 @@ class SoundService:
         bpm,  # Beats per minute for the sound_service.
         repeat=False,  # Boolean for optional repeat when song ends.
     ):
-        """Play notes in the old format."""
         # Ensure any previous timer is deinitialized
         if self.current_timer:
             self.current_timer.deinit()

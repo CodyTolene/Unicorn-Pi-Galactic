@@ -29,7 +29,8 @@ from views import sos_signal_view
 from views import warp_speed_view
 from views import wave_view
 
-from utils.button_listener import buttonListenerProcess
+from utils.button_service import ButtonService
+from utils.options_service import OptionsService
 from utils.sound_service import SoundService
 from utils.view_manager import load_current_view_index
 
@@ -79,6 +80,9 @@ if __name__ == "__main__":
     graphics.clear()
     galacticUnicorn.update(graphics)
 
+    # Initialize the options service
+    options_service = OptionsService()
+
     # Initialize the sound player
     sound_service = SoundService(galacticUnicorn)
 
@@ -90,17 +94,13 @@ if __name__ == "__main__":
         views[currentViewKey](galacticUnicorn, graphics, sound_service)
     )
 
-    # Create and schedule the button listener coroutine
-    loop.create_task(
-        buttonListenerProcess(
-            views,
-            galacticUnicorn,
-            graphics,
-            currentViewKey,
-            currentViewTask,
-            sound_service,
-        )
+    # Initialize the button service
+    button_service = ButtonService(
+        views, currentViewKey, currentViewTask, galacticUnicorn, graphics, sound_service
     )
+
+    # Initialize the button service coroutine
+    loop.create_task(button_service.run())
 
     # Run the event loop forever
     loop.run_forever()
