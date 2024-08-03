@@ -8,7 +8,7 @@ import uasyncio
 import math
 
 from galactic import GalacticUnicorn
-from utils.sounds import ExampleMusic
+from utils.sounds import ExampleRandomMusic
 
 
 class Rainbow:
@@ -17,7 +17,7 @@ class Rainbow:
         self.pico_graphics = pico_graphics
         self.height = galactic_unicorn.HEIGHT
         self.hue_offset = 0.0
-        self.sound_service = ExampleMusic(galactic_unicorn, sound_service)
+        self.sound_service = ExampleRandomMusic(galactic_unicorn, sound_service)
         self.phase = 0
         self.speed = 1.0
         self.stripe_width = 3.0

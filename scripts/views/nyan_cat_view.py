@@ -2,6 +2,7 @@
 # Apache License 2.0
 
 import uasyncio
+from utils.sounds import ExampleMusic
 
 
 class NyanCat:
@@ -9,7 +10,9 @@ class NyanCat:
         self.frame_index = 0
         self.galactic_unicorn = galactic_unicorn
         self.pico_graphics = pico_graphics
-        self.sound_service = sound_service
+        self.sound_service = ExampleMusic(galactic_unicorn, sound_service)
+
+        self.sound_service.play()
 
     def display_frame(self, frame):
         for y, row in enumerate(frame):
