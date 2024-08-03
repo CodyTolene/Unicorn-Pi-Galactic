@@ -1,3 +1,6 @@
+# Cody Tolene
+# Apache License 2.0
+
 from machine import Timer
 
 
@@ -24,9 +27,9 @@ class SoundService:
             self.current_timer.deinit()
             self.current_timer = None
 
-        # Length of the song in beats
+        # Length of the song in beats.
         song_length = max(len(track) for track in musicNotes)
-        beat = 0  # Current beat in the song
+        beat = 0  # Current beat in the song.
 
         def next_beat():
             nonlocal beat
