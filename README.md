@@ -60,8 +60,8 @@
 | Digital Rain            | N/A                | ![Digital Rain][img-digital-rain]         |
 | Emergency               | Siren Tones        | ![Emergency][img-emergency]               |
 | Fire                    | N/A                | ![Fire][img-fire]                         |
-| Fireflies               | N/A                | ![Fireflies][img-fireflies]               |
-| Fireplace               | N/A                | ![Fireplace][img-fireplace]               |
+| Fireflies               | Burning Noises     | ![Fireflies][img-fireflies]               |
+| Fireplace               | Relaxing Tones     | ![Fireplace][img-fireplace]               |
 | Fireworks               | Freedom Bursts     | ![Fireworks][img-fireworks]               |
 | Flashlight Torch        | N/A                | ![Flashlight Torch][img-flashlight-torch] |
 | Lava Lamp               | N/A                | ![Lava Lamp][img-lava-lamp]               |
