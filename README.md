@@ -59,8 +59,8 @@
 | Digital Clock (24 hour) | N/A                | ![Digital Clock 24][img-digital-clock-24] |
 | Digital Rain            | N/A                | ![Digital Rain][img-digital-rain]         |
 | Emergency               | Siren Tones        | ![Emergency][img-emergency]               |
-| Fire                    | N/A                | ![Fire][img-fire]                         |
-| Fireflies               | Burning Noises     | ![Fireflies][img-fireflies]               |
+| Fire                    | Burning Noises     | ![Fire][img-fire]                         |
+| Fireflies               | Random Crickets    | ![Fireflies][img-fireflies]               |
 | Fireplace               | Relaxing Tones     | ![Fireplace][img-fireplace]               |
 | Fireworks               | Freedom Bursts     | ![Fireworks][img-fireworks]               |
 | Flashlight Torch        | N/A                | ![Flashlight Torch][img-flashlight-torch] |
@@ -137,12 +137,17 @@ The file `main.py` will automatically run when the Galactic Unicorn is powered o
 
 ### Digital Clock View
 
-"Digital Clock" controls:
-
 | Button | Action                        |
 | :----- | :---------------------------- |
 | "C"    | Cycle text color to previous. |
 | "D"    | Cycle text color to next.     |
+
+### Rainbow (default) View
+
+| Button | Action                  |
+| :----- | :---------------------- |
+| "C"    | Increase stript width.  |
+| "D"    | Decrease stript width . |
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
