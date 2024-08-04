@@ -8,40 +8,50 @@ from utils.sounds import CelebrationSound, CelebrationSound2, ExplosionSound
 
 
 class DVDBouncer:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.dx = 1 if random.choice([True, False]) else -1
         self.dy = 1 if random.choice([True, False]) else -1
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
+        self.galactic_unicorn = galactic_unicorn
+        self.pico_graphics = pico_graphics
+        self.height = galactic_unicorn.HEIGHT
         self.logo_height = 1
         self.logo_width = 2
-        self.width = galacticUnicorn.WIDTH
+        self.options_service = options_service
+        self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
+
         self.x = random.randint(1, self.width - self.logo_width - 1)
         self.y = random.randint(1, self.height - self.logo_height - 1)
         self.color = self.random_color()
-        self.celebration_sound = CelebrationSound(galacticUnicorn, sound_service)
-        self.celebration_sound_2 = CelebrationSound2(galacticUnicorn, sound_service)
-        self.explosion_sound = ExplosionSound(galacticUnicorn, sound_service)
+        self.celebration_sound = CelebrationSound(galactic_unicorn, sound_service)
+        self.celebration_sound_2 = CelebrationSound2(galactic_unicorn, sound_service)
+        self.explosion_sound = ExplosionSound(galactic_unicorn, sound_service)
 
     def random_color(self):
-        return self.graphics.create_pen(
+        return self.pico_graphics.create_pen(
             random.randint(0, 255),
             random.randint(0, 255),
             random.randint(0, 255),
         )
 
     def draw_logo(self):
-        self.graphics.set_pen(self.color)
+        self.pico_graphics.set_pen(self.color)
         for i in range(self.logo_width):
             for j in range(self.logo_height):
-                self.graphics.pixel(self.x + i, self.y + j)
+                self.pico_graphics.pixel(self.x + i, self.y + j)
 
     def clear_logo(self):
-        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(0, 0, 0))
         for i in range(self.logo_width):
             for j in range(self.logo_height):
-                self.graphics.pixel(self.x + i, self.y + j)
+                self.pico_graphics.pixel(self.x + i, self.y + j)
 
     def update_position(self):
         self.clear_logo()
@@ -81,11 +91,15 @@ class DVDBouncer:
 
     async def update(self):
         self.update_position()
-        self.galacticUnicorn.update(self.graphics)
+        self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    dvd_bouncer = DVDBouncer(galacticUnicorn, graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    dvd_bouncer = DVDBouncer(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await dvd_bouncer.update()

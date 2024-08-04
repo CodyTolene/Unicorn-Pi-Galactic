@@ -2,34 +2,50 @@
 # Apache License 2.0
 
 import uasyncio
+from utils.sounds import ExampleMusic
 
 
 class NyanCat:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.frame_index = 0
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.sound_service = sound_service
+        self.galactic_unicorn = galactic_unicorn
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
+        self.sound_service = ExampleMusic(galactic_unicorn, sound_service)
+        self.wifi_service = wifi_service
+
+        self.sound_service.play()
 
     def display_frame(self, frame):
         for y, row in enumerate(frame):
             for x, char in enumerate(row):
                 color = color_key.get(char, (0, 0, 0))
-                pen = self.graphics.create_pen(*color)
-                self.graphics.set_pen(pen)
-                self.graphics.pixel(x, y)
-        self.galacticUnicorn.update(self.graphics)
+                pen = self.pico_graphics.create_pen(*color)
+                self.pico_graphics.set_pen(pen)
+                self.pico_graphics.pixel(x, y)
+        self.galactic_unicorn.update(self.pico_graphics)
 
     async def update(self):
-        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
-        self.graphics.clear()
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(0, 0, 0))
+        self.pico_graphics.clear()
 
         self.display_frame(frames[self.frame_index])
         self.frame_index = (self.frame_index + 1) % len(frames)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    nyan_cat = NyanCat(galacticUnicorn, graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    nyan_cat = NyanCat(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await nyan_cat.update()

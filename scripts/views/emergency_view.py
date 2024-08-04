@@ -24,13 +24,23 @@ from utils.sounds import SirenSound
 
 
 class Emergency:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.current_tone = 0
-        self.blue = graphics.create_pen(0, 0, 255)
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.sound_service = SirenSound(galacticUnicorn, sound_service)
-        self.red = graphics.create_pen(255, 0, 0)
+        self.galactic_unicorn = galactic_unicorn
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
+        self.sound_service = SirenSound(galactic_unicorn, sound_service)
+        self.wifi_service = wifi_service
+
+        self.blue = pico_graphics.create_pen(0, 0, 255)
+        self.red = pico_graphics.create_pen(255, 0, 0)
 
         self.current_color = self.red
 
@@ -43,15 +53,19 @@ class Emergency:
             self.current_tone = 0
 
     async def update(self):
-        self.graphics.set_pen(self.current_color)
-        self.graphics.clear()
-        self.galacticUnicorn.update(self.graphics)
+        self.pico_graphics.set_pen(self.current_color)
+        self.pico_graphics.clear()
+        self.galactic_unicorn.update(self.pico_graphics)
         self.current_color = self.blue if self.current_color == self.red else self.red
         await self.play_siren()
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    emergency = Emergency(galacticUnicorn, graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    emergency = Emergency(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await emergency.update()

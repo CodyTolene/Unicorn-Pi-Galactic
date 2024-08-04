@@ -6,13 +6,22 @@ import uasyncio
 
 
 class DigitalRain:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.dots = []
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
+        self.galactic_unicorn = galactic_unicorn
+        self.pico_graphics = pico_graphics
+        self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
         self.sound_service = sound_service
-        self.width = galacticUnicorn.WIDTH
+        self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
         self.MAX_DOTS = 50
         BRIGHT_GREEN = (0, 255, 0)
@@ -21,8 +30,8 @@ class DigitalRain:
         self.GREEN_VARIATIONS = [BRIGHT_GREEN, MEDIUM_GREEN, DARK_GREEN]
 
     def clear(self):
-        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
-        self.graphics.clear()
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(0, 0, 0))
+        self.pico_graphics.clear()
 
     def create_dot(self, x, y, color, stopping=False):
         return {"x": x, "y": y, "color": color, "stopping": stopping}
@@ -48,8 +57,8 @@ class DigitalRain:
     def draw_dots(self):
         for dot in self.dots:
             if 0 <= dot["x"] < self.width and 0 <= dot["y"] < self.height:
-                self.graphics.set_pen(self.graphics.create_pen(*dot["color"]))
-                self.graphics.pixel(dot["x"], dot["y"])
+                self.pico_graphics.set_pen(self.pico_graphics.create_pen(*dot["color"]))
+                self.pico_graphics.pixel(dot["x"], dot["y"])
 
     async def update(self):
         self.clear()
@@ -66,11 +75,15 @@ class DigitalRain:
             if dot["y"] < self.height and not self.is_faded_out(dot)
         ]
         self.draw_dots()
-        self.galacticUnicorn.update(self.graphics)
+        self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    digital_rain = DigitalRain(galacticUnicorn, graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    digital_rain = DigitalRain(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await digital_rain.update()
