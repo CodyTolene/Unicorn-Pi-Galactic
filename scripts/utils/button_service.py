@@ -11,6 +11,7 @@ class ButtonService:
         self.sound_service = view_service.sound_service
         self.view_service = view_service
         self.views = view_service.get_views()
+        self.wifi_service = view_service.wifi_service
 
         # Initialize button states
         self.button_states = {

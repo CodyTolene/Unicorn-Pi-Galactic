@@ -24,16 +24,26 @@ from views import rainbow_view
 from views import raindrops_view
 from views import snowfall_view
 from views import sos_signal_view
+from views import stock_display_view
 from views import warp_speed_view
 from views import wave_view
 
 
 class ViewService:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.galactic_unicorn = galactic_unicorn
+        self.options_service = options_service
         self.pico_graphics = pico_graphics
         self.sound_service = sound_service
         self.view_index_file = "/current_view.json"
+        self.wifi_service = wifi_service
 
         self.current_view_key = self.load_current_view_index()
 
@@ -45,7 +55,11 @@ class ViewService:
     def get_current_view(self):
         views = self.get_views()
         return views[self.current_view_key](
-            self.galactic_unicorn, self.pico_graphics, self.sound_service
+            self.galactic_unicorn,
+            self.options_service,
+            self.pico_graphics,
+            self.sound_service,
+            self.wifi_service,
         )
 
     def get_views(self):
@@ -69,6 +83,7 @@ class ViewService:
                 ("Raindrops", raindrops_view.run),
                 ("SOS", sos_signal_view.run),
                 ("Snowfall", snowfall_view.run),
+                ("Stock Display", stock_display_view.run),
                 ("Warp Speed", warp_speed_view.run),
                 ("Wave", wave_view.run),
             ]
@@ -98,7 +113,11 @@ class ViewService:
         self.save_current_view_index(self.current_view_key)
         current_view_task = uasyncio.create_task(
             views[self.current_view_key](
-                self.galactic_unicorn, self.pico_graphics, self.sound_service
+                self.galactic_unicorn,
+                self.options_service,
+                self.pico_graphics,
+                self.sound_service,
+                self.wifi_service,
             )
         )
         return current_view_task

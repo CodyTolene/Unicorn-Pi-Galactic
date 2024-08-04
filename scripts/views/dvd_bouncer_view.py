@@ -8,7 +8,14 @@ from utils.sounds import CelebrationSound, CelebrationSound2, ExplosionSound
 
 
 class DVDBouncer:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.dx = 1 if random.choice([True, False]) else -1
         self.dy = 1 if random.choice([True, False]) else -1
         self.galactic_unicorn = galactic_unicorn
@@ -16,7 +23,10 @@ class DVDBouncer:
         self.height = galactic_unicorn.HEIGHT
         self.logo_height = 1
         self.logo_width = 2
+        self.options_service = options_service
         self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
+
         self.x = random.randint(1, self.width - self.logo_width - 1)
         self.y = random.randint(1, self.height - self.logo_height - 1)
         self.color = self.random_color()
@@ -84,8 +94,12 @@ class DVDBouncer:
         self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    dvd_bouncer = DVDBouncer(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    dvd_bouncer = DVDBouncer(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await dvd_bouncer.update()

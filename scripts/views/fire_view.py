@@ -8,7 +8,14 @@ import uasyncio
 
 
 class Fire:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.base_damping_factor = 0.97
         self.fire_colours = [
             pico_graphics.create_pen(0, 0, 0),
@@ -19,10 +26,12 @@ class Fire:
         ]
         self.fire_spawns = 1
         self.galactic_unicorn = galactic_unicorn
+        self.options_service = options_service
         self.pico_graphics = pico_graphics
         self.height = galactic_unicorn.WIDTH + 4
         self.sound_service = sound_service
         self.width = galactic_unicorn.HEIGHT + 2
+        self.wifi_service = wifi_service
 
         self.heat = [[0.0 for _ in range(self.height)] for _ in range(self.width)]
 
@@ -78,8 +87,12 @@ class Fire:
         self.galactic_unicorn.update(_graphics)
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    fire = Fire(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    fire = Fire(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await fire.update()

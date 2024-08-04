@@ -5,15 +5,25 @@ from utils.sounds import CricketSound
 
 
 class Fireflies:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
-        self.galactic_unicorn = galactic_unicorn
-        self.pico_graphics = pico_graphics
-        self.height = galactic_unicorn.HEIGHT
-        self.sounds = CricketSound(galactic_unicorn, sound_service)
-        self.width = galactic_unicorn.WIDTH
-        self.fireflies = [self.create_firefly() for _ in range(10)]
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.chirping_task = None
+        self.galactic_unicorn = galactic_unicorn
+        self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
+        self.sounds = CricketSound(galactic_unicorn, sound_service)
         self.update_task = None
+        self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
+
+        self.fireflies = [self.create_firefly() for _ in range(10)]
 
     def create_firefly(self):
         return {
@@ -83,8 +93,12 @@ class Fireflies:
             self.update_task = None
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    fireflies = Fireflies(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    fireflies = Fireflies(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
     fireflies.start_update()
     fireflies.start_chirping()
 

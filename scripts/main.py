@@ -12,12 +12,14 @@ from utils.button_service import ButtonService
 from utils.options_service import OptionsService
 from utils.sound_service import SoundService
 from utils.view_service import ViewService
+from utils.wifi_service import WiFiService
 
 # Ensure local packages can be imported
 sys.path.append("/utils")
 sys.path.append("/views")
 
-if __name__ == "__main__":
+
+async def main():
     # Initialize GalacticUnicorn
     galactic_unicorn = GalacticUnicorn()
 
@@ -30,22 +32,33 @@ if __name__ == "__main__":
     # Initialize the sound player
     sound_service = SoundService(galactic_unicorn)
 
-    # Initialize the ViewService
-    view_service = ViewService(galactic_unicorn, pico_graphics, sound_service)
-    view_service.clear_screen()
+    # Initialize Wi-Fi service
+    wifi_service = WiFiService(options_service)
 
-    # Start the asyncio event loop
-    loop = uasyncio.get_event_loop()
+    # Connect to Wi-Fi if credentials are provided in `options.json`
+    await wifi_service.connect()
+
+    # Initialize the ViewService
+    view_service = ViewService(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
+    view_service.clear_screen()
 
     # Start the initial view
     starting_view = view_service.get_current_view()
-    current_view_task = loop.create_task(starting_view)
+    current_view_task = uasyncio.create_task(starting_view)
 
     # Initialize the button service
     button_service = ButtonService(view_service, current_view_task)
 
     # Create and schedule the button listener coroutine
-    loop.create_task(button_service.run())
+    uasyncio.create_task(button_service.run())
 
-    # Run the event loop forever
-    loop.run_forever()
+    # Keep the main loop running indefinitely
+    while True:
+        await uasyncio.sleep(1)
+
+
+if __name__ == "__main__":
+    # Run the asyncio event loop
+    uasyncio.run(main())

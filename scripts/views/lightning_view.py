@@ -8,19 +8,24 @@ from utils.sounds import ThunderSound
 
 
 class Lightning:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
-        self.bolts = []
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.galactic_unicorn = galactic_unicorn
-        self.pico_graphics = pico_graphics
         self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
         self.sound_service = ThunderSound(galactic_unicorn, sound_service)
         self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
-        self.bolts = [
-            self.create_bolt() for _ in range(random.randint(1, 3))
-        ]  # Initial bolts
-
-        # Start with a flash immediately
+        # Initialize the lightning and display one immediately
+        self.bolts = [self.create_bolt() for _ in range(random.randint(1, 3))]
         self.flash = True
         self.flash_duration = random.randint(1, 3)
         self.sound_service.play()
@@ -64,8 +69,12 @@ class Lightning:
         self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    lightning = Lightning(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    lightning = Lightning(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await lightning.update()

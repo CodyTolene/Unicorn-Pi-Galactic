@@ -12,16 +12,25 @@ from utils.sounds import ExampleRandomMusic
 
 
 class Rainbow:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.galactic_unicorn = galactic_unicorn
-        self.pico_graphics = pico_graphics
         self.height = galactic_unicorn.HEIGHT
         self.hue_offset = 0.0
-        self.sound_service = ExampleRandomMusic(galactic_unicorn, sound_service)
+        self.options_service = options_service
         self.phase = 0
+        self.pico_graphics = pico_graphics
+        self.sound_service = ExampleRandomMusic(galactic_unicorn, sound_service)
         self.speed = 1.0
         self.stripe_width = 3.0
         self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
         self.hue_map = [
             self.from_hsv(x / self.width, 1.0, 1.0) for x in range(self.width)
@@ -90,8 +99,12 @@ class Rainbow:
         self.on_button_press()
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    rainbow = Rainbow(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    rainbow = Rainbow(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await rainbow.update()

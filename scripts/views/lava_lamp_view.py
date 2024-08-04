@@ -8,12 +8,21 @@ from math import sqrt
 
 
 class LavaLamp:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.galactic_unicorn = galactic_unicorn
-        self.pico_graphics = pico_graphics
         self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
         self.sound_service = sound_service
         self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
         self.blobs = [self.create_blob() for _ in range(7)]
 
@@ -68,8 +77,12 @@ class LavaLamp:
         self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    lava_lamp = LavaLamp(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    lava_lamp = LavaLamp(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await lava_lamp.update()

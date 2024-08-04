@@ -24,12 +24,22 @@ from utils.sounds import SirenSound
 
 
 class Emergency:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.current_tone = 0
-        self.blue = pico_graphics.create_pen(0, 0, 255)
         self.galactic_unicorn = galactic_unicorn
+        self.options_service = options_service
         self.pico_graphics = pico_graphics
         self.sound_service = SirenSound(galactic_unicorn, sound_service)
+        self.wifi_service = wifi_service
+
+        self.blue = pico_graphics.create_pen(0, 0, 255)
         self.red = pico_graphics.create_pen(255, 0, 0)
 
         self.current_color = self.red
@@ -50,8 +60,12 @@ class Emergency:
         await self.play_siren()
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    emergency = Emergency(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    emergency = Emergency(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await emergency.update()

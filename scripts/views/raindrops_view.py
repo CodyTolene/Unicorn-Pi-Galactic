@@ -8,13 +8,22 @@ from utils.sounds import RaindropsSound
 
 
 class Raindrops:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.direction = random.choice([-0.3, 0.3])
         self.galactic_unicorn = galactic_unicorn
-        self.pico_graphics = pico_graphics
         self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
         self.sound_service = RaindropsSound(galactic_unicorn, sound_service)
         self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
         self.raindrops = [
             Raindrop(self.width, self.height, self.pico_graphics, self.direction)
@@ -53,8 +62,12 @@ class Raindrop:
             self.x = random.randint(0, self.width - 1)
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    raindrops = Raindrops(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    raindrops = Raindrops(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await raindrops.update()

@@ -8,10 +8,18 @@ from utils.sounds import FireplaceSound
 
 
 class Fireplace:
-    def __init__(self, pico_graphics, galactic_unicorn, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.galactic_unicorn = galactic_unicorn
-        self.pico_graphics = pico_graphics
         self.height = galactic_unicorn.HEIGHT + 2
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
         self.sound_service = FireplaceSound(galactic_unicorn, sound_service)
         self.width = galactic_unicorn.WIDTH
 
@@ -71,8 +79,12 @@ class Fireplace:
         self.galactic_unicorn.update(_graphics)
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    fireplace = Fireplace(pico_graphics, galactic_unicorn, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    fireplace = Fireplace(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await fireplace.update()

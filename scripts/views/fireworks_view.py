@@ -8,12 +8,21 @@ from utils.sounds import FireworkSound
 
 
 class Firework:
-    def __init__(self, pico_graphics, galactic_unicorn, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.galactic_unicorn = galactic_unicorn
-        self.pico_graphics = pico_graphics
         self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
         self.sound_service = FireworkSound(galactic_unicorn, sound_service)
         self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
         self.launch_x = (
             random.randint(self.width // 4, 3 * self.width // 4)
@@ -82,14 +91,24 @@ class Firework:
                             self.pico_graphics.pixel(int(p["x"]), int(p["y"]))
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
     fireworks = []
     while True:
         pico_graphics.set_pen(pico_graphics.create_pen(0, 0, 0))
         pico_graphics.clear()
 
         if random.random() < 0.1:
-            fireworks.append(Firework(pico_graphics, galactic_unicorn, sound_service))
+            fireworks.append(
+                Firework(
+                    galactic_unicorn,
+                    options_service,
+                    pico_graphics,
+                    sound_service,
+                    wifi_service,
+                )
+            )
 
         for firework in fireworks:
             await firework.update()

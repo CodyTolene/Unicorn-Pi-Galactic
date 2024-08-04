@@ -6,11 +6,20 @@ from utils.sounds import ExampleMusic
 
 
 class NyanCat:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.frame_index = 0
         self.galactic_unicorn = galactic_unicorn
+        self.options_service = options_service
         self.pico_graphics = pico_graphics
         self.sound_service = ExampleMusic(galactic_unicorn, sound_service)
+        self.wifi_service = wifi_service
 
         self.sound_service.play()
 
@@ -31,8 +40,12 @@ class NyanCat:
         self.frame_index = (self.frame_index + 1) % len(frames)
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    nyan_cat = NyanCat(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    nyan_cat = NyanCat(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await nyan_cat.update()

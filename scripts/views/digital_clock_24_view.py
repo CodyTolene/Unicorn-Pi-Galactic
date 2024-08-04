@@ -6,7 +6,14 @@ import time
 
 
 class DigitalClock24:
-    def __init__(self, galactic_unicorn, pico_graphics, sound_service):
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
         self.button_states = {"C": False, "D": False}
         self.color_index = 0  # Start with white
         self.colors = [
@@ -19,11 +26,13 @@ class DigitalClock24:
             (255, 0, 255),  # Pink
         ]
         self.galactic_unicorn = galactic_unicorn
+        self.options_service = options_service
         self.pico_graphics = pico_graphics
         self.pico_graphics.set_font("bitmap8")
         self.height = galactic_unicorn.HEIGHT
         self.sound_service = sound_service
         self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
     def on_button_press(self):
         if self.galactic_unicorn.is_pressed(self.galactic_unicorn.SWITCH_C):
@@ -75,8 +84,12 @@ class DigitalClock24:
         self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galactic_unicorn, pico_graphics, sound_service):
-    digital_clock_24 = DigitalClock24(galactic_unicorn, pico_graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    digital_clock_24 = DigitalClock24(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await digital_clock_24.update()

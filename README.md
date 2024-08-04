@@ -17,6 +17,7 @@
 - [Parts List](#parts-list)
 - [Previews](#previews)
 - [Software Guide](#software-guide)
+- [Wi-Fi Setup](#wi-fi-setup)
 - [Software Setup](#software-setup)
 - [Development](#development)
 - [Licensing](#licensing)
@@ -92,14 +93,41 @@
 First make sure you have this repo cloned to your computer. If you don't have Git installed, you can download the repo as a ZIP file by clicking the green "Code" button at the top of this page. Follow the steps below to run the Python scripts in this repository on your Raspberry Pi Pico with the Pimoroni Unicorn Pack:
 
 1. Similar to how you install the Pimoroni custom software to a Raspberry Pi Pico ([official guide][url-pimoroni-pico-guide]), you need to install the .uf2 file for the Pimoroni Galactic Unicorn. You can find the .uf2 file on the [Pimoroni GitHub Release Page][url-galactic-unicorn-release] where the file is generally named starting with "galactic_unicorn...". 
+
    > ![Info][img-info] This is a one-time setup.
+
 2. Download and install the Thonny IDE from the [official website][url-thonny]. 
+
    > ![Info][img-info] This allows us to write and run Python code on the Galactic Unicorns Raspberry Pi Pico.
+
 3. Open Thonny and connect your Galactic Unicorns Raspberry Pi Pico to your computer using a USB cable.
+
 4. On the left hand side you should see the file explorer for your Galactic Unicorns Raspberry Pi Pico. Drag and drop all the files from the `scripts` folder in this repository to the root directory of your Galactic Unicorns Raspberry Pi Pico.
+
 5. Unplug and replug your Galactic Unicorn to restart the device or press the "Reset" button on the back.
 
 The file `main.py` will automatically run when the Galactic Unicorn is powered on.
+
+<p align="right">[ <a href="#index">Index</a> ]</p>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+## Wi-Fi Setup <a name="wi-fi-setup"></a>
+
+Some views may require you to have Wi-Fi connected to your Raspberry Pi Pico. Follow the steps below to connect your Raspberry Pi Pico to Wi-Fi:
+
+1. After copying the options.json file to the root directory of your Raspberry Pi Pico, open the file in Thonny or another IDE.
+
+2. Add your Wi-Fi SSID and password to the `wifi_ssid` and `wifi_password` objects in the `options.json` file. Example:
+  
+    ```json
+    {
+      "wifi_ssid": "MY_WIFI_SSID", 
+      "wifi_password": "MY_WIFI_PASSWORD",
+    }
+    ```
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
@@ -148,6 +176,35 @@ The file `main.py` will automatically run when the Galactic Unicorn is powered o
 | :----- | :---------------------- |
 | "C"    | Increase stript width.  |
 | "D"    | Decrease stript width . |
+
+### Stock Display View
+
+| Button | Action                        |
+| :----- | :---------------------------- |
+| "C"    | Cycle text color to previous. |
+| "D"    | Cycle text color to next.     |
+
+Setup:
+
+1. Be sure your Wi-Fi is connected, by following the Wi-Fi setup instructions [here](#wi-fi-setup).
+
+2. Sign up for a free API key (a place to get stock data) at [Finnhub.io][url-finnhub].
+
+3. Add the API key to the `stock_finnhub_api_key` object in the `options.json` file. Example:
+
+    ```json
+    {
+      "stock_finnhub_api_key": "MY_API_KEY"
+    }
+    ```
+
+2. Add up to 4 stock symbols to the `stock_symbols` list in the `options.json` file. Example:
+
+    ```json
+    {
+      "stock_symbols": ["NVDA", "AMD", "MSFT", "GOOGL"]
+    }
+    ```
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
@@ -252,6 +309,7 @@ Cody Tolene
 <!-- LINK REFERENCES -->
 
 [url-btc]: https://explorer.btc.com/btc/address/bc1qfx3lvspkj0q077u3gnrnxqkqwyvcku2nml86wmudy7yf2u8edmqq0a5vnt
+[url-finnhub]: https://finnhub.io/
 [url-galactic-unicorn-release]: https://github.com/pimoroni/pimoroni-pico/releases
 [url-galactic-unicorn]: https://shop.pimoroni.com/products/space-unicorns?variant=40842033561683
 [url-new-issue]: https://github.com/CodyTolene/Unicorn-Pi-Galactic/issues/new
