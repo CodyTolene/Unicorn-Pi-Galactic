@@ -46,6 +46,8 @@ class ViewService:
         self.wifi_service = wifi_service
 
         self.current_view_key = self.load_current_view_index()
+        starting_view = self.get_current_view()
+        self.current_view_task = uasyncio.create_task(starting_view)
 
     def clear_screen(self):
         self.pico_graphics.set_pen(0)  # Black
@@ -101,17 +103,18 @@ class ViewService:
         with open(self.view_index_file, "w") as f:
             json.dump({"current_view_key": key}, f)
 
-    async def switch_view(self, views, current_view_task):
-        if current_view_task:
-            current_view_task.cancel()
+    async def switch_view(self):
+        if self.current_view_task:
+            self.current_view_task.cancel()
             try:
-                await current_view_task
+                await self.current_view_task
             except uasyncio.CancelledError:
                 pass
 
+        views = self.get_views()
         self.clear_screen()
         self.save_current_view_index(self.current_view_key)
-        current_view_task = uasyncio.create_task(
+        self.current_view_task = uasyncio.create_task(
             views[self.current_view_key](
                 self.galactic_unicorn,
                 self.options_service,
@@ -120,4 +123,4 @@ class ViewService:
                 self.wifi_service,
             )
         )
-        return current_view_task
+        return self.current_view_task

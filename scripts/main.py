@@ -29,7 +29,7 @@ async def main():
     # Initialize the options service
     options_service = OptionsService()
 
-    # Initialize the sound player
+    # Initialize the sound service
     sound_service = SoundService(galactic_unicorn)
 
     # Initialize Wi-Fi service
@@ -44,12 +44,8 @@ async def main():
     )
     view_service.clear_screen()
 
-    # Start the initial view
-    starting_view = view_service.get_current_view()
-    current_view_task = uasyncio.create_task(starting_view)
-
     # Initialize the button service
-    button_service = ButtonService(view_service, current_view_task)
+    button_service = ButtonService(view_service)
 
     # Create and schedule the button listener coroutine
     uasyncio.create_task(button_service.run())

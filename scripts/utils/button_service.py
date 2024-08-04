@@ -5,8 +5,7 @@ import uasyncio
 
 
 class ButtonService:
-    def __init__(self, view_service, current_view_task):
-        self.current_view_task = current_view_task
+    def __init__(self, view_service):
         self.galactic_unicorn = view_service.galactic_unicorn
         self.sound_service = view_service.sound_service
         self.view_service = view_service
@@ -60,10 +59,7 @@ class ButtonService:
                 self.view_service.current_view_key = view_keys[
                     (current_index - 1) % len(view_keys)
                 ]
-                self.current_view_task = await self.view_service.switch_view(
-                    self.views,
-                    self.current_view_task,
-                )
+                await self.view_service.switch_view()
         else:
             self.button_states["A"] = False
 
@@ -76,10 +72,7 @@ class ButtonService:
                 self.view_service.current_view_key = view_keys[
                     (current_index + 1) % len(view_keys)
                 ]
-                self.current_view_task = await self.view_service.switch_view(
-                    self.views,
-                    self.current_view_task,
-                )
+                await self.view_service.switch_view()
         else:
             self.button_states["B"] = False
 
