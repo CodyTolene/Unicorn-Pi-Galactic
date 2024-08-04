@@ -14,16 +14,9 @@ class StockDisplay:
         sound_service,
         wifi_service,
     ):
-        self.galactic_unicorn = galactic_unicorn
-        self.height = galactic_unicorn.HEIGHT
-        self.options_service = options_service
-        self.pico_graphics = pico_graphics
-        self.sound_service = sound_service
-        self.width = galactic_unicorn.WIDTH
-        self.wifi_service = wifi_service
-
-        self.stock_symbols = self.load_stock_symbols()
-        self.api_key = self.options_service.get_option(OptionKeys.STOCK_FINNHUB_API_KEY)
+        self.api_key = options_service.get_option(OptionKeys.STOCK_FINNHUB_API_KEY)
+        self.button_states = {"C": False, "D": False}
+        self.color_index = 0
         self.colors = [
             (255, 255, 255),  # White
             (255, 0, 0),  # Red
@@ -33,15 +26,19 @@ class StockDisplay:
             (0, 255, 255),  # Light Blue
             (255, 0, 255),  # Pink
         ]
-        self.color_index = 0
-        self.button_states = {"C": False, "D": False}
-        self.pico_graphics.set_font("bitmap3")  # Ensure this is the smallest font
-        # No longer managing Wi-Fi directly in this class
+        self.fetch_interval = 30  # Update data every 30 seconds
+        self.galactic_unicorn = galactic_unicorn
+        self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
+        self.pico_graphics.set_font("bitmap3")
+        self.sound_service = sound_service
+        self.stock_data = {}
+        self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
-    def load_stock_symbols(self):
-        # Load stock symbols from the options JSON file
-        symbols = self.options_service.get_option(OptionKeys.STOCK_SYMBOLS, [])
-        return symbols[:4]  # Limit to 4 symbols
+        self.stock_symbols = options_service.get_option(OptionKeys.STOCK_SYMBOLS, [])
+        self.text_position = self.width
 
     def fetch_stock_data(self):
         if not self.api_key:
@@ -55,9 +52,7 @@ class StockDisplay:
                 response = urequests.get(url)
                 if response.status_code == 200:
                     data = response.json()
-                    stock_data[symbol] = data.get(
-                        "c", "N/A"
-                    )  # 'c' is the current price
+                    stock_data[symbol] = data.get("c", "N/A")  # Current price
                 else:
                     stock_data[symbol] = "Error: " + str(response.status_code)
 
@@ -89,63 +84,57 @@ class StockDisplay:
         else:
             self.button_states["D"] = False
 
-    async def update(self):
-        self.on_button_press()
-        self.pico_graphics.set_pen(0)
-        self.pico_graphics.clear()
+    async def update_display(self):
+        while True:
+            self.on_button_press()
+            self.pico_graphics.set_pen(0)
+            self.pico_graphics.clear()
 
-        if not self.wifi_service.is_connected():
-            self.display_message("No Wi-Fi")
-        else:
-            stock_data = self.fetch_stock_data()
-            self.display_stock_data(stock_data)
+            if not self.wifi_service.is_connected():
+                self.display_message("No Wi-Fi")
+            else:
+                self.display_stock_data()
 
-        self.galactic_unicorn.update(self.pico_graphics)
+            self.galactic_unicorn.update(self.pico_graphics)
+            scroll_speed = 0.05
+            await uasyncio.sleep(scroll_speed)
+
+    async def fetch_data_periodically(self):
+        while True:
+            self.stock_data = self.fetch_stock_data()
+            await uasyncio.sleep(self.fetch_interval)
 
     def display_message(self, message):
-        self.pico_graphics.set_pen(
-            self.pico_graphics.create_pen(255, 0, 0)
-        )  # Red pen for message
-        text_width = self.pico_graphics.measure_text(message, 0.5)  # Smaller text scale
-        x = (self.width - text_width) // 2  # Center the text horizontally
-        y = (self.height - 4) // 2  # Center the text vertically
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(255, 0, 0))
+        text_width = self.pico_graphics.measure_text(message, 0.5)
+
+        # Center the text horizontally
+        x = (self.width - text_width) // 2
+        # Center the text vertically
+        y = (self.height - 4) // 2
+
         self.pico_graphics.text(message, x, y, scale=0.5)
 
-    def display_stock_data(self, stock_data):
+    def display_stock_data(self):
         current_color = self.colors[self.color_index]
         self.pico_graphics.set_pen(self.pico_graphics.create_pen(*current_color))
 
-        # Define quadrants for each stock symbol
-        quadrant_width = self.width // 2
-        quadrant_height = self.height // 2
+        text_scale = 0.4
+        full_text = "  ".join(
+            f"{symbol}: {price}" for symbol, price in self.stock_data.items()
+        )
 
-        positions = [
-            (0, 0),  # Top-left
-            (quadrant_width, 0),  # Top-right
-            (0, quadrant_height),  # Bottom-left
-            (quadrant_width, quadrant_height),  # Bottom-right
-        ]
+        # Measure the full text width
+        full_text_width = self.pico_graphics.measure_text(full_text, text_scale)
 
-        text_scale = 0.5  # Smaller scale
+        # Move the text leftward
+        self.text_position -= 1
 
-        for index, (symbol, price) in enumerate(stock_data.items()):
-            symbol_str = f"{symbol}"
-            price_str = f"{price}"
+        # Reset the text position when the entire text has scrolled past
+        if self.text_position < -full_text_width:
+            self.text_position = self.width
 
-            # Calculate positions for symbol and price to ensure they fit
-            x, y = positions[index]
-            symbol_text_width = self.pico_graphics.measure_text(symbol_str, text_scale)
-            price_text_width = self.pico_graphics.measure_text(price_str, text_scale)
-
-            # Position symbol and price
-            symbol_x = int(x + (quadrant_width - symbol_text_width) / 2)
-            symbol_y = int(y + 1)  # Slight offset from the top
-
-            price_x = int(x + (quadrant_width - price_text_width) / 2)
-            price_y = int(symbol_y + 4)  # Place below the symbol
-
-            self.pico_graphics.text(symbol_str, symbol_x, symbol_y, scale=text_scale)
-            self.pico_graphics.text(price_str, price_x, price_y, scale=text_scale)
+        self.pico_graphics.text(full_text, self.text_position, 0, scale=text_scale)
 
 
 async def run(
@@ -155,6 +144,7 @@ async def run(
         galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
     )
 
-    while True:
-        await stock_display.update()
-        await uasyncio.sleep(10)  # Update every 10 seconds
+    # Run both `update_display` and `fetch_data_periodically`
+    await uasyncio.gather(
+        stock_display.update_display(), stock_display.fetch_data_periodically()
+    )
