@@ -42,6 +42,9 @@ class DigitalClock24:
         self.minute = 0
         self.second = 0
 
+        # Time has been manually adjusted
+        self.time_adjusted = False  # Initialize this attribute
+
         # Set the time zone, default to Central Time (CST/CDT)
         self.time_zone = options_service.get_option(
             OptionKeys.TIME_ZONE, "America/Chicago"
@@ -78,10 +81,6 @@ class DigitalClock24:
             datetime_str = data["datetime"][
                 :19
             ]  # Extract datetime string in the format "YYYY-MM-DDTHH:MM:SS"
-
-            # year = int(datetime_str[:4])
-            # month = int(datetime_str[5:7])
-            # day = int(datetime_str[8:10])
 
             # Parse the datetime string
             hour = int(datetime_str[11:13])
@@ -125,6 +124,11 @@ class DigitalClock24:
             if self.hour < 0:
                 self.hour = 23
 
+        # Flag that time has been adjusted manually
+        self.time_adjusted = True
+        # Update the display immediately after the adjustment
+        uasyncio.create_task(self.update_display())
+
     async def handle_button_presses(self):
         while True:
             # Handle color cycling buttons
@@ -155,15 +159,20 @@ class DigitalClock24:
 
     async def update_clock(self):
         while True:
-            self.second += 1
-            if self.second > 59:
-                self.second = 0
-                self.minute += 1
-            if self.minute > 59:
-                self.minute = 0
-                self.hour += 1
-            if self.hour > 23:
-                self.hour = 0
+            if not self.time_adjusted:
+                # Only increment time if no manual adjustments have been made
+                self.second += 1
+                if self.second > 59:
+                    self.second = 0
+                    self.minute += 1
+                if self.minute > 59:
+                    self.minute = 0
+                    self.hour += 1
+                if self.hour > 23:
+                    self.hour = 0
+
+            # Reset the flag after a second passes
+            self.time_adjusted = False
 
             await self.update_display()
             await uasyncio.sleep(1)  # Clock ticks every second
