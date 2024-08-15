@@ -12,6 +12,7 @@ class OptionKeys:
     STOCKS_SYMBOLS = "stocks_symbols"
     STOCKS_UPDATE_AFTER_X_SCROLLS = "stocks_update_after_x_scrolls"
     STOCKS_UPDATE_MESSAGE = "stocks_update_message"
+    TIME_ZONE = "time_zone"
 
 
 class OptionsService:
@@ -66,4 +67,5 @@ class OptionsService:
             OptionKeys.STOCKS_SYMBOLS: ["NVDA", "AMD", "MSFT", "GOOGL"],
             OptionKeys.STOCKS_UPDATE_AFTER_X_SCROLLS: 3,
             OptionKeys.STOCKS_UPDATE_MESSAGE: True,
+            OptionKeys.TIME_ZONE: "America/Chicago",
         }

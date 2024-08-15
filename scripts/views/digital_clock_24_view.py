@@ -2,7 +2,10 @@
 # Apache License 2.0
 
 import uasyncio
-import time
+import urequests
+from time import localtime
+
+from utils.options_service import OptionKeys
 
 
 class DigitalClock24:
@@ -34,34 +37,143 @@ class DigitalClock24:
         self.width = galactic_unicorn.WIDTH
         self.wifi_service = wifi_service
 
-    def on_button_press(self):
-        if self.galactic_unicorn.is_pressed(self.galactic_unicorn.SWITCH_C):
-            if not self.button_states["C"]:
-                self.button_states["C"] = True
-                # Cycle to the previous color
-                self.color_index = (self.color_index - 1) % len(self.colors)
-        else:
-            self.button_states["C"] = False
+        # Initialize hour, minute, second
+        self.hour = 0
+        self.minute = 0
+        self.second = 0
 
-        if self.galactic_unicorn.is_pressed(self.galactic_unicorn.SWITCH_D):
-            if not self.button_states["D"]:
-                self.button_states["D"] = True
-                # Cycle to the next color
-                self.color_index = (self.color_index + 1) % len(self.colors)
-        else:
-            self.button_states["D"] = False
+        # Set the time zone, default to Central Time (CST/CDT)
+        self.time_zone = options_service.get_option(
+            OptionKeys.TIME_ZONE, "America/Chicago"
+        )
+        self.display_message("Loading")
+        self.fetch_internet_time()
 
-    async def update(self):
-        self.on_button_press()
+    def display_message(self, message):
+        self.pico_graphics.set_pen(0)
+        self.pico_graphics.clear()
+
+        current_color = self.colors[self.color_index]
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(*current_color))
+
+        text_width = self.pico_graphics.measure_text(message, 1)
+        x = (self.width - text_width) // 2
+        y = (self.height - 8) // 2  # Assuming text height is 8 pixels
+
+        self.pico_graphics.text(message, x, y, scale=1)
+        self.galactic_unicorn.update(self.pico_graphics)
+
+    def fetch_internet_time(self):
+        if not self.wifi_service.is_connected():
+            print("No Wi-Fi available.")
+            self.fallback_to_local_time()
+            return
+
+        try:
+            url = f"http://worldtimeapi.org/api/timezone/{self.time_zone}"
+            response = urequests.get(url)
+            data = response.json()
+
+            # Use the 'datetime' field directly from the API
+            datetime_str = data["datetime"][
+                :19
+            ]  # Extract datetime string in the format "YYYY-MM-DDTHH:MM:SS"
+
+            # year = int(datetime_str[:4])
+            # month = int(datetime_str[5:7])
+            # day = int(datetime_str[8:10])
+
+            # Parse the datetime string
+            hour = int(datetime_str[11:13])
+            minute = int(datetime_str[14:16])
+            second = int(datetime_str[17:19])
+
+            # Set the hour, minute, and second
+            self.hour = hour
+            self.minute = minute
+            self.second = second
+
+            response.close()
+
+        except Exception as e:
+            print(f"Error fetching time: {e}")
+            self.fallback_to_local_time()
+
+    def fallback_to_local_time(self):
+        current_time = localtime()
+        self.hour = current_time[3]  # Hours
+        self.minute = current_time[4]  # Minutes
+        self.second = current_time[5]  # Seconds
+
+    def adjust_time(self, direction):
+        # Reset seconds to zero on time adjustment
+        self.second = 0
+
+        if direction == "up":
+            self.minute += 1
+            if self.minute > 59:
+                self.minute = 0
+                self.hour += 1
+            if self.hour > 23:
+                self.hour = 0
+
+        elif direction == "down":
+            self.minute -= 1
+            if self.minute < 0:
+                self.minute = 59
+                self.hour -= 1
+            if self.hour < 0:
+                self.hour = 23
+
+    async def handle_button_presses(self):
+        while True:
+            # Handle color cycling buttons
+            if self.galactic_unicorn.is_pressed(self.galactic_unicorn.SWITCH_C):
+                if not self.button_states["C"]:
+                    self.button_states["C"] = True
+                    self.color_index = (self.color_index - 1) % len(self.colors)
+            else:
+                self.button_states["C"] = False
+
+            if self.galactic_unicorn.is_pressed(self.galactic_unicorn.SWITCH_D):
+                if not self.button_states["D"]:
+                    self.button_states["D"] = True
+                    self.color_index = (self.color_index + 1) % len(self.colors)
+            else:
+                self.button_states["D"] = False
+
+            # Handle volume buttons for time adjustment
+            if self.galactic_unicorn.is_pressed(self.galactic_unicorn.SWITCH_VOLUME_UP):
+                self.adjust_time("up")
+
+            if self.galactic_unicorn.is_pressed(
+                self.galactic_unicorn.SWITCH_VOLUME_DOWN
+            ):
+                self.adjust_time("down")
+
+            await uasyncio.sleep(0.1)  # Check button presses every 100ms
+
+    async def update_clock(self):
+        while True:
+            self.second += 1
+            if self.second > 59:
+                self.second = 0
+                self.minute += 1
+            if self.minute > 59:
+                self.minute = 0
+                self.hour += 1
+            if self.hour > 23:
+                self.hour = 0
+
+            await self.update_display()
+            await uasyncio.sleep(1)  # Clock ticks every second
+
+    async def update_display(self):
         self.pico_graphics.set_pen(0)
         self.pico_graphics.clear()
 
         # Time string
-        current_time = time.localtime()
-        hour = current_time[3]
-        minute = current_time[4]
-        second = current_time[5]
-        time_str = "{:02}:{:02}:{:02}".format(hour, minute, second)
+        time_str = "{:02}:{:02}:{:02}".format(self.hour, self.minute, self.second)
 
         # Color
         current_color = self.colors[self.color_index]
@@ -83,6 +195,10 @@ class DigitalClock24:
         self.pico_graphics.text(time_str, x, y, scale=scale)
         self.galactic_unicorn.update(self.pico_graphics)
 
+    async def run(self):
+        # Run clock and button handling concurrently
+        await uasyncio.gather(self.update_clock(), self.handle_button_presses())
+
 
 async def run(
     galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
@@ -91,6 +207,5 @@ async def run(
         galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
     )
 
-    while True:
-        await digital_clock_24.update()
-        await uasyncio.sleep(0.1)
+    # Start clock and button handling
+    await digital_clock_24.run()

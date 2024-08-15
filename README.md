@@ -52,29 +52,29 @@
 
 ## Previews <a name="previews"></a>
 
-| Name                    | Sound(s)           | Wi-Fi Required | Preview                                   |
-| :---------------------- | :----------------- | :------------- | :---------------------------------------- |
-| DVD Bouncer             | Bounce / Celebrate | False          | ![DVD Bouncer][img-dvd-bouncer]           |
-| Digital Clock (12 hour) | None               | False          | ![Digital Clock 12][img-digital-clock-12] |
-| Digital Clock (24 hour) | None               | False          | ![Digital Clock 24][img-digital-clock-24] |
-| Digital Rain            | None               | False          | ![Digital Rain][img-digital-rain]         |
-| Emergency               | Siren Tones        | False          | ![Emergency][img-emergency]               |
-| Fire                    | None               | False          | ![Fire][img-fire]                         |
-| Fireflies               | Random Crickets    | False          | ![Fireflies][img-fireflies]               |
-| Fireplace               | Burning Noises     | False          | ![Fireplace][img-fireplace]               |
-| Fireworks               | Freedom Bursts     | False          | ![Fireworks][img-fireworks]               |
-| Flashlight Torch        | None               | False          | ![Flashlight Torch][img-flashlight-torch] |
-| Lava Lamp               | None               | False          | ![Lava Lamp][img-lava-lamp]               |
-| Lightning               | Thunder Claps      | False          | ![Lightning][img-lightning]               |
-| Nyan Cat                | Demo Music         | False          | ![Nyan Cat][img-nyan-cat]                 |
-| Plasma                  | None               | False          | ![Plasma][img-plasma]                     |
-| Rainbow (default)       | Relaxing Tones     | False          | ![Rainbow][img-rainbow]                   |
-| Raindrops               | Rain               | False          | ![Raindrops][img-raindrops]               |
-| SOS (Morse Code)        | None               | False          | ![SOS][img-sos]                           |
-| Snowfall                | None               | False          | ![Snowfall][img-snowfall]                 |
-| Stocks Display          | None               | True           | ![Stocks Display][img-stocks-display]     |
-| Warp Speed              | None               | False          | ![Warp Speed][img-warp-speed]             |
-| Wave                    | None               | False          | ![Wave][img-wave]                         |
+| Name                    | Sound(s)           | Wi-Fi | Preview                                   |
+| :---------------------- | :----------------- | :---- | :---------------------------------------- |
+| DVD Bouncer             | Bounce / Celebrate | False | ![DVD Bouncer][img-dvd-bouncer]           |
+| Digital Clock (12 hour) | None               | True  | ![Digital Clock 12][img-digital-clock-12] |
+| Digital Clock (24 hour) | None               | False | ![Digital Clock 24][img-digital-clock-24] |
+| Digital Rain            | None               | False | ![Digital Rain][img-digital-rain]         |
+| Emergency               | Siren Tones        | False | ![Emergency][img-emergency]               |
+| Fire                    | None               | False | ![Fire][img-fire]                         |
+| Fireflies               | Random Crickets    | False | ![Fireflies][img-fireflies]               |
+| Fireplace               | Burning Noises     | False | ![Fireplace][img-fireplace]               |
+| Fireworks               | Freedom Bursts     | False | ![Fireworks][img-fireworks]               |
+| Flashlight Torch        | None               | False | ![Flashlight Torch][img-flashlight-torch] |
+| Lava Lamp               | None               | False | ![Lava Lamp][img-lava-lamp]               |
+| Lightning               | Thunder Claps      | False | ![Lightning][img-lightning]               |
+| Nyan Cat                | Demo Music         | False | ![Nyan Cat][img-nyan-cat]                 |
+| Plasma                  | None               | False | ![Plasma][img-plasma]                     |
+| Rainbow (default)       | Relaxing Tones     | False | ![Rainbow][img-rainbow]                   |
+| Raindrops               | Rain               | False | ![Raindrops][img-raindrops]               |
+| SOS (Morse Code)        | None               | False | ![SOS][img-sos]                           |
+| Snowfall                | None               | False | ![Snowfall][img-snowfall]                 |
+| Stocks Display          | None               | True  | ![Stocks Display][img-stocks-display]     |
+| Warp Speed              | None               | False | ![Warp Speed][img-warp-speed]             |
+| Wave                    | None               | False | ![Wave][img-wave]                         |
 
 > ![Warning][img-warning] This software may produce flashing lights, which can trigger seizures in individuals with photosensitive epilepsy. Please exercise caution if you or anyone who may be exposed to the lights has a history of epilepsy or seizures.
 
@@ -186,10 +186,12 @@ The `options.json` file contains user options that can be modified to customize 
 
 ### Digital Clock View
 
-| Button | Action                        |
-| :----- | :---------------------------- |
-| "C"    | Cycle text color to previous. |
-| "D"    | Cycle text color to next.     |
+| Button | Action                                  |
+| :----- | :-------------------------------------- |
+| "C"    | Cycle text color to previous.           |
+| "D"    | Cycle text color to next.               |
+| "V+"   | Manually update time, add minutes.      |
+| "V-"   | Manually update time, subtract minutes. |
 
 ### Rainbow (default) View
 

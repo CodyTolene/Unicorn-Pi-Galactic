@@ -5,5 +5,6 @@
     "stocks_scroll_speed": 0.75,
     "stocks_symbols": ["NVDA", "AMD", "MSFT", "GOOGL"],
     "stocks_update_after_x_scrolls": 3,
-    "stocks_update_message": true
+    "stocks_update_message": true,
+    "time_zone": "America/Chicago"
 }
