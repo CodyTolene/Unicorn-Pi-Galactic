@@ -8,20 +8,29 @@ import uasyncio
 import math
 
 from galactic import GalacticUnicorn
-from utils.sounds import ExampleMusic
+from utils.sounds import ExampleRandomMusic
 
 
 class Rainbow:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
+        self.galactic_unicorn = galactic_unicorn
+        self.height = galactic_unicorn.HEIGHT
         self.hue_offset = 0.0
-        self.sound_service = ExampleMusic(galacticUnicorn, sound_service)
+        self.options_service = options_service
         self.phase = 0
+        self.pico_graphics = pico_graphics
+        self.sound_service = ExampleRandomMusic(galactic_unicorn, sound_service)
         self.speed = 1.0
         self.stripe_width = 3.0
-        self.width = galacticUnicorn.WIDTH
+        self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
         self.hue_map = [
             self.from_hsv(x / self.width, 1.0, 1.0) for x in range(self.width)
@@ -60,23 +69,23 @@ class Rainbow:
             ]
             for y in range(self.height):
                 v = (math.sin((x + y) / self.stripe_width + phase_percent) + 1.5) / 2.5
-                self.graphics.set_pen(
-                    self.graphics.create_pen(
+                self.pico_graphics.set_pen(
+                    self.pico_graphics.create_pen(
                         int(colour[0] * v), int(colour[1] * v), int(colour[2] * v)
                     )
                 )
-                self.graphics.pixel(x, y)
+                self.pico_graphics.pixel(x, y)
 
-        self.galacticUnicorn.update(self.graphics)
+        self.galactic_unicorn.update(self.pico_graphics)
 
     def on_button_press(self):
-        if self.galacticUnicorn.is_pressed(GalacticUnicorn.SWITCH_C):
+        if self.galactic_unicorn.is_pressed(GalacticUnicorn.SWITCH_C):
             self.stripe_width += 0.05
             self.stripe_width = 10.0 if self.stripe_width > 10.0 else self.stripe_width
             # self.hue_offset += 0.01
             # self.hue_offset = 1.0 if self.hue_offset > 1.0 else self.hue_offset
 
-        if self.galacticUnicorn.is_pressed(GalacticUnicorn.SWITCH_D):
+        if self.galactic_unicorn.is_pressed(GalacticUnicorn.SWITCH_D):
             self.stripe_width -= 0.05
             self.stripe_width = 1.0 if self.stripe_width < 1.0 else self.stripe_width
             # self.hue_offset -= 0.01
@@ -84,14 +93,18 @@ class Rainbow:
 
     async def update(self):
         self.phase += self.speed
-        self.graphics.set_pen(0)
-        self.graphics.clear()
+        self.pico_graphics.set_pen(0)
+        self.pico_graphics.clear()
         self.draw()
         self.on_button_press()
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    rainbow = Rainbow(galacticUnicorn, graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    rainbow = Rainbow(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await rainbow.update()

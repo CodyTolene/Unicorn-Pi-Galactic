@@ -8,12 +8,21 @@ from utils.sounds import FireworkSound
 
 
 class Firework:
-    def __init__(self, graphics, galacticUnicorn, sound_service):
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
-        self.sound_service = FireworkSound(galacticUnicorn, sound_service)
-        self.width = galacticUnicorn.WIDTH
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
+        self.galactic_unicorn = galactic_unicorn
+        self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
+        self.sound_service = FireworkSound(galactic_unicorn, sound_service)
+        self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
         self.launch_x = (
             random.randint(self.width // 4, 3 * self.width // 4)
@@ -24,7 +33,7 @@ class Firework:
         self.explosion_x = self.launch_x
         self.explosion_y = self.height // 2
         self.brightness = random.uniform(0.5, 1.0)
-        self.color = graphics.create_pen(
+        self.color = pico_graphics.create_pen(
             int(self.brightness * random.randint(100, 255)),
             int(self.brightness * random.randint(100, 255)),
             int(self.brightness * random.randint(100, 255)),
@@ -54,8 +63,8 @@ class Firework:
     async def update(self):
         if self.stage == "launch":
             if self.y > self.height // 2:
-                self.graphics.set_pen(self.color)
-                self.graphics.pixel(self.launch_x, self.y)
+                self.pico_graphics.set_pen(self.color)
+                self.pico_graphics.pixel(self.launch_x, self.y)
                 self.y -= 1
             else:
                 self.stage = "explode"
@@ -72,24 +81,34 @@ class Firework:
                         height_in_bounds = 0 <= int(p["y"]) < self.height
                         if width_in_bounds and height_in_bounds:
                             brightness = int(255 * p["life"])
-                            self.graphics.set_pen(
-                                self.graphics.create_pen(
+                            self.pico_graphics.set_pen(
+                                self.pico_graphics.create_pen(
                                     brightness * (p["color"] >> 16 & 0xFF) // 255,
                                     brightness * (p["color"] >> 8 & 0xFF) // 255,
                                     brightness * (p["color"] & 0xFF) // 255,
                                 )
                             )
-                            self.graphics.pixel(int(p["x"]), int(p["y"]))
+                            self.pico_graphics.pixel(int(p["x"]), int(p["y"]))
 
 
-async def run(galacticUnicorn, graphics, sound_service):
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
     fireworks = []
     while True:
-        graphics.set_pen(graphics.create_pen(0, 0, 0))
-        graphics.clear()
+        pico_graphics.set_pen(pico_graphics.create_pen(0, 0, 0))
+        pico_graphics.clear()
 
         if random.random() < 0.1:
-            fireworks.append(Firework(graphics, galacticUnicorn, sound_service))
+            fireworks.append(
+                Firework(
+                    galactic_unicorn,
+                    options_service,
+                    pico_graphics,
+                    sound_service,
+                    wifi_service,
+                )
+            )
 
         for firework in fireworks:
             await firework.update()
@@ -102,5 +121,5 @@ async def run(galacticUnicorn, graphics, sound_service):
                 filtered_fireworks.append(firework)
         fireworks = filtered_fireworks
 
-        galacticUnicorn.update(graphics)
+        galactic_unicorn.update(pico_graphics)
         await uasyncio.sleep(0.1)

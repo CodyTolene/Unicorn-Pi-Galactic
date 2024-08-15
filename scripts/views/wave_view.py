@@ -7,12 +7,21 @@ import uasyncio
 
 
 class Wave:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
+        self.galactic_unicorn = galactic_unicorn
+        self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
         self.sound_service = sound_service
-        self.width = galacticUnicorn.WIDTH
+        self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
     async def update(self):
         t = time.ticks_ms() / 1000
@@ -29,15 +38,19 @@ class Wave:
                 blue = int(wave * 255)
                 green = int(wave * 127)
 
-                PEN = self.graphics.create_pen(0, green, blue)
-                self.graphics.set_pen(PEN)
-                self.graphics.pixel(x, y)
+                PEN = self.pico_graphics.create_pen(0, green, blue)
+                self.pico_graphics.set_pen(PEN)
+                self.pico_graphics.pixel(x, y)
 
-        self.galacticUnicorn.update(self.graphics)
+        self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    wave = Wave(galacticUnicorn, graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    wave = Wave(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await wave.update()

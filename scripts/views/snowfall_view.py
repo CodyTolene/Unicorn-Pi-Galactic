@@ -6,23 +6,32 @@ import random
 
 
 class Snowfall:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
+        self.galactic_unicorn = galactic_unicorn
+        self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
         self.sound_service = sound_service
-        self.width = galacticUnicorn.WIDTH
+        self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
 
         self.snowflakes = [
-            self.Snowflake(self.width, self.height, self.graphics, initial=True)
+            self.Snowflake(self.width, self.height, self.pico_graphics, initial=True)
             for _ in range(20)
         ]
 
     class Snowflake:
-        def __init__(self, width, height, graphics, initial=False):
+        def __init__(self, width, height, pico_graphics, initial=False):
             self.width = width
             self.height = height
-            self.graphics = graphics
+            self.pico_graphics = pico_graphics
             self.reset(initial)
 
         def reset(self, initial=False):
@@ -30,7 +39,7 @@ class Snowfall:
             # Start from random position if initial, otherwise from the top
             self.y = random.uniform(0, self.height - 1) if initial else 0
             self.speed_y = random.uniform(0.1, 0.3)
-            self.color = self.graphics.create_pen(
+            self.color = self.pico_graphics.create_pen(
                 random.randint(200, 255),
                 random.randint(200, 255),
                 random.randint(200, 255),
@@ -39,8 +48,8 @@ class Snowfall:
             self.drift_direction = random.choice([-0.1, 0.1])
 
         async def update(self):
-            self.graphics.set_pen(self.color)
-            self.graphics.pixel(int(self.x), int(self.y))
+            self.pico_graphics.set_pen(self.color)
+            self.pico_graphics.pixel(int(self.x), int(self.y))
             self.y += self.speed_y
             # Side drift
             self.x += self.drift_direction
@@ -54,17 +63,21 @@ class Snowfall:
                 self.reset()
 
     async def update(self):
-        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
-        self.graphics.clear()
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(0, 0, 0))
+        self.pico_graphics.clear()
 
         for snowflake in self.snowflakes:
             await snowflake.update()
 
-        self.galacticUnicorn.update(self.graphics)
+        self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    snowfall = Snowfall(galacticUnicorn, graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    snowfall = Snowfall(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await snowfall.update()

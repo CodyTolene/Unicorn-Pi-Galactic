@@ -8,15 +8,27 @@ from utils.sounds import ThunderSound
 
 
 class Lightning:
-    def __init__(self, galacticUnicorn, graphics, sound_service):
-        self.bolts = []
-        self.flash = False
-        self.flash_duration = 0
-        self.galacticUnicorn = galacticUnicorn
-        self.graphics = graphics
-        self.height = galacticUnicorn.HEIGHT
-        self.sound_service = ThunderSound(galacticUnicorn, sound_service)
-        self.width = galacticUnicorn.WIDTH
+    def __init__(
+        self,
+        galactic_unicorn,
+        options_service,
+        pico_graphics,
+        sound_service,
+        wifi_service,
+    ):
+        self.galactic_unicorn = galactic_unicorn
+        self.height = galactic_unicorn.HEIGHT
+        self.options_service = options_service
+        self.pico_graphics = pico_graphics
+        self.sound_service = ThunderSound(galactic_unicorn, sound_service)
+        self.width = galactic_unicorn.WIDTH
+        self.wifi_service = wifi_service
+
+        # Initialize the lightning and display one immediately
+        self.bolts = [self.create_bolt() for _ in range(random.randint(1, 3))]
+        self.flash = True
+        self.flash_duration = random.randint(1, 3)
+        self.sound_service.play()
 
     def create_bolt(self):
         bolt = []
@@ -30,14 +42,14 @@ class Lightning:
         return bolt
 
     async def update(self):
-        self.graphics.set_pen(self.graphics.create_pen(0, 0, 0))
-        self.graphics.clear()
+        self.pico_graphics.set_pen(self.pico_graphics.create_pen(0, 0, 0))
+        self.pico_graphics.clear()
 
         if self.flash:
-            self.graphics.set_pen(self.graphics.create_pen(255, 255, 255))
+            self.pico_graphics.set_pen(self.pico_graphics.create_pen(255, 255, 255))
             for x in range(self.width):
                 for y in range(self.height):
-                    self.graphics.pixel(x, y)
+                    self.pico_graphics.pixel(x, y)
             self.flash_duration -= 1
             if self.flash_duration <= 0:
                 self.flash = False
@@ -51,14 +63,18 @@ class Lightning:
 
         for bolt in self.bolts:
             for x, y in bolt:
-                self.graphics.set_pen(self.graphics.create_pen(255, 255, 255))
-                self.graphics.pixel(x, y)
+                self.pico_graphics.set_pen(self.pico_graphics.create_pen(255, 255, 255))
+                self.pico_graphics.pixel(x, y)
 
-        self.galacticUnicorn.update(self.graphics)
+        self.galactic_unicorn.update(self.pico_graphics)
 
 
-async def run(galacticUnicorn, graphics, sound_service):
-    lightning = Lightning(galacticUnicorn, graphics, sound_service)
+async def run(
+    galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+):
+    lightning = Lightning(
+        galactic_unicorn, options_service, pico_graphics, sound_service, wifi_service
+    )
 
     while True:
         await lightning.update()
