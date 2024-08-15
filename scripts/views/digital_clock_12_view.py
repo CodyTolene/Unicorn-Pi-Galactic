@@ -43,6 +43,9 @@ class DigitalClock12:
         self.second = 0
         self.am_pm = "AM"  # Default to AM
 
+        # Time has been manually adjusted
+        self.time_adjusted = False  # Initialize this attribute
+
         # Set the time zone, default to Central Time (CST/CDT)
         self.time_zone = options_service.get_option(
             OptionKeys.TIME_ZONE, "America/Chicago"
@@ -79,10 +82,6 @@ class DigitalClock12:
             datetime_str = data["datetime"][
                 :19
             ]  # Extract datetime string in the format "YYYY-MM-DDTHH:MM:SS"
-
-            # year = int(datetime_str[:4])
-            # month = int(datetime_str[5:7])
-            # day = int(datetime_str[8:10])
 
             # Parse the time string
             hour = int(datetime_str[11:13])
@@ -140,15 +139,26 @@ class DigitalClock12:
                 self.minute = 59
                 self.hour -= 1
 
-            # Ensure hour stays within 1-12 for 12-hour format
+            # Handle hour wrap-around for 12-hour format
             if self.hour < 1:
                 self.hour = 12
-                # Toggle AM/PM when rolling back from 1:00 AM to 12:59 PM or vice versa
-                self.am_pm = "AM" if self.am_pm == "PM" else "PM"
+                # Toggle AM/PM when rolling back from 1:00 AM/PM to 12:59 AM/PM
+                if self.am_pm == "AM":
+                    self.am_pm = "PM"
+                else:
+                    self.am_pm = "AM"
 
-            # Check the transition from 12:00 AM to 11:59 PM correctly
-            if self.hour == 11 and self.minute == 59:
-                self.am_pm = "AM" if self.am_pm == "PM" else "PM"
+            # Handle the transition from 12:00 AM -> 11:59 PM correctly
+            if self.hour == 12 and self.minute == 59:
+                if self.am_pm == "AM":
+                    self.am_pm = "PM"
+                else:
+                    self.am_pm = "AM"
+
+        # Flag that time has been adjusted manually
+        self.time_adjusted = True
+        # Update the display immediately after the adjustment
+        uasyncio.create_task(self.update_display())
 
     async def handle_button_presses(self):
         while True:
@@ -180,21 +190,26 @@ class DigitalClock12:
 
     async def update_clock(self):
         while True:
-            self.second += 1
-            if self.second > 59:
-                self.second = 0
-                self.minute += 1
-            if self.minute > 59:
-                self.minute = 0
-                self.hour += 1
+            if not self.time_adjusted:
+                # Only increment time if no manual adjustments have been made
+                self.second += 1
+                if self.second > 59:
+                    self.second = 0
+                    self.minute += 1
+                if self.minute > 59:
+                    self.minute = 0
+                    self.hour += 1
 
-                # Check if it's time to toggle AM/PM
-                if self.hour == 12:
-                    self.am_pm = "AM" if self.am_pm == "PM" else "PM"
+                    # Check if it's time to toggle AM/PM
+                    if self.hour == 12:
+                        self.am_pm = "AM" if self.am_pm == "PM" else "PM"
 
-            # Ensure the hour stays within 12-hour bounds
-            if self.hour > 12:
-                self.hour = 1
+                # Ensure the hour stays within 12-hour bounds
+                if self.hour > 12:
+                    self.hour = 1
+
+            # Reset the flag after a second passes
+            self.time_adjusted = False
 
             await self.update_display()
             await uasyncio.sleep(1)  # Clock ticks every second
