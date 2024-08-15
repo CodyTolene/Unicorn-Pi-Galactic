@@ -68,14 +68,16 @@ class StocksDisplay:
             print("API key is missing.")
             return None  # Return None to indicate no data due to missing API key
 
-        stock_data = {}
+        # Clear the existing stock data before fetching
+        self.stock_data.clear()
+
         for symbol in self.stocks_symbols:
             try:
                 url = f"https://finnhub.io/api/v1/quote?symbol={symbol}&token={self.api_key}"
                 response = urequests.get(url)
                 if response.status_code == 200:
                     data = response.json()
-                    stock_data[symbol] = data.get("c", "N/A")  # Current price
+                    self.stock_data[symbol] = data.get("c", "N/A")  # Current price
                 else:
                     error_status_code_message = "Error: " + str(response.status_code)
                     print(error_status_code_message)
@@ -83,14 +85,14 @@ class StocksDisplay:
                     return None
 
                 response.close()
-                del response  # Free memory
-                gc.collect()  # Collect garbage to free memory
+                gc.collect()  # Collect garbage after each response
 
             except Exception as e:
                 print(f"Error fetching data for {symbol}: {e}")
-                stock_data[symbol] = "Error"
+                self.stock_data[symbol] = "Error"
 
-        return stock_data
+        gc.collect()  # Additional garbage collection to free memory
+        return self.stock_data
 
     def on_button_press(self):
         if self.galactic_unicorn.is_pressed(self.galactic_unicorn.SWITCH_C):

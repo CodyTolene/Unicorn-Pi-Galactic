@@ -338,6 +338,7 @@ Cody Tolene
 [img-raindrops]: .github/images/examples/raindrops.gif
 [img-snowfall]: .github/images/examples/snowfall.gif
 [img-sos]: .github/images/examples/sos.gif
+[img-stocks-display]: .github/images/examples/stocks-display.gif
 [img-warning]: .github/images/ng-icons/warn.svg
 [img-warp-speed]: .github/images/examples/warp-speed.gif
 [img-wave]: .github/images/examples/wave.gif
