@@ -40,8 +40,8 @@
 
 ![Pimoroni Galactic Unicorn][img-galactic-unicorn]
 
-| Part                                      | Price (USD) |
-| :---------------------------------------- | :---------- |
+| Part                                              | Price (USD) |
+| :------------------------------------------------ | :---------- |
 | [Pimoroni Galactic Unicorn][url-galactic-unicorn] | $65.00      |
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
@@ -56,7 +56,7 @@
 | :---------------------- | :----------------- | :---- | :---------------------------------------- |
 | DVD Bouncer             | Bounce / Celebrate | False | ![DVD Bouncer][img-dvd-bouncer]           |
 | Digital Clock (12 hour) | None               | True  | ![Digital Clock 12][img-digital-clock-12] |
-| Digital Clock (24 hour) | None               | False | ![Digital Clock 24][img-digital-clock-24] |
+| Digital Clock (24 hour) | None               | True  | ![Digital Clock 24][img-digital-clock-24] |
 | Digital Rain            | None               | False | ![Digital Rain][img-digital-rain]         |
 | Emergency               | Siren Tones        | False | ![Emergency][img-emergency]               |
 | Fire                    | None               | False | ![Fire][img-fire]                         |
@@ -126,6 +126,7 @@ Some views may require you to have Wi-Fi connected to your Raspberry Pi Pico. Fo
     {
       "wifi_ssid": "MY_WIFI_SSID", 
       "wifi_password": "MY_WIFI_PASSWORD",
+      ...
     }
     ```
 
@@ -149,6 +150,7 @@ The `options.json` file contains user options that can be modified to customize 
 | `stocks_symbols`                | `["NVDA", "AMD", "MSFT", "GOOGL"]` | A list of up to 4 stock symbols.                     |
 | `stocks_update_after_x_scrolls` | `3`                                | The number of scrolls before updating stock prices.  |
 | `stocks_update_message`         | `true`                             | Display a message while updating stock prices.       |
+| `time_zone`                     | `"America/Chicago"`                | The default time zone for the digital clock views.   |
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
@@ -184,7 +186,16 @@ The `options.json` file contains user options that can be modified to customize 
 | "L+"   | Increase brightness.  |
 | "L-"   | Lower brightness.     |
 
-### Digital Clock View
+### Digital Clock 12-hour (AM/PM meridiem) View
+
+| Button | Action                                  |
+| :----- | :-------------------------------------- |
+| "C"    | Cycle text color to previous.           |
+| "D"    | Cycle text color to next.               |
+| "V+"   | Manually update time, add minutes.      |
+| "V-"   | Manually update time, subtract minutes. |
+
+### Digital Clock 24-hour View
 
 | Button | Action                                  |
 | :----- | :-------------------------------------- |
@@ -207,7 +218,7 @@ The `options.json` file contains user options that can be modified to customize 
 | "C"    | Cycle text color to previous. |
 | "D"    | Cycle text color to next.     |
 
-Setup:
+Stocks display view setup:
 
 1. Be sure your Wi-Fi is connected, by following the Wi-Fi setup instructions [here](#wi-fi-setup).
 
@@ -221,13 +232,15 @@ Setup:
     }
     ```
 
-2. Add up to 4 stock symbols to the `stocks_symbols` list in the `options.json` file. Example:
+4. Add up to 4 stock symbols to the `stocks_symbols` list in the `options.json` file. Example:
 
     ```json
     {
       "stocks_symbols": ["NVDA", "AMD", "MSFT", "GOOGL"]
     }
     ```
+
+5. See more options in the [User Options](#user-options) section.
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
