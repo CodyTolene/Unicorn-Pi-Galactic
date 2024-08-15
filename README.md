@@ -9,8 +9,6 @@
   </p>
 </div>
 
-> ![Warning][img-warning] This software may produce flashing lights, which can trigger seizures in individuals with photosensitive epilepsy. Please exercise caution if you or anyone who may be exposed to the lights has a history of epilepsy or seizures.
-
 ## Index <a name="index"></a>
 
 - [Build Status](#build-status)
@@ -18,6 +16,7 @@
 - [Previews](#previews)
 - [Software Guide](#software-guide)
 - [Wi-Fi Setup](#wi-fi-setup)
+- [User Options](#user-options)
 - [Software Setup](#software-setup)
 - [Development](#development)
 - [Licensing](#licensing)
@@ -53,28 +52,29 @@
 
 ## Previews <a name="previews"></a>
 
-| Name                    | Sound(s)           | Preview                                   |
-| :---------------------- | :----------------- | :---------------------------------------- |
-| DVD Bouncer             | Bounce / Celebrate | ![DVD Bouncer][img-dvd-bouncer]           |
-| Digital Clock (12 hour) | None               | ![Digital Clock 12][img-digital-clock-12] |
-| Digital Clock (24 hour) | None               | ![Digital Clock 24][img-digital-clock-24] |
-| Digital Rain            | None               | ![Digital Rain][img-digital-rain]         |
-| Emergency               | Siren Tones        | ![Emergency][img-emergency]               |
-| Fire                    | None               | ![Fire][img-fire]                         |
-| Fireflies               | Random Crickets    | ![Fireflies][img-fireflies]               |
-| Fireplace               | Burning Noises     | ![Fireplace][img-fireplace]               |
-| Fireworks               | Freedom Bursts     | ![Fireworks][img-fireworks]               |
-| Flashlight Torch        | None               | ![Flashlight Torch][img-flashlight-torch] |
-| Lava Lamp               | None               | ![Lava Lamp][img-lava-lamp]               |
-| Lightning               | Thunder Claps      | ![Lightning][img-lightning]               |
-| Nyan Cat                | Demo Music         | ![Nyan Cat][img-nyan-cat]                 |
-| Plasma                  | None               | ![Plasma][img-plasma]                     |
-| Rainbow (default)       | Relaxing Tones     | ![Rainbow][img-rainbow]                   |
-| Raindrops               | Rain               | ![Raindrops][img-raindrops]               |
-| SOS (Morse Code)        | None               | ![SOS][img-sos]                           |
-| Snowfall                | None               | ![Snowfall][img-snowfall]                 |
-| Warp Speed              | None               | ![Warp Speed][img-warp-speed]             |
-| Wave                    | None               | ![Wave][img-wave]                         |
+| Name                    | Sound(s)           | Wi-Fi Required | Preview                                   |
+| :---------------------- | :----------------- | :------------- | :---------------------------------------- |
+| DVD Bouncer             | Bounce / Celebrate | False          | ![DVD Bouncer][img-dvd-bouncer]           |
+| Digital Clock (12 hour) | None               | False          | ![Digital Clock 12][img-digital-clock-12] |
+| Digital Clock (24 hour) | None               | False          | ![Digital Clock 24][img-digital-clock-24] |
+| Digital Rain            | None               | False          | ![Digital Rain][img-digital-rain]         |
+| Emergency               | Siren Tones        | False          | ![Emergency][img-emergency]               |
+| Fire                    | None               | False          | ![Fire][img-fire]                         |
+| Fireflies               | Random Crickets    | False          | ![Fireflies][img-fireflies]               |
+| Fireplace               | Burning Noises     | False          | ![Fireplace][img-fireplace]               |
+| Fireworks               | Freedom Bursts     | False          | ![Fireworks][img-fireworks]               |
+| Flashlight Torch        | None               | False          | ![Flashlight Torch][img-flashlight-torch] |
+| Lava Lamp               | None               | False          | ![Lava Lamp][img-lava-lamp]               |
+| Lightning               | Thunder Claps      | False          | ![Lightning][img-lightning]               |
+| Nyan Cat                | Demo Music         | False          | ![Nyan Cat][img-nyan-cat]                 |
+| Plasma                  | None               | False          | ![Plasma][img-plasma]                     |
+| Rainbow (default)       | Relaxing Tones     | False          | ![Rainbow][img-rainbow]                   |
+| Raindrops               | Rain               | False          | ![Raindrops][img-raindrops]               |
+| SOS (Morse Code)        | None               | False          | ![SOS][img-sos]                           |
+| Snowfall                | None               | False          | ![Snowfall][img-snowfall]                 |
+| Stocks Display          | None               | True           | ![Stocks Display][img-stocks-display]     |
+| Warp Speed              | None               | False          | ![Warp Speed][img-warp-speed]             |
+| Wave                    | None               | False          | ![Wave][img-wave]                         |
 
 > ![Warning][img-warning] This software may produce flashing lights, which can trigger seizures in individuals with photosensitive epilepsy. Please exercise caution if you or anyone who may be exposed to the lights has a history of epilepsy or seizures.
 
@@ -118,7 +118,7 @@ The file `main.py` will automatically run when the Galactic Unicorn is powered o
 
 Some views may require you to have Wi-Fi connected to your Raspberry Pi Pico. Follow the steps below to connect your Raspberry Pi Pico to Wi-Fi:
 
-1. After copying the options.json file to the root directory of your Raspberry Pi Pico, open the file in Thonny or another IDE.
+1. After copying the options.json (see [User Options](#user-options) below for more information) file to the root directory of your Raspberry Pi Pico, open the file in Thonny or another IDE.
 
 2. Add your Wi-Fi SSID and password to the `wifi_ssid` and `wifi_password` objects in the `options.json` file. Example:
   
@@ -128,6 +128,27 @@ Some views may require you to have Wi-Fi connected to your Raspberry Pi Pico. Fo
       "wifi_password": "MY_WIFI_PASSWORD",
     }
     ```
+
+> ![Info][img-info] Connecting to Wi-Fi is optional and only required for views that need internet access.
+
+<p align="right">[ <a href="#index">Index</a> ]</p>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+## User Options <a name="user-options"></a>
+
+The `options.json` file contains user options that can be modified to customize the software or add additional functionality. The following options are available:
+
+| Option                          | Default Value                      | Description                                          |
+| :------------------------------ | :--------------------------------- | :--------------------------------------------------- |
+| `wifi_ssid`                     | `""`                               | The SSID of your Wi-Fi network.                      |
+| `wifi_password`                 | `""`                               | The password of your Wi-Fi network.                  |
+| `stocks_finnhub_api_key`        | `""`                               | A FinnHub API Key for fetching current stock prices. |
+| `stocks_symbols`                | `["NVDA", "AMD", "MSFT", "GOOGL"]` | A list of up to 4 stock symbols.                     |
+| `stocks_update_after_x_scrolls` | `3`                                | The number of scrolls before updating stock prices.  |
+| `stocks_update_message`         | `true`                             | Display a message while updating stock prices.       |
 
 <p align="right">[ <a href="#index">Index</a> ]</p>
 
@@ -177,7 +198,7 @@ Some views may require you to have Wi-Fi connected to your Raspberry Pi Pico. Fo
 | "C"    | Increase stript width.  |
 | "D"    | Decrease stript width . |
 
-### Stock Display View
+### Stocks Display View
 
 | Button | Action                        |
 | :----- | :---------------------------- |
@@ -190,19 +211,19 @@ Setup:
 
 2. Sign up for a free API key (a place to get stock data) at [Finnhub.io][url-finnhub].
 
-3. Add the API key to the `stock_finnhub_api_key` object in the `options.json` file. Example:
+3. Add the API key to the `stocks_finnhub_api_key` object in the `options.json` file. Example:
 
     ```json
     {
-      "stock_finnhub_api_key": "MY_API_KEY"
+      "stocks_finnhub_api_key": "MY_API_KEY"
     }
     ```
 
-2. Add up to 4 stock symbols to the `stock_symbols` list in the `options.json` file. Example:
+2. Add up to 4 stock symbols to the `stocks_symbols` list in the `options.json` file. Example:
 
     ```json
     {
-      "stock_symbols": ["NVDA", "AMD", "MSFT", "GOOGL"]
+      "stocks_symbols": ["NVDA", "AMD", "MSFT", "GOOGL"]
     }
     ```
 

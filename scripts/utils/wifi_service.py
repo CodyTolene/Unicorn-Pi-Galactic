@@ -14,6 +14,10 @@ class WiFiService:
     async def connect(self):
         if not self.ssid or not self.password:
             print("No Wi-Fi credentials, skipping connection. Some views may not work!")
+
+            if self.is_connected():
+                self.wlan.disconnect()
+
             return
 
         self.wlan.active(True)
@@ -33,8 +37,8 @@ class WiFiService:
                 return
 
         if self.wlan.isconnected():
-            print("Connected to Wi-Fi")
-            print("Network config:", self.wlan.ifconfig())
+            print("Successfully connected to Wi-Fi!")
+            # print("Network config:", self.wlan.ifconfig())
             return
         else:
             print("Failed to connect to Wi-Fi")

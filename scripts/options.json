@@ -1,6 +1,9 @@
 {
     "wifi_ssid": "", 
     "wifi_password": "",
-    "stock_finnhub_api_key": "",
-    "stock_symbols": ["NVDA", "AMD", "MSFT", "GOOGL"]
+    "stocks_finnhub_api_key": "",
+    "stocks_scroll_speed": 0.75,
+    "stocks_symbols": ["NVDA", "AMD", "MSFT", "GOOGL"],
+    "stocks_update_after_x_scrolls": 3,
+    "stocks_update_message": true
 }
